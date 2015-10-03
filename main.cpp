@@ -7,8 +7,11 @@
 #include "List.h"
 #include <fstream>
 
-
+//======================================================= Local Function to main Driver
 void getData(List<Hero>* list);
+
+
+
 ///////////////////////////////////////////////////////////  - Main Test Driver
 int main(int argc, const char * argv[]) {
     
@@ -42,12 +45,8 @@ void getData(List<Hero>* list){
     Hero current;
     string tempString; int tempInt; double tempDouble;
     ifstream inFile;
-    //Comment out my code and access this instead
+
     inFile.open("champions.txt");
-    
-    //For Dalton only, xcode requires full path without special settings changes
-            //inFile.open("/Users/daltonrick/Projects/C++/League Group Project/League Group Project/champions.txt");
-    
     if (inFile.fail()) {
         cout << "Error! Input file not found." << endl;
     }
