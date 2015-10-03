@@ -9,6 +9,7 @@
 
 //======================================================= Local Function to main Driver
 void getData(List<Hero>* list);
+void addChampion(List<Hero>* list);
 
 
 
