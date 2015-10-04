@@ -41,6 +41,7 @@ int main(int argc, const char * argv[]) {
     
     
 }
+//======================================================= getData()
 void getData(List<Hero>* list){
     
     Hero current;
@@ -75,10 +76,69 @@ void getData(List<Hero>* list){
             
             list->push_front(current);
             inFile.ignore();
-        }
-    }
+        }//While Loop END
+    }// Else Statement END
+}// getData Function END
+
+//======================================================= addChampion()
+void addChampion(List<Hero>* list){
+    Hero newChampion; string tempString; int tempInt; double tempDouble;
     
+    cout << "\nEnter champion's Name: ";
+        cin.ignore();
+        getline(cin, tempString);
+        if (tempString.empty()){
+            cout << endl << "Add Champion Cancelled!" << endl; return;
+        }// If Statement END
+        else
+            
+    newChampion.setName(tempString);
     
+    cout << "\n\nEnter champion's Health: ";
+    cin >> tempInt;
+    newChampion.setHealth(tempInt);
     
+    cout << "\n\nEner champion's Mana: ";
+    cin >> tempInt;
+    newChampion.setMana(tempInt);
     
-}
+    cout << "\n\nEnter champion's Damage Rating: ";
+    cin >> tempInt;
+    newChampion.setDamageRating(tempInt);
+    
+    cout << "\n\nEnter champion's Attack Damage: ";
+    cin >> tempInt;
+    newChampion.setAttackDamage(tempInt);
+    
+    cout << "\n\nEnter champion's Attack Speed: ";
+    cin >> tempDouble;
+    newChampion.setAttackSpeed(tempDouble);
+    
+    cout << "\n\nEnter champion's Armor: ";
+    cin >> tempDouble;
+    newChampion.setArmor(tempDouble);
+    
+    cout << "\n\nEnter champion's Magic Resistance: ";
+    cin >> tempDouble;
+    newChampion.setMagicResistance(tempDouble);
+    
+    cout << "\n\nEnter champion's Movement Speed: ";
+    cin >> tempInt;
+    newChampion.setMovementSpeed(tempInt);
+    
+    list->push_back(newChampion);
+    
+    return;
+}// addChampion Function END
+
+//=======================================================
+
+
+
+
+
+
+
+
+
+
