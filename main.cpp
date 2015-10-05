@@ -145,67 +145,109 @@ char mainMenu(){
 
 //======================================================= addChampion()
 void addChampion(List<Hero>* list){
-    Hero newChampion; string tempString; //int tempInt; double tempDouble;
+    Hero newChampion; string tempString;int tempInt; double tempDouble; int count; char choice;
 
 	//creating random generator
 
-	Random r; // Example of how to generator a number between 1-200 -> r.DrawNumber(1, 200);
+    Random r;  // Example of how to generator a number between 1-200 -> r.DrawNumber(1, 200);
     
-    cout << "\nEnter champion's Name: ";
+    cout << "Would you like to use the Random Stat Generator? (Y/N): ";
+    cin >> choice;
     
-    cin >> tempString;
-    newChampion.setName(tempString);
+    if (toupper(choice) == 'Y') {
+        
+        cout << "How many champions would you like to add?: ";
+        cin >> count;
+        
+        for (int i=0; i < count; i++) {
+            
+            cout << "\nEnter champion's Name: ";
+            cin >> tempString;
+            newChampion.setName(tempString);
+            
+            newChampion.setHealth(r.DrawNumber(450, 650));
+            cout << "Health: " << newChampion.getHealth() << endl;
+            
+            newChampion.setMana(r.DrawNumber(235, 365));
+            cout << "Mana: " << newChampion.getMana() << endl;
+            
+            newChampion.setAttackRange(r.DrawNumber(150, 565));
+            cout << "Attack Range: " << newChampion.getAttackRange() << endl;
+            
+            newChampion.setAttackDamage(r.DrawNumber(38, 60));
+            cout << "Attack Damage: " << newChampion.getAttackDamage() << endl;
+            
+            newChampion.setAttackSpeed(r.DrawNumber(600, 800) * .001); // Convert the random generated int into a double.
+            cout << "Attack Speed: " << newChampion.getAttackSpeed() << endl;
+            
+            newChampion.setArmor(r.DrawNumber(15, 35));
+            cout << "Armor: " << newChampion.getArmor() << endl;
+            
+            newChampion.setMagicResistance(r.DrawNumber(25, 35));
+            cout << "Magic Resistance: " << newChampion.getMagicResistance() << endl;
+            
+            newChampion.setMovementSpeed(r.DrawNumber(315, 375));
+            cout << "Movement Speed: " << newChampion.getMovementSpeed() << endl;
+            
+            list->push_back(newChampion);
+            
+            cout << i+1 << " of " << count << " added." << endl;
+            
+        }// for loop END
+    }// if statement END
     
-    //cout << "\nEnter champion's Health: ";
-    //cin >> tempInt;
-    //newChampion.setHealth(tempInt);
-	newChampion.setHealth(r.DrawNumber(450, 650));
-	cout << "Health: " << newChampion.getHealth() << endl;
+    else{
+        
+        cout << "How many champions would you like to add?: ";
+        cin >> count;
+        
+        for (int i=0; i < count; i++) {
+            cout << "\nEnter champion's Name: ";
+            
+            cin >> tempString;
+            newChampion.setName(tempString);
+            
+            cout << "\nEnter champion's Health: ";
+            cin >> tempInt;
+            newChampion.setHealth(tempInt);
     
-    //cout << "\nEner champion's Mana: ";
-    //cin >> tempInt;
-	//newChampion.setMana(tempInt);
-	newChampion.setMana(r.DrawNumber(235, 365));
-	cout << "Mana: " << newChampion.getMana() << endl;
-    
-    //cout << "\nEnter champion's Damage Range: ";
-    //cin >> tempInt;
-   // newChampion.setAttackRange(tempInt);
-	newChampion.setAttackRange(r.DrawNumber(150, 565));
-	cout << "Attack Range: " << newChampion.getAttackRange() << endl;
+            
+            cout << "\nEner champion's Mana: ";
+            cin >> tempInt;
+            newChampion.setMana(tempInt);
+            
+            cout << "\nEnter champion's Damage Range: ";
+            cin >> tempInt;
+            newChampion.setAttackRange(tempInt);
+            
+            cout << "\nEnter champion's Attack Damage: ";
+            cin >> tempInt;
+            newChampion.setAttackDamage(tempInt);
+            
+            
+            cout << "\nEnter champion's Attack Speed: ";
+            cin >> tempDouble;
+            newChampion.setAttackSpeed(tempDouble); // The random number generator only works with ints
+           
+            
+            cout << "\nEnter champion's Armor: ";
+            cin >> tempDouble;
+            newChampion.setArmor(tempDouble);
+            
+            cout << "\nEnter champion's Magic Resistance: ";
+            cin >> tempDouble;
+            newChampion.setMagicResistance(tempDouble);
+            
+            cout << "\nEnter champion's Movement Speed: ";
+            cin >> tempInt;
+            newChampion.setMovementSpeed(tempInt);
+            
+            list->push_back(newChampion);
+            
+            cout << i+1 << " of " << count << " added." << endl;
+        }// for Loop END
 
-    //cout << "\nEnter champion's Attack Damage: ";
-    //cin >> tempInt;
-    //newChampion.setAttackDamage(tempInt);
-	newChampion.setAttackDamage(r.DrawNumber(38, 60));
-	cout << "Attack Damage: " << newChampion.getAttackDamage() << endl;
-
-    //cout << "\nEnter champion's Attack Speed: ";
-    //cin >> tempDouble;
-    //newChampion.setAttackSpeed(tempDouble); // The random number generator only works with ints
-    newChampion.setAttackSpeed(r.DrawNumber(600, 800) * .001); // Convert the random generated int into a double.
-    cout << "Attack Speed: " << newChampion.getAttackSpeed() << endl;
-
-    //cout << "\nEnter champion's Armor: ";
-   // cin >> tempDouble;
-    //newChampion.setArmor(tempDouble);
-	newChampion.setArmor(r.DrawNumber(15, 35));
-	cout << "Armor: " << newChampion.getArmor() << endl;
-    
-    //cout << "\nEnter champion's Magic Resistance: ";
-    //cin >> tempDouble;
-   // newChampion.setMagicResistance(tempDouble);
-	newChampion.setMagicResistance(r.DrawNumber(25, 35));
-	cout << "Magic Resistance: " << newChampion.getMagicResistance() << endl;
-    
-   // cout << "\nEnter champion's Movement Speed: ";
-    //cin >> tempInt;
-   // newChampion.setMovementSpeed(tempInt);
-	newChampion.setMovementSpeed(r.DrawNumber(315, 375));
-	cout << "Movement Speed: " << newChampion.getMovementSpeed() << endl;
-    
-    list->push_back(newChampion);
-    
+    }// else statement END
     return;
 }// addChampion Function END
 
