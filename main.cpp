@@ -145,7 +145,7 @@ char mainMenu(){
 
 //======================================================= addChampion()
 void addChampion(List<Hero>* list){
-    Hero newChampion; string tempString; int tempInt; double tempDouble;
+    Hero newChampion; string tempString; //int tempInt; double tempDouble;
 
 	//creating random generator
 
