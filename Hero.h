@@ -11,7 +11,6 @@
 
 #include <string>
 #include <iostream>
-#include <fstream>
 using namespace std;
 
 
@@ -29,34 +28,36 @@ private:
     int movementSpeed;
     
 public:
-    //Default Constructor
+    
+//Default Constructor
     Hero(): name(""), health(0), mana(0), damageRating(0), attackDamage(0), attackSpeed(0.0), armor(0.0), magicResistance(0.0), movementSpeed(0) {}
     
-    //Copy Constructor
+//Copy Constructor
     Hero(const Hero &data);
     
-    // Accessors
-    
-    // Getters
+// ** Setters (manipulators) **
     void setName(string championName);
-    string getName();
     void setHealth(int life);
-    int getHealth();
     void setMana(int);
-    int getMana();
     void setDamageRating(int);
-    int getDamageRating();
     void setAttackDamage(int);
-    int getAttackDamage();
     void setAttackSpeed(double);
-    double getAttackSpeed();
     void setArmor(double);
-    double getArmor();
     void setMagicResistance(double);
-    double getMagicResistance();
     void setMovementSpeed(int);
+    
+// ** Accessors **
+    string getName();
+    int getHealth();
+    int getMana();
+    int getDamageRating();
+    int getAttackDamage();
+    double getAttackSpeed();
+    double getArmor();
+    double getMagicResistance();
     int getMovementSpeed();
     
+// ** Other Member Functions **
     void print();
     
     

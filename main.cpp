@@ -5,7 +5,7 @@
 //  Created by Dalton Rick on 10/2/15.
 
 #include "List.h"
-
+#include <fstream>
 
 //======================================================= Local Function to main Driver
 void getData(List<Hero>* list);
