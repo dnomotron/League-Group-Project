@@ -83,7 +83,7 @@ int main(int argc, const char * argv[]) {
 */
     
 //======================================================= Save any New Champions or data to file before exit
-    //print_to_file(Champions);
+    print_to_file(Champions);
     
     return 0;
 }
@@ -120,7 +120,7 @@ void getData(List<Hero>* list){
             inFile >> tempInt;
             current.setMovementSpeed(tempInt);
             
-            list->push_front(current);
+            list->push_back(current);
             inFile.ignore();
         }//While Loop END
     }// Else Statement END
