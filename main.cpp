@@ -5,41 +5,78 @@
 //  Created by Dalton Rick on 10/2/15.
 
 #include "List.h"
-#include <fstream>
+
 
 //======================================================= Local Function to main Driver
 void getData(List<Hero>* list);
 void addChampion(List<Hero>* list);
+void print_to_file(List<Hero> list);
+char mainMenu();
+char searchMenu();
+void searchFunction(List<Hero> list);
 
-
+void remove(List<Hero>* list, int choice);
 
 ///////////////////////////////////////////////////////////  - Main Test Driver
 int main(int argc, const char * argv[]) {
     
     //creating a new list object L
     
-    List<Hero> Champions;
+    List<Hero> Champions; getData(&Champions); char choice; int counter=0;
     
-    Hero data;
+   
+// Menu should start here:
     
-    data.setName("Lux");
-    data.setHealth(478);
-    data.setMana(334);
-    data.setDamageRating(550);
-    data.setAttackDamage(54);
-    data.setAttackSpeed(0.625);
-    data.setArmor(18.7);
-    data.setMovementSpeed(330);
+    while((choice = mainMenu()) && choice != 'E'){
+        
+        switch (choice) {
+            case 'A':
+                addChampion(&Champions);
+                break;
+                
+            case 'S':
+                //searchFunction(Champions);
+                break;
+                
+            case 'R':
+                Champions.print();
+                
+                cout << "Please enter champion to delete: ";
+                cin >> counter;
+                remove(&Champions, counter);
+                break;
+                
+            case 'P':
+                Champions.print();
+                break;
+                
+            default:
+                cout << "\nNot a valid choice!\n";
+                break;
+        }
+        
+        
+    }
     
     
-    //Champions.push_front(data);
-    
-    getData(&Champions);
     
     
+    
+/* /////////////////////////////////////// Test Case:
     Champions.print();
     
+    addChampion(&Champions);
     
+    Champions.print();
+        
+    print_to_file(Champions);
+    
+*/
+    
+//======================================================= Save any New Champions or data to file before exit
+    //print_to_file(Champions);
+    
+    return 0;
 }
 //======================================================= getData()
 void getData(List<Hero>* list){
@@ -48,7 +85,7 @@ void getData(List<Hero>* list){
     string tempString; int tempInt; double tempDouble;
     ifstream inFile;
 
-    inFile.open("champions.txt");
+    inFile.open("Champions.txt");
     if (inFile.fail()) {
         cout << "Error! Input file not found." << endl;
     }
@@ -80,12 +117,28 @@ void getData(List<Hero>* list){
     }// Else Statement END
 }// getData Function END
 
+//======================================================= mainMenu()
+char mainMenu(){
+    char choice = 'E';
+    
+    cout << "\t\t\t ** Welcome to the Main Menu **\n\t\t\tPlease choose from the following:\n\n";
+    
+    cout << "\t A to add new champion\n"
+    << "\t S to enter search menu\n"
+    << "\t P to print list\n"
+    << "\t R to remove a champion\n"
+    << "\t E to Exit";
+    
+    
+    cout << "\n\nChoice: "; cin >> choice;
+    return toupper(choice);
+}
+
 //======================================================= addChampion()
 void addChampion(List<Hero>* list){
     Hero newChampion; string tempString; int tempInt; double tempDouble;
     
     cout << "\nEnter champion's Name: ";
-        cin.ignore();
         getline(cin, tempString);
         if (tempString.empty()){
             cout << endl << "Add Champion Cancelled!" << endl; return;
@@ -94,35 +147,35 @@ void addChampion(List<Hero>* list){
             
     newChampion.setName(tempString);
     
-    cout << "\n\nEnter champion's Health: ";
+    cout << "\nEnter champion's Health: ";
     cin >> tempInt;
     newChampion.setHealth(tempInt);
     
-    cout << "\n\nEner champion's Mana: ";
+    cout << "\nEner champion's Mana: ";
     cin >> tempInt;
     newChampion.setMana(tempInt);
     
-    cout << "\n\nEnter champion's Damage Rating: ";
+    cout << "\nEnter champion's Damage Rating: ";
     cin >> tempInt;
     newChampion.setDamageRating(tempInt);
     
-    cout << "\n\nEnter champion's Attack Damage: ";
+    cout << "\nEnter champion's Attack Damage: ";
     cin >> tempInt;
     newChampion.setAttackDamage(tempInt);
     
-    cout << "\n\nEnter champion's Attack Speed: ";
+    cout << "\nEnter champion's Attack Speed: ";
     cin >> tempDouble;
     newChampion.setAttackSpeed(tempDouble);
     
-    cout << "\n\nEnter champion's Armor: ";
+    cout << "\nEnter champion's Armor: ";
     cin >> tempDouble;
     newChampion.setArmor(tempDouble);
     
-    cout << "\n\nEnter champion's Magic Resistance: ";
+    cout << "\nEnter champion's Magic Resistance: ";
     cin >> tempDouble;
     newChampion.setMagicResistance(tempDouble);
     
-    cout << "\n\nEnter champion's Movement Speed: ";
+    cout << "\nEnter champion's Movement Speed: ";
     cin >> tempInt;
     newChampion.setMovementSpeed(tempInt);
     
@@ -131,14 +184,54 @@ void addChampion(List<Hero>* list){
     return;
 }// addChampion Function END
 
-//=======================================================
+void print_to_file(List<Hero> list){
+   
+    ofstream outFile; Hero tempChampion; int count = 0;
+    
+    
+    outFile.open("Champions.txt");
+    if (outFile.fail()) {
+        cout << "Error opening file! " << endl;
+    }else
+    {
+        list.begin();
+        
+        while (!list.off_end()) {
+            tempChampion = list.current();
+            if (count != 0)
+                outFile << endl;
+            
+            outFile << tempChampion.getName() << " " << tempChampion.getHealth() << " " << tempChampion.getMana() << " "
+            << tempChampion.getDamageRating() << " " << tempChampion.getAttackDamage() << " " << tempChampion.getAttackSpeed()
+            << " " << tempChampion.getArmor() << " " << tempChampion.getMagicResistance() << " " << tempChampion.getMovementSpeed();
+            
+            list.scroll();
+            count++;
+        }//While Loop END
+        
+        cout << count << " Champions saved to file. " << endl;
+    }// else statement END
 
+    
+}// print_to_file Function END
 
-
-
-
-
-
+void remove(List<Hero>* list, int choice){
+    
+    list->begin(); int count=1;
+    
+    if(choice == 0)
+        return;
+    else{
+        while (count < choice) {
+            list->scroll();
+            count++;
+        }// while statement END
+        
+        list->remove();
+ 
+    }// else Statement END
+    
+}// remove Function END
 
 
 

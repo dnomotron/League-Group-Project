@@ -130,6 +130,7 @@ public:
     //Prints nothing if the list is empty
     
     
+    
 };
 
 //================================================================= Default Constructor
@@ -157,11 +158,12 @@ List<listitem>::~List()
 template <class listitem>
 void List<listitem>::print()
 {
-    iterator = head;
+    iterator = head; int count = 1;
     while (iterator != NULL) {
-        
+        cout << endl << endl << count << "." << endl;
         iterator->data.print();
         iterator = iterator->next;
+        count++;
         
     }// End While loop
     cout << endl;
@@ -314,19 +316,6 @@ void List<listitem>::pop_back(){
         delete tail;
         iterator->next = NULL;
         tail = iterator;
-        
-        
-        /* iterator=head;
-         
-         for(int i=1; i < size-1; i++)
-         {
-         iterator = iterator->next;
-         }
-         temp = iterator->next;
-         iterator->next = NULL;
-         tail = iterator;
-         delete temp;
-         */
         size--;
     }
 }
@@ -353,21 +342,20 @@ listitem List<listitem>::front(){
         return head->data;
 }
 
-//============================================================== current() **** current does not work, xcode will not allow me to compile unless i resolve the issue of current() reaching end of non void function.
-/*
- template <class listitem>
+//============================================================== current()
+template <class listitem>
  listitem List<listitem>::current()
  {
  if (off_end())
  {
  cout << "Current: Iterator is off the end of the list!" << endl;
  assert(iterator == NULL); //xcode will not allow end of non-void function cant compile without " return returntype; "
- return -1;
+     return iterator -> data;
  }
- else
- return iterator -> data;
+     else
+     return iterator -> data;
  }
- */
+ 
 //============================================================= begin();
 template <class listitem>
 void List<listitem>::begin(){
@@ -382,6 +370,7 @@ void List<listitem>::insert(listitem data){
     
     if (off_end()) {
         cout << "Cannot insert, iterator Off_End" << endl;
+        return;
     }
     else if(get_size() == 1){
         NodeRef newNode = new Node(data);
@@ -424,12 +413,34 @@ void List<listitem>::scroll(){
 template <class listitem>
 void List<listitem>::remove(){
     
+    
     if (off_end()) {
         cout << endl << "Cannot delete NULL value" << endl;
+        
     }
     else{
+        
+        if(iterator->previous == NULL){
+            
+            head = iterator->next;
+            head->previous = NULL;
+            
+        }else if(iterator->next == NULL){
+            
+            tail = iterator->previous;
+            tail->next = NULL;
+        }
+        else{
+            NodeRef current;
+            current = iterator->previous;
+            current->next = iterator->next;
+            
+            current = iterator->next;
+            current->previous = iterator->previous;
+        }
         delete iterator;
         size--;
+
     }
     
 }

@@ -11,6 +11,7 @@
 
 #include <string>
 #include <iostream>
+#include <fstream>
 using namespace std;
 
 
@@ -135,7 +136,7 @@ int Hero::getMovementSpeed(){
 }
 void Hero::print(){
     
-    cout << endl << endl << "Champion: " << name << endl;
+    cout << "Champion: " << name << endl;
     cout << "Health: " << health << endl;
     cout << "Mana: " << mana << endl;
     cout << "Damage Rating: " << damageRating << endl;
@@ -145,5 +146,4 @@ void Hero::print(){
     cout << "Magic Resistance: " << magicResistance << endl;
     cout << "Movement Speed: " << movementSpeed << endl;
 }
-
 #endif /* defined(____Hero__) */
