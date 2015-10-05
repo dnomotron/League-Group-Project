@@ -5,6 +5,7 @@
 //  Created by Dalton Rick on 10/2/15.
 
 #include "List.h"
+#include "Random.h"
 #include <fstream>
 
 //======================================================= Local Function to main Driver
@@ -23,6 +24,7 @@ int main(int argc, const char * argv[]) {
     //creating a new list object L
     
     List<Hero> Champions; getData(&Champions); char choice; int counter=0;
+
     
    
 // Menu should start here:
@@ -137,6 +139,11 @@ char mainMenu(){
 //======================================================= addChampion()
 void addChampion(List<Hero>* list){
     Hero newChampion; string tempString; int tempInt; double tempDouble;
+
+	//creating random generator
+
+	Random r;
+	// Example of how to generator a number between 1-200 -> r.DrawNumber(1, 200);
     
     cout << "\nEnter champion's Name: ";
         getline(cin, tempString);
