@@ -31,7 +31,7 @@ private:
 public:
     
 //Default Constructor
-    Hero(): name(""), health(0), mana(0), damageRating(0), attackDamage(0), attackSpeed(0.0), armor(0.0), magicResistance(0.0), movementSpeed(0) {}
+    Hero(): name(""), health(0), mana(0), attackRange(0), attackDamage(0), attackSpeed(0.0), armor(0.0), magicResistance(0.0), movementSpeed(0) {}
     
 //Copy Constructor
     Hero(const Hero &data);
@@ -94,8 +94,8 @@ void Hero::setHealth(int life){
 void Hero::setMana(int MA){
     mana = MA;
 }
-void Hero::setAttackRange(int D_R){
-    damageRating = D_R;
+void Hero::setAttackRange(int A_R){
+    attackRange = A_R;
 }
 void Hero::setAttackDamage(int A_D){
     attackDamage = A_D;
@@ -125,7 +125,7 @@ int Hero::getMana(){
     return mana;
 }
 int Hero::getAttackRange(){
-    return damageRating;
+    return attackRange;
 }
 int Hero::getAttackDamage(){
     return attackDamage;
