@@ -108,7 +108,7 @@ void getData(List<Hero>* list){
             inFile >> tempInt;
             current.setMana(tempInt);
             inFile >> tempInt;
-            current.setDamageRating(tempInt);
+            current.setAttackRange(tempInt);
             inFile >> tempInt;
             current.setAttackDamage(tempInt);
             inFile >> tempDouble;
@@ -170,9 +170,9 @@ void addChampion(List<Hero>* list){
     
     //cout << "\nEnter champion's Damage Range: ";
     //cin >> tempInt;
-   // newChampion.setDamageRating(tempInt);
-	newChampion.setDamageRating(r.DrawNumber(150, 565));
-	cout << "Damage Rating: " << newChampion.getDamageRating() << endl;
+   // newChampion.setAttackRange(tempInt);
+	newChampion.setAttackRange(r.DrawNumber(150, 565));
+	cout << "Attack Range: " << newChampion.getAttackRange() << endl;
 
     //cout << "\nEnter champion's Attack Damage: ";
     //cin >> tempInt;
@@ -227,7 +227,7 @@ void print_to_file(List<Hero> list){
                 outFile << endl;
             
             outFile << tempChampion.getName() << " " << tempChampion.getHealth() << " " << tempChampion.getMana() << " "
-            << tempChampion.getDamageRating() << " " << tempChampion.getAttackDamage() << " " << tempChampion.getAttackSpeed()
+            << tempChampion.getAttackRange() << " " << tempChampion.getAttackDamage() << " " << tempChampion.getAttackSpeed()
             << " " << tempChampion.getArmor() << " " << tempChampion.getMagicResistance() << " " << tempChampion.getMovementSpeed();
             
             list.scroll();
