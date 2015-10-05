@@ -129,7 +129,7 @@ void getData(List<Hero>* list){
 //======================================================= mainMenu()
 char mainMenu(){
     char choice = 'E';
-    
+    cout << endl;
     cout << "\t\t\t ** Welcome to the Main Menu **\n\t\t\tPlease choose from the following:\n\n";
     
     cout << "\t A to add new champion\n"
