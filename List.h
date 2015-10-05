@@ -1,8 +1,10 @@
-//  Dalton Rick
+//  Dalton Rick, Nathan Foster, Kush Patel, Desmond Lee, Kurtis Hoang
 //
 //  CIS 22C
 //
-//  linkList.h
+//  Group Project - Leaugue of Legends Character engine
+//
+//  List.h
 
 #ifndef ____List__
 #define ____List__

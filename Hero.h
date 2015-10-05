@@ -1,10 +1,11 @@
+//  Dalton Rick, Nathan Foster, Kush Patel, Desmond Lee, Kurtis Hoang
+//
+//  CIS 22C
+//
+//  Group Project - Leaugue of Legends Character engine
 //
 //  Hero.h
-//
-//
-//  Created by Dalton Rick on 10/2/15.
-//
-//
+
 
 #ifndef ____Hero__
 #define ____Hero__

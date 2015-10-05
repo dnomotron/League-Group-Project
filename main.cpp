@@ -1,21 +1,28 @@
+//  Dalton Rick, Nathan Foster, Kush Patel, Desmond Lee, Kurtis Hoang
+//
+//  CIS 22C
+//
+//  Group Project - Leaugue of Legends Character engine
 //
 //  main.cpp
-//  League Group Project
-//
-//  Created by Dalton Rick on 10/2/15.
 
 #include "List.h"
 #include "Random.h"
 #include <fstream>
 
-//======================================================= Local Function to main Driver
+//======================================================= Local Function to main() Driver
+
+// Must Run at Start
 void getData(List<Hero>* list);
-void addChampion(List<Hero>* list);
-void print_to_file(List<Hero> list);
+
+// Menus
 char mainMenu();
 char searchMenu();
-void searchFunction(List<Hero> list);
 
+//Switch case Functions
+void addChampion(List<Hero>* list);
+void print_to_file(List<Hero> list);
+void searchFunction(List<Hero> list);
 void remove(List<Hero>* list, int choice);
 
 ///////////////////////////////////////////////////////////  - Main Test Driver
