@@ -34,6 +34,9 @@ public:
     
 //Copy Constructor
     Hero(const Hero &data);
+
+//Default Constuctor
+	~Hero();
     
 // ** Setters (manipulators) **
     void setName(string championName);
@@ -76,6 +79,9 @@ Hero::Hero(const Hero &data){
     movementSpeed = data.movementSpeed;
     
 }
+
+Hero::~Hero()
+{}
 
 void Hero::setName(string championName)
 {
