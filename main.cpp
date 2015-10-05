@@ -142,8 +142,7 @@ void addChampion(List<Hero>* list){
 
 	//creating random generator
 
-	Random r;
-	// Example of how to generator a number between 1-200 -> r.DrawNumber(1, 200);
+	Random r; // Example of how to generator a number between 1-200 -> r.DrawNumber(1, 200);
     
     cout << "\nEnter champion's Name: ";
         getline(cin, tempString);
