@@ -183,7 +183,8 @@ void addChampion(List<Hero>* list){
     //cout << "\nEnter champion's Attack Speed: ";
     //cin >> tempDouble;
     //newChampion.setAttackSpeed(tempDouble); // The random number generator only works with ints
-	cout << "Attack Speed: " << newChampion.getAttackSpeed() << endl;
+    newChampion.setAttackSpeed(r.DrawNumber(600, 800) * .001); // Convert the random generated int into a double.
+    cout << "Attack Speed: " << newChampion.getAttackSpeed() << endl;
 
     //cout << "\nEnter champion's Armor: ";
    // cin >> tempDouble;
