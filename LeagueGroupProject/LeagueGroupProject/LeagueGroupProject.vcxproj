@@ -123,7 +123,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\Hero.h" />
     <ClInclude Include="..\..\List.h" />
-    <ClInclude Include="Random.h" />
+    <ClInclude Include="..\..\Random.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
