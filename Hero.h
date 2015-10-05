@@ -21,7 +21,7 @@ private:
     string name;
     int health;
     int mana; //
-    int damageRating; // i.e. Ranged 550
+    int attackRange; // i.e. Ranged 550
     int attackDamage;
     double attackSpeed;
     double armor;
@@ -43,7 +43,7 @@ public:
     void setName(string championName);
     void setHealth(int life);
     void setMana(int);
-    void setDamageRating(int);
+    void setAttackRange(int);
     void setAttackDamage(int);
     void setAttackSpeed(double);
     void setArmor(double);
@@ -54,7 +54,7 @@ public:
     string getName();
     int getHealth();
     int getMana();
-    int getDamageRating();
+    int getAttackRange();
     int getAttackDamage();
     double getAttackSpeed();
     double getArmor();
@@ -72,7 +72,7 @@ Hero::Hero(const Hero &data){
     name = data.name;
     health = data.health;
     mana = data.mana;
-    damageRating = data.damageRating;
+    attackRange = data.attackRange;
     attackDamage = data.attackDamage;
     attackSpeed = data.attackSpeed;
     armor = data.armor;
@@ -94,7 +94,7 @@ void Hero::setHealth(int life){
 void Hero::setMana(int MA){
     mana = MA;
 }
-void Hero::setDamageRating(int D_R){
+void Hero::setAttackRange(int D_R){
     damageRating = D_R;
 }
 void Hero::setAttackDamage(int A_D){
@@ -124,7 +124,7 @@ int Hero::getHealth(){
 int Hero::getMana(){
     return mana;
 }
-int Hero::getDamageRating(){
+int Hero::getAttackRange(){
     return damageRating;
 }
 int Hero::getAttackDamage(){
@@ -147,7 +147,7 @@ void Hero::print(){
     cout << "Champion: " << name << endl;
     cout << "Health: " << health << endl;
     cout << "Mana: " << mana << endl;
-    cout << "Damage Rating: " << damageRating << endl;
+    cout << "Attack Range: " << attackRange << endl;
     cout << "Attack Damage: " << attackDamage << endl;
     cout << "Attack Speed: " << attackSpeed << endl;
     cout << "Armor: " << armor << endl;
