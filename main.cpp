@@ -152,12 +152,8 @@ void addChampion(List<Hero>* list){
 	Random r; // Example of how to generator a number between 1-200 -> r.DrawNumber(1, 200);
     
     cout << "\nEnter champion's Name: ";
-        getline(cin, tempString);
-        if (tempString.empty()){
-            cout << endl << "Add Champion Cancelled!" << endl; return;
-        }// If Statement END
-        else
-            
+    
+    cin >> tempString;
     newChampion.setName(tempString);
     
     cout << "\nEnter champion's Health: ";
