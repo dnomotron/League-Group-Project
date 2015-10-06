@@ -22,15 +22,14 @@ char searchMenu();
 //Switch case Functions
 void addChampion(List<Hero>* list);
 void print_to_file(List<Hero> list);
-void searchFunction(List<Hero> list);
-void remove(List<Hero>* list, int choice);
+void search(List<Hero>* list, bool remove);
 
 ///////////////////////////////////////////////////////////  - Main Test Driver
 int main(int argc, const char * argv[]) {
     
     //creating a new list object L
     
-    List<Hero> Champions; getData(&Champions); char choice; int counter=0;
+    List<Hero> Champions; getData(&Champions); char choice; bool remove = false;
 
     
    
@@ -44,15 +43,13 @@ int main(int argc, const char * argv[]) {
                 break;
                 
             case 'S':
-                //searchFunction(Champions);
+                remove = false;
+                search(&Champions, remove);
                 break;
                 
             case 'R':
-                Champions.print();
-                
-                cout << "Please enter champion to delete: ";
-                cin >> counter;
-                remove(&Champions, counter);
+                remove = true;
+                search(&Champions, remove);
                 break;
                 
             case 'P':
@@ -130,7 +127,7 @@ void getData(List<Hero>* list){
 char mainMenu(){
     char choice = 'E';
     cout << endl;
-    cout << "\t\t\t ** Welcome to the Main Menu **\n\t\t\tPlease choose from the following:\n\n";
+    cout << "\t\t\t\t ** Welcome to the Main Menu **\n\nPlease choose from the following:\n\n";
     
     cout << "\t A to add new champion\n"
     << "\t S to enter search menu\n"
@@ -140,6 +137,24 @@ char mainMenu(){
     
     
     cout << "\n\nChoice: "; cin >> choice;
+    return toupper(choice);
+}// mainMenu() function END
+
+//======================================================= searchMenu()
+char searchMenu(){
+    char choice = 'E';
+    cout << endl;
+    cout << "\t\t\t\t\t *** Search Menu ***\n\nPlease choose from the following:\n\n";
+    
+    cout << "\t N to search by name\n"
+    << "\t H to search by hash number\n"
+    << "\t A to search by Attribute\n"
+    << "\t E to exit to main menu\n";
+    
+    cout << "\n\nChoice: ";
+    cin >> choice;
+    //cout << "------------------------------------------------------\n\n";
+    
     return toupper(choice);
 }
 
@@ -251,6 +266,7 @@ void addChampion(List<Hero>* list){
     return;
 }// addChampion Function END
 
+//======================================================= print_to_file()
 void print_to_file(List<Hero> list){
    
     ofstream outFile; Hero tempChampion; int count = 0;
@@ -281,24 +297,75 @@ void print_to_file(List<Hero> list){
 
     
 }// print_to_file Function END
-
-void remove(List<Hero>* list, int choice){
+//======================================================= search()
+void search(List<Hero>* list, bool remove){
+    char choice; string query; Hero temp; int selected =0; int count =0; char response = 'N'; bool found = false;
     
-    list->begin(); int count=1;
-    
-    if(choice == 0)
-        return;
-    else{
-        while (count < choice) {
-            list->scroll();
-            count++;
-        }// while statement END
+    while((choice = searchMenu()) && choice != 'E'){
+                                //=========================================== Remove option enabled
+                                    if (remove == true && selected != 0){
+                                        list->begin();
+                
+                                        for (count = 0; count < selected-1; count++){
+                                            list->scroll();
+                                            count++;
+                                        }// for statement END
+                                            list->remove();
+                                    }// if Statement END
         
-        list->remove();
- 
-    }// else Statement END
+        switch (choice) {
+            case 'N':
+                cout << "\nEnter champion name: ";
+                cin >> query; cout << endl;
+                
+                list->begin();
+                
+                while (list->off_end() == false) {
+                    
+                    temp = list->current();
+                    selected++;// this keeps track of where in the list we are. If query is found, selected is the spot in the list that remove function must delete;
+                    if (temp.getName() == query) {
+                        temp.print(); found = true;
+                                        //====================================== Remove option enabled
+                                            if (remove == true) {
+                                                cout << "\nWould you like to delete? (Y/N): ";
+                                                cin >> response;
+                                                if (toupper(response) == 'N') {
+                                                    selected=0;
+                                                }// if response == 'N' statement END
+                                            }// if (remove==true) statement END
+                        break;
+                        
+                    }//if Statement END
+                    
+                    list->scroll();
+                    
+                }// while loop END
+                if (found == false)
+                    cout << "\nNo match found!" << endl;
+            
+                break;
+                
+            case 'H':
+                
+                break;
+                
+            case 'A':
+                
+                break;
+                
+            case 'E':
+                return;
+                
+                break;
+                
+            default:
+                cout << "\nNot a valid choice!\n";
+                break;
+        }
+        
+        
+    }
+
     
-}// remove Function END
-
-
-
+}

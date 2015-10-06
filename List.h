@@ -131,6 +131,8 @@ public:
     //and separated by a blank space
     //Prints nothing if the list is empty
     
+    void print1();
+    
     
     
 };
@@ -170,6 +172,18 @@ void List<listitem>::print()
     }// End While loop
     cout << endl;
 }// End List::print()
+
+//================================================================= Print()
+template <class listitem>
+void List<listitem>::print1(){
+    
+    if (!off_end())
+        iterator->data.print();
+    else
+        cout << "\nIterator off end!\n";
+    
+    return;
+}
 
 //================================================================ push_front()
 template <class listitem>

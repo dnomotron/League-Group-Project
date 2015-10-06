@@ -12,6 +12,7 @@
 
 #include <string>
 #include <iostream>
+#include <iomanip>
 using namespace std;
 
 
@@ -143,15 +144,16 @@ int Hero::getMovementSpeed(){
     return movementSpeed;
 }
 void Hero::print(){
+    cout << setprecision(3);
     
-    cout << "Champion: " << name << endl;
-    cout << "Health: " << health << endl;
-    cout << "Mana: " << mana << endl;
-    cout << "Attack Range: " << attackRange << endl;
-    cout << "Attack Damage: " << attackDamage << endl;
-    cout << "Attack Speed: " << attackSpeed << endl;
-    cout << "Armor: " << armor << endl;
-    cout << "Magic Resistance: " << magicResistance << endl;
-    cout << "Movement Speed: " << movementSpeed << endl;
+    cout << left << "Champion:\t" << name << endl;
+    cout << left << setw(20) <<  "Health: " <<  right << setw(6) << health << endl;
+    cout << left << setw(20) << "Mana: " << right << setw(6) << mana << endl;
+    cout << left << setw(20) << "Attack Range: " << right << setw(6) << attackRange << endl;
+    cout << left << setw(20) << "Attack Damage: " << right << setw(6) << attackDamage << endl;
+    cout << left << setw(20) << "Attack Speed: " << right << setw(6) << attackSpeed << endl;
+    cout << left << setw(20) << "Armor: " << right << setw(6) << armor << endl;
+    cout << left << setw(20) << "Magic Resistance: " << right << setw(6) << magicResistance << endl;
+    cout << left << setw(20) << "Movement Speed: " << right << setw(6) << movementSpeed << endl;
 }
 #endif /* defined(____Hero__) */
