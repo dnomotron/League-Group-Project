@@ -18,6 +18,7 @@ void getData(List<Hero>* list);
 // Menus
 char mainMenu();
 char searchMenu();
+char attributeMenu();
 
 //Switch case Functions
 void addChampion(List<Hero>* list);
@@ -156,6 +157,27 @@ char searchMenu(){
     //cout << "------------------------------------------------------\n\n";
     
     return toupper(choice);
+}
+//======================================================= attributeMenu()
+char attributeMenu(){
+    char choice = 'E';
+    cout << endl;
+    cout << "\t\t\t\t *** Attribute Menu ***\n\nPlease choose from the following:\n\n";
+    
+    cout << "\t H to search by Health\n"
+    << "\t M to search by Mana\n"
+    << "\t R to search by Attack Range\n"
+    << "\t D to search by Attack Damage\n"
+    << "\t S to search by Attack Speed\n"
+    << "\t A to search by Armor\n"
+    << "\t G to search by Magic Resistance\n"
+    << "\t Q to search by Movement Speed\n";
+    
+    cout << "\n\nChoice: ";
+    cin >> choice;
+    
+    return toupper(choice);
+    
 }
 
 //======================================================= addChampion()
@@ -299,7 +321,8 @@ void print_to_file(List<Hero> list){
 }// print_to_file Function END
 //======================================================= search()
 void search(List<Hero>* list, bool remove){
-    char choice; string query; Hero temp; int selected =0; int count =0; char response = 'N'; bool found = false;
+    char choice; string query; Hero temp; int selected =0; int count =0; char response = 'N'; bool found = false; char attribute;
+    int intMin, intMax; double doubleMin, doubleMax;
     
     while((choice = searchMenu()) && choice != 'E'){
                                 //=========================================== Remove option enabled
@@ -314,11 +337,11 @@ void search(List<Hero>* list, bool remove){
                                     }// if Statement END
         
         switch (choice) {
-            case 'N':
+            case 'N':// Name
                 cout << "\nEnter champion name: ";
                 cin >> query; cout << endl;
                 
-                list->begin();
+                list->begin(); selected = 0;
                 
                 while (list->off_end() == false) {
                     
@@ -344,17 +367,245 @@ void search(List<Hero>* list, bool remove){
                 if (found == false)
                     cout << "\nNo match found!" << endl;
             
-                break;
+                break;// End Name
                 
-            case 'H':
+            case 'H':// Hash
                 
-                break;
+                break;// END Hash
                 
-            case 'A':
+            case 'A':// Attribute
+                list->begin(); selected = 0;
+                cout << "Select an attribute:\n";
                 
-                break;
+                            switch ((attribute = attributeMenu())) {
+                        
+                                    case 'H':// Health
+                                        cout << "Enter Min Range: "; cin >> intMin;
+                                        cout << "\nEnter Max Range: "; cin >> intMax;
+                        
+                                        while (list->off_end() == false) {
+                                                temp = list->current();
+                                                selected++;// this keeps track of where in the list we are. If query is found, selected is the spot in the list that remove function must delete;
+                                            if (temp.getHealth() >= intMin && temp.getHealth() <= intMax) {
+                                                cout << endl << endl; temp.print(); found = true;
+                                                    //====================================== Remove option enabled
+                                                    if (remove == true) {
+                                                        cout << "\nWould you like to delete? (Y/N): ";
+                                                        cin >> response;
+                                                        if (toupper(response) == 'N') {
+                                                            selected=0;
+                                                        }// if response == 'N' statement END
+                                                    }// if (remove==true) statement END
+                                
+                                            }//if Statement END
+                            
+                                                list->scroll();
+                            
+                                        }// while loop END
+                                    if (found == false)
+                                        cout << "\nNo match found!" << endl;
+        
+                                    break;// END Health
                 
-            case 'E':
+                                case 'M':// Mana
+                                    cout << "Enter Min Range: "; cin >> intMin;
+                                    cout << "\nEnter Max Range: "; cin >> intMax;
+                        
+                                    while (list->off_end() == false) {
+                                        temp = list->current();
+                                        selected++;// this keeps track of where in the list we are. If query is found, selected is the spot in the list that remove function must delete;
+                                        if (temp.getMana() >= intMin && temp.getMana() <= intMax) {
+                                            cout << endl << endl; temp.print(); found = true;
+                                                //====================================== Remove option enabled
+                                                if (remove == true) {
+                                                    cout << "\nWould you like to delete? (Y/N): ";
+                                                    cin >> response;
+                                                    if (toupper(response) == 'N') {
+                                                        selected=0;
+                                                    }// if response == 'N' statement END
+                                                }// if (remove==true) statement END
+                                
+                                        }//if Statement END
+                            
+                                        list->scroll();
+                            
+                                    }// while loop END
+                                    if (found == false)
+                                        cout << "\nNo match found!" << endl;
+                        
+                                    break;
+                        
+                                case 'R':// Attack Range
+                                    cout << "Enter Min Range: "; cin >> intMin;
+                                    cout << "\nEnter Max Range: "; cin >> intMax;
+                                    
+                                    while (list->off_end() == false) {
+                                        temp = list->current();
+                                        selected++;// this keeps track of where in the list we are. If query is found, selected is the spot in the list that remove function must delete;
+                                        if (temp.getAttackRange() >= intMin && temp.getAttackRange() <= intMax) {
+                                            cout << endl << endl; temp.print(); found = true;
+                                            //====================================== Remove option enabled
+                                            if (remove == true) {
+                                                cout << "\nWould you like to delete? (Y/N): ";
+                                                cin >> response;
+                                                if (toupper(response) == 'N') {
+                                                    selected=0;
+                                                }// if response == 'N' statement END
+                                            }// if (remove==true) statement END
+                                            
+                                        }//if Statement END
+                                        
+                                        list->scroll();
+                                        
+                                    }// while loop END
+                                    if (found == false)
+                                        cout << "\nNo match found!" << endl;
+                                    break;
+                        
+                                case 'D':// Attack Damage
+                                    cout << "Enter Min Range: "; cin >> intMin;
+                                    cout << "\nEnter Max Range: "; cin >> intMax;
+                                    
+                                    while (list->off_end() == false) {
+                                        temp = list->current();
+                                        selected++;// this keeps track of where in the list we are. If query is found, selected is the spot in the list that remove function must delete;
+                                        if (temp.getAttackDamage() >= intMin && temp.getAttackDamage() <= intMax) {
+                                            cout << endl << endl; temp.print(); found = true;
+                                            //====================================== Remove option enabled
+                                            if (remove == true) {
+                                                cout << "\nWould you like to delete? (Y/N): ";
+                                                cin >> response;
+                                                if (toupper(response) == 'N') {
+                                                    selected=0;
+                                                }// if response == 'N' statement END
+                                            }// if (remove==true) statement END
+                                            
+                                        }//if Statement END
+                                        
+                                        list->scroll();
+                                        
+                                    }// while loop END
+                                    if (found == false)
+                                        cout << "\nNo match found!" << endl;
+                                    break;
+                        
+                                case 'S':// Attack Speed
+                                    cout << "Enter Min Range: "; cin >> doubleMin;
+                                    cout << "\nEnter Max Range: "; cin >> doubleMax;
+                                    
+                                    while (list->off_end() == false) {
+                                        temp = list->current();
+                                        selected++;// this keeps track of where in the list we are. If query is found, selected is the spot in the list that remove function must delete;
+                                        if (temp.getAttackSpeed() >= doubleMin && temp.getAttackSpeed() <= doubleMax) {
+                                            cout << endl << endl; temp.print(); found = true;
+                                            //====================================== Remove option enabled
+                                            if (remove == true) {
+                                                cout << "\nWould you like to delete? (Y/N): ";
+                                                cin >> response;
+                                                if (toupper(response) == 'N') {
+                                                    selected=0;
+                                                }// if response == 'N' statement END
+                                            }// if (remove==true) statement END
+                                            
+                                        }//if Statement END
+                                        
+                                        list->scroll();
+                                        
+                                    }// while loop END
+                                    if (found == false)
+                                        cout << "\nNo match found!" << endl;
+                                    break;
+                        
+                                case 'A':// Armor
+                                    cout << "Enter Min Range: "; cin >> doubleMin;
+                                    cout << "\nEnter Max Range: "; cin >> doubleMax;
+                                    
+                                    while (list->off_end() == false) {
+                                        temp = list->current();
+                                        selected++;// this keeps track of where in the list we are. If query is found, selected is the spot in the list that remove function must delete;
+                                        if (temp.getArmor() >= doubleMin && temp.getArmor() <= doubleMax) {
+                                            cout << endl << endl; temp.print(); found = true;
+                                            //====================================== Remove option enabled
+                                            if (remove == true) {
+                                                cout << "\nWould you like to delete? (Y/N): ";
+                                                cin >> response;
+                                                if (toupper(response) == 'N') {
+                                                    selected=0;
+                                                }// if response == 'N' statement END
+                                            }// if (remove==true) statement END
+                                            
+                                        }//if Statement END
+                                        
+                                        list->scroll();
+                                        
+                                    }// while loop END
+                                    if (found == false)
+                                        cout << "\nNo match found!" << endl;
+                                    break;
+                        
+                                case 'G':// Magic Resistance
+                                    cout << "Enter Min Range: "; cin >> doubleMin;
+                                    cout << "\nEnter Max Range: "; cin >> doubleMax;
+                                    
+                                    while (list->off_end() == false) {
+                                        temp = list->current();
+                                        selected++;// this keeps track of where in the list we are. If query is found, selected is the spot in the list that remove function must delete;
+                                        if (temp.getMagicResistance() >= doubleMin && temp.getMagicResistance() <= doubleMax) {
+                                            cout << endl << endl; temp.print(); found = true;
+                                            //====================================== Remove option enabled
+                                            if (remove == true) {
+                                                cout << "\nWould you like to delete? (Y/N): ";
+                                                cin >> response;
+                                                if (toupper(response) == 'N') {
+                                                    selected=0;
+                                                }// if response == 'N' statement END
+                                            }// if (remove==true) statement END
+                                            
+                                        }//if Statement END
+                                        
+                                        list->scroll();
+                                        
+                                    }// while loop END
+                                    if (found == false)
+                                        cout << "\nNo match found!" << endl;
+                                    break;
+                        
+                                case 'Q':// Movement Speed
+                                    cout << "Enter Min Range: "; cin >> intMin;
+                                    cout << "\nEnter Max Range: "; cin >> intMax;
+                                    
+                                    while (list->off_end() == false) {
+                                        temp = list->current();
+                                        selected++;// this keeps track of where in the list we are. If query is found, selected is the spot in the list that remove function must delete;
+                                        if (temp.getMovementSpeed() >= intMin && temp.getMovementSpeed() <= intMax) {
+                                            cout << endl << endl; temp.print(); found = true;
+                                            //====================================== Remove option enabled
+                                            if (remove == true) {
+                                                cout << "\nWould you like to delete? (Y/N): ";
+                                                cin >> response;
+                                                if (toupper(response) == 'N') {
+                                                    selected=0;
+                                                }// if response == 'N' statement END
+                                            }// if (remove==true) statement END
+                                            
+                                        }//if Statement END
+                                        
+                                        list->scroll();
+                                        
+                                    }// while loop END
+                                    if (found == false)
+                                        cout << "\nNo match found!" << endl;
+                                    break;
+                
+                                default:
+                                    cout << "\nNot a valid choice!\n";
+                                    break;
+                            }// End Attribute switch
+                
+        
+                break;// End Attribute
+                
+            case 'E'://Exit
                 return;
                 
                 break;
