@@ -117,7 +117,7 @@ void getData(List<Hero>* list){
             inFile >> tempDouble;
             current.setAttackSpeed(tempDouble);
             inFile >> tempDouble;
-            current.setarmorClass(tempDouble);
+            current.setarmor(tempDouble);
             inFile >> tempDouble;
             current.setMagicResistance(tempDouble);
             inFile >> tempInt;
@@ -175,7 +175,7 @@ char attributeMenu(){
     << "\t R to search by Attack Range\n"
     << "\t D to search by Attack Damage\n"
     << "\t S to search by Attack Speed\n"
-    << "\t A to search by Armor Class\n"
+    << "\t A to search by Armor \n"
     << "\t G to search by Magic Resistance\n"
     << "\t Q to search by Movement Speed\n";
     
@@ -223,8 +223,8 @@ void addChampion(List<Hero>* list){
             newChampion.setAttackSpeed(r.DrawNumber(600, 800) * .001); // Convert the random generated int into a double.
             cout << "Attack Speed: " << newChampion.getAttackSpeed() << endl;
             
-            newChampion.setarmorClass(r.DrawNumber(15, 35));
-            cout << "Armor Class: " << newChampion.getarmorClass() << endl;
+            newChampion.setarmor(r.DrawNumber(15, 35));
+            cout << "Armor: " << newChampion.getarmor() << endl;
             
             newChampion.setMagicResistance(r.DrawNumber(25, 35));
             cout << "Magic Resistance: " << newChampion.getMagicResistance() << endl;
@@ -273,9 +273,9 @@ void addChampion(List<Hero>* list){
             newChampion.setAttackSpeed(tempDouble); // The random number generator only works with ints
            
             
-            cout << "\nEnter champion's Armor Class: ";
+            cout << "\nEnter champion's Armor: ";
             cin >> tempDouble;
-            newChampion.setarmorClass(tempDouble);
+            newChampion.setarmor(tempDouble);
             
             cout << "\nEnter champion's Magic Resistance: ";
             cin >> tempDouble;
@@ -314,7 +314,7 @@ void print_to_file(List<Hero> list){
             
             outFile << tempChampion.getName() << " " << tempChampion.getHealth() << " " << tempChampion.getMana() << " "
             << tempChampion.getAttackRange() << " " << tempChampion.getAttackDamage() << " " << tempChampion.getAttackSpeed()
-            << " " << tempChampion.getarmorClass() << " " << tempChampion.getMagicResistance() << " " << tempChampion.getMovementSpeed();
+            << " " << tempChampion.getarmor() << " " << tempChampion.getMagicResistance() << " " << tempChampion.getMovementSpeed();
             
             list.scroll();
             count++;
@@ -522,14 +522,14 @@ void search(List<Hero>* list, bool remove){
                                         cout << "\nNo match found!" << endl;
                                     break;
                         
-                                case 'A':// armorClass
+                                case 'A':// armor
                                     cout << "Enter Min Range: "; cin >> doubleMin;
                                     cout << "\nEnter Max Range: "; cin >> doubleMax;
                                     
                                     while (list->off_end() == false) {
                                         temp = list->current();
                                         selected++;// this keeps track of where in the list we are. If query is found, selected is the spot in the list that remove function must delete;
-                                        if (temp.getarmorClass() >= doubleMin && temp.getarmorClass() <= doubleMax) {
+                                        if (temp.getarmor() >= doubleMin && temp.getarmor() <= doubleMax) {
                                             cout << endl << endl; temp.print(); found = true;
                                             //====================================== Remove option enabled
                                             if (remove == true) {
