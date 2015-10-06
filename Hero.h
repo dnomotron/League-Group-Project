@@ -25,14 +25,17 @@ private:
     int attackRange; // i.e. Ranged 550
     int attackDamage;
     double attackSpeed;
-    double armor;
+    double armorClass;
     double magicResistance;
     int movementSpeed;
+	bool wearingEquipment;
+	int weapon;
+	int armor;
     
 public:
     
 //Default Constructor
-    Hero(): name(""), health(0), mana(0), attackRange(0), attackDamage(0), attackSpeed(0.0), armor(0.0), magicResistance(0.0), movementSpeed(0) {}
+	Hero() : name(""), health(0), mana(0), attackRange(0), attackDamage(0), attackSpeed(0.0), armorClass(0.0), magicResistance(0.0), movementSpeed(0), wearingEquipment(false), weapon(0), armor(0) {}
     
 //Copy Constructor
     Hero(const Hero &data);
@@ -47,7 +50,7 @@ public:
     void setAttackRange(int);
     void setAttackDamage(int);
     void setAttackSpeed(double);
-    void setArmor(double);
+    void setarmorClass(double);
     void setMagicResistance(double);
     void setMovementSpeed(int);
     
@@ -58,7 +61,7 @@ public:
     int getAttackRange();
     int getAttackDamage();
     double getAttackSpeed();
-    double getArmor();
+    double getarmorClass();
     double getMagicResistance();
     int getMovementSpeed();
     
@@ -76,7 +79,7 @@ Hero::Hero(const Hero &data){
     attackRange = data.attackRange;
     attackDamage = data.attackDamage;
     attackSpeed = data.attackSpeed;
-    armor = data.armor;
+    armorClass = data.armorClass;
     magicResistance = data.magicResistance;
     movementSpeed = data.movementSpeed;
     
@@ -105,8 +108,8 @@ void Hero::setAttackDamage(int A_D){
 void Hero::setAttackSpeed(double A_S){
     attackSpeed = A_S;
 }
-void Hero::setArmor(double AMR){
-    armor = AMR;
+void Hero::setarmorClass(double AMR){
+    armorClass = AMR;
 }
 void Hero::setMagicResistance(double magRes){
     magicResistance = magRes;
@@ -137,8 +140,8 @@ double Hero::getAttackSpeed(){
 double Hero::getMagicResistance(){
     return magicResistance;
 }
-double Hero::getArmor(){
-    return armor;
+double Hero::getarmorClass(){
+    return armorClass;
 }
 int Hero::getMovementSpeed(){
     return movementSpeed;
@@ -152,7 +155,7 @@ void Hero::print(){
     cout << left << setw(20) << "Attack Range: " << right << setw(6) << attackRange << endl;
     cout << left << setw(20) << "Attack Damage: " << right << setw(6) << attackDamage << endl;
     cout << left << setw(20) << "Attack Speed: " << right << setw(6) << attackSpeed << endl;
-    cout << left << setw(20) << "Armor: " << right << setw(6) << armor << endl;
+    cout << left << setw(20) << "armorClass: " << right << setw(6) << armorClass << endl;
     cout << left << setw(20) << "Magic Resistance: " << right << setw(6) << magicResistance << endl;
     cout << left << setw(20) << "Movement Speed: " << right << setw(6) << movementSpeed << endl;
 }
