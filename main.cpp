@@ -328,20 +328,10 @@ void print_to_file(List<Hero> list){
 //======================================================= search()
 void search(List<Hero>* list, bool remove){
     char choice; string query; Hero temp; int selected =0; int count =0; char response = 'N'; bool found = false; char attribute;
-    int intMin, intMax; double doubleMin, doubleMax;
+    int intMin, intMax; double doubleMin, doubleMax; int counted=0; int convert=0;
     
     while((choice = searchMenu()) && choice != 'E'){
-                                //=========================================== Remove option enabled
-                                    if (remove == true && selected != 0){
-                                        list->begin();
-                
-                                        for (count = 0; count < selected-1; count++){
-                                            list->scroll();
-                                            count++;
-                                        }// for statement END
-                                            list->remove();
-                                    }// if Statement END
-        
+        found = false;
         switch (choice) {
             case 'N':// Name
                 cout << "\nEnter champion name: ";
@@ -380,9 +370,9 @@ void search(List<Hero>* list, bool remove){
                 break;// END Hash
                 
             case 'A':// Attribute
-                list->begin(); selected = 0;
+                list->begin(); selected = 0; counted =0;
                 cout << "Select an attribute:\n";
-                
+
                             switch ((attribute = attributeMenu())) {
                         
                                     case 'H':// Health
@@ -391,26 +381,42 @@ void search(List<Hero>* list, bool remove){
                         
                                         while (list->off_end() == false) {
                                                 temp = list->current();
-                                                selected++;// this keeps track of where in the list we are. If query is found, selected is the spot in the list that remove function must delete;
-                                            if (temp.getHealth() >= intMin && temp.getHealth() <= intMax) {
-                                                cout << endl << endl; temp.print(); found = true;
-                                                    //====================================== Remove option enabled
-                                                    if (remove == true) {
-                                                        cout << "\nWould you like to delete? (Y/N): ";
-                                                        cin >> response;
-                                                        if (toupper(response) == 'N') {
-                                                            selected=0;
-                                                        }// if response == 'N' statement END
-                                                    }// if (remove==true) statement END
-                                
+                                            
+                                            if (temp.getHealth() >= intMin && temp.getHealth() <= intMax) { counted++;
+                                                cout << endl << endl << counted << endl; temp.print(); found = true;
+                                                
                                             }//if Statement END
                             
                                                 list->scroll();
                             
                                         }// while loop END
+                                    
+                                    //====================================== Remove option enabled
+                                    if (remove == true && found == true) {
+                                        cout << "\nWhich you like to delete? (Enter 0 to cancel): ";
+                                        cin >> convert;
+                                        if (convert == 0) {
+                                            selected=0;
+                                        }else
+                                        {
+                                            list->begin(); counted =0; selected =0;
+                                            while (list->off_end() == false && counted < convert) {
+                                                temp = list->current();
+                                                selected++;
+                                                if (temp.getHealth() >= intMin && temp.getHealth() <= intMax) {
+                                                    counted++;
+                                                }//if Statement END
+                                                
+                                                list->scroll();
+                                                
+                                            }// while loop END
+
+                                        }
+                                    }// if (remove==true) statement END
+                                    
+                                    
                                     if (found == false)
                                         cout << "\nNo match found!" << endl;
-        
                                     break;// END Health
                 
                                 case 'M':// Mana
@@ -419,23 +425,39 @@ void search(List<Hero>* list, bool remove){
                         
                                     while (list->off_end() == false) {
                                         temp = list->current();
-                                        selected++;// this keeps track of where in the list we are. If query is found, selected is the spot in the list that remove function must delete;
-                                        if (temp.getMana() >= intMin && temp.getMana() <= intMax) {
-                                            cout << endl << endl; temp.print(); found = true;
-                                                //====================================== Remove option enabled
-                                                if (remove == true) {
-                                                    cout << "\nWould you like to delete? (Y/N): ";
-                                                    cin >> response;
-                                                    if (toupper(response) == 'N') {
-                                                        selected=0;
-                                                    }// if response == 'N' statement END
-                                                }// if (remove==true) statement END
-                                
+                                        if (temp.getMana() >= intMin && temp.getMana() <= intMax) {counted++;
+                                            cout << endl << endl << counted << endl; temp.print(); found = true;
+                                            
                                         }//if Statement END
                             
                                         list->scroll();
                             
                                     }// while loop END
+                                    
+                                    //====================================== Remove option enabled
+                                    if (remove == true && found == true) {
+                                        cout << "\nWhich you like to delete? (Enter 0 to cancel): ";
+                                        cin >> convert;
+                                        if (convert == 0) {
+                                            selected=0;
+                                        }else
+                                        {
+                                            list->begin(); counted =0; selected =0;
+                                            while (list->off_end() == false && counted < convert) {
+                                                temp = list->current();
+                                                selected++;
+                                                if (temp.getMana() >= intMin && temp.getMana() <= intMax) {
+                                                    counted++;
+                                                }//if Statement END
+                                                
+                                                list->scroll();
+                                                
+                                            }// while loop END
+                                            
+                                        }
+                                    }// if (remove==true) statement END
+
+                                    
                                     if (found == false)
                                         cout << "\nNo match found!" << endl;
                         
@@ -447,23 +469,42 @@ void search(List<Hero>* list, bool remove){
                                     
                                     while (list->off_end() == false) {
                                         temp = list->current();
-                                        selected++;// this keeps track of where in the list we are. If query is found, selected is the spot in the list that remove function must delete;
+                                       
                                         if (temp.getAttackRange() >= intMin && temp.getAttackRange() <= intMax) {
-                                            cout << endl << endl; temp.print(); found = true;
-                                            //====================================== Remove option enabled
-                                            if (remove == true) {
-                                                cout << "\nWould you like to delete? (Y/N): ";
-                                                cin >> response;
-                                                if (toupper(response) == 'N') {
-                                                    selected=0;
-                                                }// if response == 'N' statement END
-                                            }// if (remove==true) statement END
+                                            counted++;
+                                            cout << endl << endl << counted << endl; temp.print(); found = true;
+                                            
                                             
                                         }//if Statement END
                                         
                                         list->scroll();
                                         
                                     }// while loop END
+                                    
+                                    //====================================== Remove option enabled
+                                    if (remove == true && found == true) {
+                                        cout << "\nWhich you like to delete? (Enter 0 to cancel): ";
+                                        cin >> convert;
+                                        if (convert == 0) {
+                                            selected=0;
+                                        }else
+                                        {
+                                            list->begin(); counted =0; selected =0;
+                                            while (list->off_end() == false && counted < convert) {
+                                                temp = list->current();
+                                                selected++;
+                                                if (temp.getAttackRange() >= intMin && temp.getAttackRange() <= intMax) {
+                                                    counted++;
+                                                }//if Statement END
+                                                
+                                                list->scroll();
+                                                
+                                            }// while loop END
+                                            
+                                        }
+                                    }// if (remove==true) statement END
+
+                                    
                                     if (found == false)
                                         cout << "\nNo match found!" << endl;
                                     break;
@@ -474,23 +515,42 @@ void search(List<Hero>* list, bool remove){
                                     
                                     while (list->off_end() == false) {
                                         temp = list->current();
-                                        selected++;// this keeps track of where in the list we are. If query is found, selected is the spot in the list that remove function must delete;
+                                        
                                         if (temp.getAttackDamage() >= intMin && temp.getAttackDamage() <= intMax) {
-                                            cout << endl << endl; temp.print(); found = true;
-                                            //====================================== Remove option enabled
-                                            if (remove == true) {
-                                                cout << "\nWould you like to delete? (Y/N): ";
-                                                cin >> response;
-                                                if (toupper(response) == 'N') {
-                                                    selected=0;
-                                                }// if response == 'N' statement END
-                                            }// if (remove==true) statement END
+                                            counted++;
+                                            cout << endl << endl << counted << endl; temp.print(); found = true;
+                                            
                                             
                                         }//if Statement END
                                         
                                         list->scroll();
                                         
                                     }// while loop END
+                                    
+                                    //====================================== Remove option enabled
+                                    if (remove == true && found == true) {
+                                        cout << "\nWhich you like to delete? (Enter 0 to cancel): ";
+                                        cin >> convert;
+                                        if (convert == 0) {
+                                            selected=0;
+                                        }else
+                                        {
+                                            list->begin(); counted =0; selected =0;
+                                            while (list->off_end() == false && counted < convert) {
+                                                temp = list->current();
+                                                selected++;
+                                                if (temp.getHealth() >= intMin && temp.getHealth() <= intMax) {
+                                                    counted++;
+                                                }//if Statement END
+                                                
+                                                list->scroll();
+                                                
+                                            }// while loop END
+                                            
+                                        }
+                                    }// if (remove==true) statement END
+
+                                    
                                     if (found == false)
                                         cout << "\nNo match found!" << endl;
                                     break;
@@ -501,23 +561,42 @@ void search(List<Hero>* list, bool remove){
                                     
                                     while (list->off_end() == false) {
                                         temp = list->current();
-                                        selected++;// this keeps track of where in the list we are. If query is found, selected is the spot in the list that remove function must delete;
+                                        
                                         if (temp.getAttackSpeed() >= doubleMin && temp.getAttackSpeed() <= doubleMax) {
-                                            cout << endl << endl; temp.print(); found = true;
-                                            //====================================== Remove option enabled
-                                            if (remove == true) {
-                                                cout << "\nWould you like to delete? (Y/N): ";
-                                                cin >> response;
-                                                if (toupper(response) == 'N') {
-                                                    selected=0;
-                                                }// if response == 'N' statement END
-                                            }// if (remove==true) statement END
+                                            counted++;
+                                            cout << endl << endl << counted << endl; temp.print(); found = true;
+                                            
                                             
                                         }//if Statement END
                                         
                                         list->scroll();
                                         
                                     }// while loop END
+                                    
+                                    //====================================== Remove option enabled
+                                    if (remove == true && found == true) {
+                                        cout << "\nWhich you like to delete? (Enter 0 to cancel): ";
+                                        cin >> convert;
+                                        if (convert == 0) {
+                                            selected=0;
+                                        }else
+                                        {
+                                            list->begin(); counted =0; selected =0;
+                                            while (list->off_end() == false && counted < convert) {
+                                                temp = list->current();
+                                                selected++;
+                                                if (temp.getAttackSpeed() >= doubleMin && temp.getAttackSpeed() <= doubleMax) {
+                                                    counted++;
+                                                }//if Statement END
+                                                
+                                                list->scroll();
+                                                
+                                            }// while loop END
+                                            
+                                        }
+                                    }// if (remove==true) statement END
+
+                                    
                                     if (found == false)
                                         cout << "\nNo match found!" << endl;
                                     break;
@@ -528,23 +607,42 @@ void search(List<Hero>* list, bool remove){
                                     
                                     while (list->off_end() == false) {
                                         temp = list->current();
-                                        selected++;// this keeps track of where in the list we are. If query is found, selected is the spot in the list that remove function must delete;
+                                        
                                         if (temp.getarmorClass() >= doubleMin && temp.getarmorClass() <= doubleMax) {
-                                            cout << endl << endl; temp.print(); found = true;
-                                            //====================================== Remove option enabled
-                                            if (remove == true) {
-                                                cout << "\nWould you like to delete? (Y/N): ";
-                                                cin >> response;
-                                                if (toupper(response) == 'N') {
-                                                    selected=0;
-                                                }// if response == 'N' statement END
-                                            }// if (remove==true) statement END
+                                            counted++;
+                                            cout << endl << endl << counted << endl; temp.print(); found = true;
+                                    
                                             
                                         }//if Statement END
                                         
                                         list->scroll();
                                         
                                     }// while loop END
+                                    
+                                    //====================================== Remove option enabled
+                                    if (remove == true && found == true) {
+                                        cout << "\nWhich you like to delete? (Enter 0 to cancel): ";
+                                        cin >> convert;
+                                        if (convert == 0) {
+                                            selected=0;
+                                        }else
+                                        {
+                                            list->begin(); counted =0; selected =0;
+                                            while (list->off_end() == false && counted < convert) {
+                                                temp = list->current();
+                                                selected++;
+                                                if (temp.getarmorClass() >= doubleMin && temp.getarmorClass() <= doubleMax) {
+                                                    counted++;
+                                                }//if Statement END
+                                                
+                                                list->scroll();
+                                                
+                                            }// while loop END
+                                            
+                                        }
+                                    }// if (remove==true) statement END
+
+                                    
                                     if (found == false)
                                         cout << "\nNo match found!" << endl;
                                     break;
@@ -555,23 +653,41 @@ void search(List<Hero>* list, bool remove){
                                     
                                     while (list->off_end() == false) {
                                         temp = list->current();
-                                        selected++;// this keeps track of where in the list we are. If query is found, selected is the spot in the list that remove function must delete;
+                                        
                                         if (temp.getMagicResistance() >= doubleMin && temp.getMagicResistance() <= doubleMax) {
-                                            cout << endl << endl; temp.print(); found = true;
-                                            //====================================== Remove option enabled
-                                            if (remove == true) {
-                                                cout << "\nWould you like to delete? (Y/N): ";
-                                                cin >> response;
-                                                if (toupper(response) == 'N') {
-                                                    selected=0;
-                                                }// if response == 'N' statement END
-                                            }// if (remove==true) statement END
+                                            counted++;
+                                            cout << endl << endl << counted << endl; temp.print(); found = true;
                                             
                                         }//if Statement END
                                         
                                         list->scroll();
                                         
                                     }// while loop END
+                                    
+                                    //====================================== Remove option enabled
+                                    if (remove == true && found == true) {
+                                        cout << "\nWhich you like to delete? (Enter 0 to cancel): ";
+                                        cin >> convert;
+                                        if (convert == 0) {
+                                            selected=0;
+                                        }else
+                                        {
+                                            list->begin(); counted =0; selected =0;
+                                            while (list->off_end() == false && counted < convert) {
+                                                temp = list->current();
+                                                selected++;
+                                                if (temp.getMagicResistance() >= doubleMin && temp.getMagicResistance() <= doubleMax) {
+                                                    counted++;
+                                                }//if Statement END
+                                                
+                                                list->scroll();
+                                                
+                                            }// while loop END
+                                            
+                                        }
+                                    }// if (remove==true) statement END
+
+                                    
                                     if (found == false)
                                         cout << "\nNo match found!" << endl;
                                     break;
@@ -582,23 +698,42 @@ void search(List<Hero>* list, bool remove){
                                     
                                     while (list->off_end() == false) {
                                         temp = list->current();
-                                        selected++;// this keeps track of where in the list we are. If query is found, selected is the spot in the list that remove function must delete;
+                                    
                                         if (temp.getMovementSpeed() >= intMin && temp.getMovementSpeed() <= intMax) {
-                                            cout << endl << endl; temp.print(); found = true;
-                                            //====================================== Remove option enabled
-                                            if (remove == true) {
-                                                cout << "\nWould you like to delete? (Y/N): ";
-                                                cin >> response;
-                                                if (toupper(response) == 'N') {
-                                                    selected=0;
-                                                }// if response == 'N' statement END
-                                            }// if (remove==true) statement END
+                                            counted++;
+                                            cout << endl << endl << counted << endl; temp.print(); found = true;
+                                            
                                             
                                         }//if Statement END
                                         
                                         list->scroll();
                                         
                                     }// while loop END
+                                    
+                                    //====================================== Remove option enabled
+                                    if (remove == true && found == true) {
+                                        cout << "\nWhich you like to delete? (Enter 0 to cancel): ";
+                                        cin >> convert;
+                                        if (convert == 0) {
+                                            selected=0;
+                                        }else
+                                        {
+                                            list->begin(); counted =0; selected =0;
+                                            while (list->off_end() == false && counted < convert) {
+                                                temp = list->current();
+                                                selected++;
+                                                if (temp.getMovementSpeed() >= intMin && temp.getMovementSpeed() <= intMax) {
+                                                    counted++;
+                                                }//if Statement END
+                                                
+                                                list->scroll();
+                                                
+                                            }// while loop END
+                                            
+                                        }
+                                    }// if (remove==true) statement END
+
+                                    
                                     if (found == false)
                                         cout << "\nNo match found!" << endl;
                                     break;
@@ -620,11 +755,16 @@ void search(List<Hero>* list, bool remove){
                 cout << "\nNot a valid choice!\n";
                 break;
         }
+        //=========================================== Remove option enabled
+        if (remove == true && selected != 0){
+            list->begin();
+            for (count = 0; count < selected-1; count++){
+                list->scroll();
+            }// for statement END
+            list->remove();
+        }// if Statement END
         
-        
-    }
-
-    
+            }// while statement END
 }
 //======================================================= battle()
 void battle(List<Hero>* hero){
