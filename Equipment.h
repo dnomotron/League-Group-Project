@@ -8,7 +8,7 @@
 //  Equipment.h
 
 #ifndef ____Equipment__
-#define ________Equipment____
+#define ____Equipment__
 
 #include "Hero.h"
 using namespace std;

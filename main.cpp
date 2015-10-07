@@ -608,7 +608,7 @@ void search(List<Hero>* list, bool remove){
                                     while (list->off_end() == false) {
                                         temp = list->current();
                                         
-                                        if (temp.getarmorClass() >= doubleMin && temp.getarmorClass() <= doubleMax) {
+                                        if (temp.getarmor() >= doubleMin && temp.getarmor() <= doubleMax) {
                                             counted++;
                                             cout << endl << endl << counted << endl; temp.print(); found = true;
                                     
@@ -631,7 +631,7 @@ void search(List<Hero>* list, bool remove){
                                             while (list->off_end() == false && counted < convert) {
                                                 temp = list->current();
                                                 selected++;
-                                                if (temp.getarmorClass() >= doubleMin && temp.getarmorClass() <= doubleMax) {
+                                                if (temp.getarmor() >= doubleMin && temp.getarmor() <= doubleMax) {
                                                     counted++;
                                                 }//if Statement END
                                                 
