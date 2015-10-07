@@ -17,9 +17,25 @@ using namespace std;
 class Equipment{
 
 private:
+    bool equipped;
+    
+    
 public:
-
+    
+    // ** Setters **
+    void setEquipped(bool status);
+    
+    // ** Getters **
+    bool getEquipped();
+    
 };
+
+void Equipment::setEquipped(bool status){
+    equipped = status;
+}
+bool Equipment::getEquipped(){
+    return equipped;
+}
 
 class Weapon : Equipment{
 
@@ -30,7 +46,7 @@ private:
 
 public:
 	//Default Constructor
-	Weapon() : weaponName("Default Weapon"), attackDamageBoost(0), attackSpeedBoost(0.0){}
+    Weapon() : weaponName("Default Weapon"), attackDamageBoost(0), attackSpeedBoost(0.0) {}
 
 	//Copy Constructor
 
