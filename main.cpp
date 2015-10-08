@@ -127,6 +127,8 @@ void getData(List<Hero>* list){
             inFile.ignore();
         }//While Loop END
     }// Else Statement END
+    
+    inFile.close();
 }// getData Function END
 
 //======================================================= mainMenu()
