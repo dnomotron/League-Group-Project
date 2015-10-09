@@ -46,7 +46,7 @@ int main(int argc, const char * argv[]) {
                 addChampion(&Champions);
 				break;
 			case 'B':
-
+				battle(&Champions);
 				break;
             case 'R':
                 remove = true;
