@@ -775,9 +775,26 @@ void search(List<Hero>* list, bool remove){
             }// while statement END
 }
 //======================================================= battle()
-void battle(List<Hero>* hero){
-	string selectedChampion;
-	cout << "Enter the name of the champion you want to fight with: ";
+void battle(List<Hero>* hero) {
+	string selectedChampion; int selected; Hero temp; bool found = false;
+	cout << "Enter the name of the champion you want to fight with: " << endl;
 	cin >> selectedChampion;
+
+	hero->begin(); selected = 0;
+
+	while (hero->off_end() == false) {
+
+		temp = hero->current();
+		selected++;// this keeps track of where in the list we are. If query is found, selected is the spot in the list that remove function must delete;
+		if (temp.getName() == selectedChampion) {
+			//temp.print(); 
+			found = true;
+		}
+	}//end while
+	if (found == true)
+	{
+		cout << "true" << endl;
+	}
+	else { cout << "false" << endl; }
 
 }
