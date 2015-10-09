@@ -162,10 +162,10 @@ void Hero::print(){
 }
 double Hero::calcStatBonus(){
 	double bonus = 0.0;
-	for (int i = 0; i < 6; i++)
-	{
-		bonus += Inventory[i];
-	}
+	//for (int i = 0; i < 6; i++)
+	//{
+	//	bonus += Inventory[i];
+	//}
 	
 	return bonus;
 }

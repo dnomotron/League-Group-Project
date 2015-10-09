@@ -37,7 +37,10 @@ int main(int argc, const char * argv[]) {
 	
 	// Testing 
 	Weapon w("Long Sword", 1, 0.6);
+	Armor a;
 	Hero h;
+	Equipment e;
+	e.showSeceret(w, a);
 	cout << h.calcStatBonus() << endl;
 	// End of Testing
 	
