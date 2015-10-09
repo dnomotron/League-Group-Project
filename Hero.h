@@ -30,6 +30,7 @@ private:
     double magicResistance;
     int movementSpeed;
 	bool wearingEquipment;
+	Equipment Inventory[5];
     
 public:
     
@@ -67,7 +68,7 @@ public:
     
 // ** Other Member Functions **
     void print();
-    
+	double calcStatBonus();
     
 };
 
@@ -158,5 +159,14 @@ void Hero::print(){
     cout << left << setw(20) << "Armor: " << right << setw(6) << armor << endl;
     cout << left << setw(20) << "Magic Resistance: " << right << setw(6) << magicResistance << endl;
     cout << left << setw(20) << "Movement Speed: " << right << setw(6) << movementSpeed << endl;
+}
+double Hero::calcStatBonus(){
+	double bonus = 0.0;
+	for (int i = 0; i < 6; i++)
+	{
+		bonus += Inventory[i];
+	}
+	
+	return bonus;
 }
 #endif /* defined(____Hero__) */

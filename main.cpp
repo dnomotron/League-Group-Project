@@ -34,8 +34,14 @@ int main(int argc, const char * argv[]) {
     //creating a new list object L
     
     List<Hero> Champions; getData(&Champions); char choice; bool remove = false;
+	
+	// Testing 
+	Weapon w("Long Sword", 1, 0.6);
+	Hero h;
+	cout << h.calcStatBonus() << endl;
+	// End of Testing
+	
 
-    
    
 // Menu should start here:
     

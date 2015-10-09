@@ -19,7 +19,6 @@ class Equipment{
 private:
     bool equipped;
     
-    
 public:
     
     // ** Setters **
@@ -46,7 +45,7 @@ private:
 
 public:
 	//Default Constructor
-    Weapon() : weaponName("Default Weapon"), attackDamageBoost(0), attackSpeedBoost(0.0) {}
+	Weapon(string name, int damage, double speed){ weaponName = name, attackDamageBoost = damage, attackSpeedBoost = speed; }
 
 	//Copy Constructor
 
@@ -58,9 +57,9 @@ public:
 	void setattackSpeedBoost(double);
 
 	// ** Accessors **
-	string getWeaponName();
-	int getAttackDamage();
-	double getAttackSpeed();
+	string getWeaponName(){ return weaponName; }
+	int getAttackDamage() { return attackDamageBoost; }
+	double getAttackSpeed() { return attackSpeedBoost; }
 
 	// ** Other Member Functions **
 	
