@@ -139,20 +139,49 @@ public:
     int getWeapon();
     
     // ** Other Functions **
-    void print(Weapon e);
+    void print();
 };
 
 void Equipment::setType(string typespecifier){
     type = typespecifier;
 }
-void Equipment::setWeapon(Weapon e){
-    e.setAttackDamageBoost(20);
-    e.setattackSpeedBoost(10.5);
-    e.setWeaponName("LongSword");
+void Equipment::setEquipped(bool status){
+    equipped = status;
     
 }
-void Equipment::print(Weapon e){
+void Equipment::setWeapon(Weapon e){
+    type = "Weapon";
+    weapon.setAttackDamageBoost(e.getAttackDamage());
+    weapon.setattackSpeedBoost(e.getAttackSpeed());
+    weapon.setWeaponName(e.getWeaponName());
     
-    e.print();
+}
+void Equipment::setArmor(Armor a){
+    type = "Armor";
+    armor.setArmorBoost(a.getArmorBoost());
+    armor.setHealthBoost(a.getHealthBoost());
+    armor.setMagicResistanceBoost(a.getMagicResistanceBoost());
+    armor.setManaBoost(a.getManaBoost());
+    armor.setArmorName(a.getArmorName());
+    
+}
+void Equipment::print(){
+    
+    if (type == "Weapon") {
+        cout << "Weapon Name: " << weapon.getWeaponName() << endl;
+        cout << "Attack Damage: " << weapon.getAttackDamage() << endl;
+        cout << "Attack Speed: " << weapon.getAttackSpeed() << endl;
+    }else if(type == "Armor"){
+        
+        cout << "Armor Name: " << armor.getArmorName() << endl;
+        cout << "Armor Boost: " << armor.getArmorBoost() << endl;
+        cout << "Health Boost: " << armor.getHealthBoost() << endl;
+        cout << "Magic Resistance: " << armor.getMagicResistanceBoost() << endl;
+        cout << "Mana Boost: " << armor.getManaBoost() << endl;
+        
+    }
+    else{
+        cout << "\nEmpty Weapon Slot!" << endl;
+    }
 }
 #endif /* defined(____Equipment__) */
