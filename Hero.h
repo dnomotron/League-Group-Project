@@ -29,13 +29,12 @@ private:
     double armor;
     double magicResistance;
     int movementSpeed;
-	bool wearingEquipment;
 	Equipment Inventory[5];
     
 public:
     
 //Default Constructor
-	Hero() : name(""), health(0), mana(0), attackRange(0), attackDamage(0), attackSpeed(0.0), armor(0.0), magicResistance(0.0), movementSpeed(0), wearingEquipment(false){}
+	Hero() : name(""), health(0), mana(0), attackRange(0), attackDamage(0), attackSpeed(0.0), armor(0.0), magicResistance(0.0), movementSpeed(0) {}
     
 //Copy Constructor
     Hero(const Hero &data);
@@ -86,8 +85,7 @@ Hero::Hero(const Hero &data){
     
 }
 
-Hero::~Hero()
-{}
+Hero::~Hero() {}
 
 void Hero::setName(string championName)
 {
@@ -160,13 +158,8 @@ void Hero::print(){
     cout << left << setw(20) << "Magic Resistance: " << right << setw(6) << magicResistance << endl;
     cout << left << setw(20) << "Movement Speed: " << right << setw(6) << movementSpeed << endl;
 }
-double Hero::calcStatBonus(){
-	double bonus = 0.0;
-	//for (int i = 0; i < 6; i++)
-	//{
-	//	bonus += Inventory[i];
-	//}
-	
-	return bonus;
-}
+
+
+
+
 #endif /* defined(____Hero__) */

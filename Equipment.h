@@ -1,4 +1,3 @@
-
 //  Dalton Rick, Nathan Foster, Kush Patel, Desmond Lee, Kurtis Hoang
 //
 //  CIS 22C
@@ -23,12 +22,11 @@ private:
 
 public:
 	//Default Constructor
-	Weapon(string name, int damage, double speed){ weaponName = name, attackDamageBoost = damage, attackSpeedBoost = speed; }
+    Weapon(): weaponName(""), attackDamageBoost(0), attackSpeedBoost(0.0) {}
+	//Weapon(string name, int damage, double speed){ weaponName = name, attackDamageBoost = damage, attackSpeedBoost = speed; }
 
 	//Copy Constructor
-
-	//Default Constuctor
-	
+    
 	// ** Setters (manipulators) **
 	void setWeaponName(string);
 	void setAttackDamageBoost(int);
@@ -40,6 +38,7 @@ public:
 	double getAttackSpeed() { return attackSpeedBoost; }
 
 	// ** Other Member Functions **
+    void print();
 };
 
 void Weapon::setWeaponName(string name){
@@ -52,6 +51,11 @@ void Weapon::setAttackDamageBoost(int damage){
 
 void Weapon::setattackSpeedBoost(double speed){
 	attackSpeedBoost = speed;
+}
+void Weapon::print(){
+    cout << "Weapon Name: " << weaponName << endl;
+    cout << "Attack Damage Boost: " << attackDamageBoost << endl;
+    cout << "Attack Speed Boost: " << attackSpeedBoost << endl;
 }
 
 
@@ -82,11 +86,11 @@ public:
 	void setMagicResistanceBoost(double);
 
 	// ** Accessors **
-	string Armor::getArmorName(){ return armorName; }
-	double Armor::getArmorBoost(){ return armorBoost; }
-	int Armor::getHealthBoost(){ return healthBoost; }
-	int Armor::getManaBoost(){ return manaBoost; }
-	double Armor::getMagicResistanceBoost(){ return magicResistanceBoost; }
+	string getArmorName(){ return armorName; }
+	double getArmorBoost(){ return armorBoost; }
+	int getHealthBoost(){ return healthBoost; }
+	int getManaBoost(){ return manaBoost; }
+	double getMagicResistanceBoost(){ return magicResistanceBoost; }
 
 	// ** Other Member Functions **
 
@@ -109,26 +113,54 @@ void Armor::setMagicResistanceBoost(double mrb){
 	magicResistanceBoost = mrb;
 }
 
+
+
+
+
 class Equipment{
 private:
 	bool equipped;
+    string type;
+    Weapon weapon;
+    Armor armor;
 
 public:
-	void showSeceret(Weapon e, Armor a)
-	{
-		cout << e.getAttackDamage() << endl;
-		cout << a.getArmorBoost() << endl;
-	}
-	// ** Setters **
-	void setEquipped(bool status);
+    
+    Equipment(): equipped(false), type("") {}
+    
+    
+    // ** Setters **
+    void setType(string typespecifier);
+    void setEquipped(bool status);
+    void setWeapon(Weapon e);
+    void setArmor(Armor a);
+    
 
 	// ** Getters **
 	bool getEquipped();
-	//void Equipment::setEquipped(bool status){
-		//equipped = status;
-	//}
-	//bool Equipment::getEquipped(){
-		//return equipped;
-	//}
+    string getType();
+    int getWeapon();
+    
+    // ** Other Functions **
+    void print(Weapon e);
 };
+
+void Equipment::setType(string typespecifier){
+    type = typespecifier;
+}
+void Equipment::setWeapon(Weapon e){
+    e.setAttackDamageBoost(20);
+    e.setattackSpeedBoost(10.5);
+    e.setWeaponName("LongSword");
+    
+}
+void Equipment::print(Weapon e){
+    
+    e.print();
+}
+
+
+
+
+
 #endif /* defined(____Equipment__) */

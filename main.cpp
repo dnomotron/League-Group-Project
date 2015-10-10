@@ -36,13 +36,14 @@ int main(int argc, const char * argv[]) {
     List<Hero> Champions; getData(&Champions); char choice; bool remove = false;
 	
 	// Testing 
-	Weapon w("Long Sword", 1, 0.6);
-	Armor a;
-	Hero h;
-	Equipment e;
-	e.showSeceret(w, a);
-	cout << h.calcStatBonus() << endl;
-	// End of Testing
+	
+    Equipment testWeapon;
+    
+    testWeapon.setType("Weapon");
+    testWeapon.print(Weapon e);
+    
+    
+    // End of Testing
 	
 
    
