@@ -29,7 +29,7 @@ private:
     double armor;
     double magicResistance;
     int movementSpeed;
-	Equipment Inventory[5];
+	//Equipment Inventory[5];
     
 public:
     
@@ -71,8 +71,8 @@ public:
     
 };
 
-Hero::Hero(const Hero &data){
-    
+Hero::Hero(const Hero &data)
+{
     name = data.name;
     health = data.health;
     mana = data.mana;

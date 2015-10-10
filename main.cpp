@@ -36,12 +36,7 @@ int main(int argc, const char * argv[]) {
     List<Hero> Champions; getData(&Champions); char choice; bool remove = false;
 	
 	// Testing 
-	
-    Equipment testWeapon;
-    
-    testWeapon.setType("Weapon");
-    testWeapon.print(Weapon e);
-    
+
     
     // End of Testing
 	
