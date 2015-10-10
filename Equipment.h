@@ -12,7 +12,7 @@
 #include "Hero.h"
 using namespace std;
 
-
+//***************************************************************************************************************************************WEAPON
 class Weapon {
 	friend class Equipment;
 private:
@@ -58,7 +58,7 @@ void Weapon::print(){
     cout << "Attack Speed Boost: " << attackSpeedBoost << endl;
 }
 
-
+//***************************************************************************************************************************************ARMOR
 class Armor{
 	friend class Equipment;
 private:
@@ -113,10 +113,7 @@ void Armor::setMagicResistanceBoost(double mrb){
 	magicResistanceBoost = mrb;
 }
 
-
-
-
-
+//***************************************************************************************************************************************EQUIPMENT
 class Equipment{
 private:
 	bool equipped;
@@ -158,9 +155,4 @@ void Equipment::print(Weapon e){
     
     e.print();
 }
-
-
-
-
-
 #endif /* defined(____Equipment__) */

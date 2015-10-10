@@ -55,15 +55,15 @@ public:
 	void setEquipment(int);
     
 // ** Accessors **
-    string getName();
-    int getHealth();
-    int getMana();
-    int getAttackRange();
-    int getAttackDamage();
-    double getAttackSpeed();
-    double getarmor();
-    double getMagicResistance();
-    int getMovementSpeed();
+	string getName() { return name; };
+    int getHealth() { return health; };
+    int getMana() { return mana; };
+    int getAttackRange() { return attackRange; };
+    int getAttackDamage() { return attackDamage; };
+    double getAttackSpeed() { return attackSpeed; };
+    double getarmor() { return armor; };
+    double getMagicResistance() { return magicResistance; };
+    int getMovementSpeed() { return movementSpeed; };
     
 // ** Other Member Functions **
     void print();
@@ -116,35 +116,6 @@ void Hero::setMagicResistance(double magRes){
 void Hero::setMovementSpeed(int speed){
     movementSpeed = speed;
 }
-string Hero::getName()
-{
-    return name;
-}
-
-int Hero::getHealth(){
-    return health;
-}
-int Hero::getMana(){
-    return mana;
-}
-int Hero::getAttackRange(){
-    return attackRange;
-}
-int Hero::getAttackDamage(){
-    return attackDamage;
-}
-double Hero::getAttackSpeed(){
-    return attackSpeed;
-}
-double Hero::getMagicResistance(){
-    return magicResistance;
-}
-double Hero::getarmor(){
-    return armor;
-}
-int Hero::getMovementSpeed(){
-    return movementSpeed;
-}
 void Hero::print(){
     cout << setprecision(3);
     
@@ -158,8 +129,4 @@ void Hero::print(){
     cout << left << setw(20) << "Magic Resistance: " << right << setw(6) << magicResistance << endl;
     cout << left << setw(20) << "Movement Speed: " << right << setw(6) << movementSpeed << endl;
 }
-
-
-
-
 #endif /* defined(____Hero__) */

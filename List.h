@@ -131,10 +131,7 @@ public:
     //and separated by a blank space
     //Prints nothing if the list is empty
     
-    void print1();
-    
-    
-    
+    void print1(); 
 };
 
 //================================================================= Default Constructor
@@ -202,9 +199,7 @@ void List<listitem>::push_front(listitem data){
         head->previous = newNode;
         head = newNode;
     }
-    
-    size++;
-    
+    size++; 
 }
 
 //============================================================= push_back()
@@ -235,10 +230,8 @@ int List<listitem>::get_size(){
 
 //============================================================ back()
 template <class listitem>
-listitem List<listitem>::back()
-{
+listitem List<listitem>::back(){
     return tail->data;
-    
 }
 
 //============================================================ Off_End()
@@ -252,9 +245,7 @@ bool List<listitem>::off_end()
 }
 //============================================================= Copy Constructor
 template <class listitem>
-List<listitem>::List(const List &list): size(list.size)
-{
-    
+List<listitem>::List(const List &list): size(list.size){
     NodeRef current;
     if(list.head == NULL) //If the original list is empty, make an empty list for this list
     {
@@ -275,13 +266,8 @@ List<listitem>::List(const List &list): size(list.size)
             current = current->next;
             temp = temp->next;
             current->data = temp->data;
-            
-            
-            
         }
-        
-        tail = current; //Why do I need this line of code?
-        
+        tail = current;
     }
 }
 
@@ -289,27 +275,20 @@ List<listitem>::List(const List &list): size(list.size)
 template <class listitem>
 void List<listitem>::pop_front(){
     
-    if (empty()) //or make a call to the empty() function
-    {
+    if (empty())
         cout << "Cannot call pop_front on an empty list" << endl;
-    }
-    else if (size==1)
-    {
+    else if (size==1) {
         delete head;
         head = tail = iterator = NULL;
         
         size = 0;
-        
     }
-    else
-    {
+    else {
         NodeRef temp = head;
         head = head->next;
         head->previous = NULL;
         delete temp;
-        
         size--;
-        
     }
 }
 
@@ -319,15 +298,12 @@ void List<listitem>::pop_back(){
     
     if (empty())
     {cout << "Cannot call pop_back on an empty list" << endl;}
-    else if (size==1)
-    {
+    else if (size==1) {
         delete head;
         head = tail = iterator = NULL;
         size = 0;
     }
-    else
-    {
-        
+    else {
         iterator = tail->previous;
         delete tail;
         iterator->next = NULL;
@@ -339,7 +315,7 @@ void List<listitem>::pop_back(){
 //============================================================ Empty();
 template <class listitem>
 bool List<listitem>::empty(){
-    
+
     if(size==0)
         return true;
     else
@@ -352,7 +328,7 @@ listitem List<listitem>::front(){
     if(empty())
     {
         cout << "Cannot call first node on empty list!" << endl;
-        return 0;
+        return false;
     }
     else
         return head->data;
@@ -360,8 +336,7 @@ listitem List<listitem>::front(){
 
 //============================================================== current()
 template <class listitem>
- listitem List<listitem>::current()
- {
+ listitem List<listitem>::current(){
  if (off_end())
  {
  cout << "Current: Iterator is off the end of the list!" << endl;
@@ -375,10 +350,7 @@ template <class listitem>
 //============================================================= begin();
 template <class listitem>
 void List<listitem>::begin(){
-    
-    iterator = head;
-    
-    
+    iterator = head; 
 }
 //=========================================================== insert()
 template <class listitem>
@@ -404,8 +376,7 @@ void List<listitem>::insert(listitem data){
         iterator->next = newNode;
         if(newNode->next == NULL)
             tail = newNode;
-        else
-        {
+        else{
             NodeRef current = newNode ->next;
             current->previous = newNode;
         }
@@ -429,10 +400,8 @@ void List<listitem>::scroll(){
 template <class listitem>
 void List<listitem>::remove(){
     
-    
     if (off_end()) {
         cout << endl << "Cannot delete NULL value" << endl;
-        
     }
     else{
         
@@ -456,10 +425,6 @@ void List<listitem>::remove(){
         }
         delete iterator;
         size--;
-
     }
-    
 }
-
-
 #endif /* defined(____linkList__) */
