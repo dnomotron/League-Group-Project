@@ -40,7 +40,7 @@ int main(int argc, const char * argv[]) {
     Equipment testWeapon;
     
     testWeapon.setType("Weapon");
-    testWeapon.print(Weapon e);
+    //testWeapon.print(Weapon e);
     
     
     // End of Testing
