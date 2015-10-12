@@ -24,6 +24,7 @@ char attributeMenu();
 void addChampion(List<Hero>* list);
 void print_to_file(List<Hero> list);
 void search(List<Hero>* list, bool remove);
+void equipChampion(List<Hero>* list, List<Equipment> inventory);
 
 //Other functions
 void battle(List<Hero>* hero);
@@ -76,6 +77,12 @@ int main(int argc, const char * argv[]) {
                 Inventory.print();
                 break;
                 
+            case 'Q':
+                
+                equipChampion(&Champions, Inventory);
+                
+                break;
+                
             default:
                 cout << "\nNot a valid choice!\n";
                 break;
@@ -108,7 +115,7 @@ int main(int argc, const char * argv[]) {
 void getData(List<Hero>* list, List<Equipment>* inventory){
     
     Hero current; Weapon weapon; Armor armor; Equipment tempEquip;
-    string tempString; int tempInt; double tempDouble; char tempChar;
+    string tempString; int tempInt; double tempDouble; //char tempChar;
     ifstream inFile;
 
     inFile.open("Champions.txt");
@@ -136,7 +143,7 @@ void getData(List<Hero>* list, List<Equipment>* inventory){
             current.setMagicResistance(tempDouble);
             inFile >> tempInt;
             current.setMovementSpeed(tempInt);
-            
+            current.zeroEquippedCount();
             list->push_back(current);
             inFile.ignore();
         }//While Loop END
@@ -164,12 +171,14 @@ void getData(List<Hero>* list, List<Equipment>* inventory){
                 armor.setManaBoost(tempInt);
                 inFile >> tempDouble;
                 armor.setMagicResistanceBoost(tempDouble);
+                /*
                 inFile >> tempChar;
                 if (tempChar == 'Y') {
                     tempEquip.setEquipped(true);
                 }else{
                     tempEquip.setEquipped(false);
                 }
+                */
                 getline(inFile, tempString);
                 armor.setArmorName(tempString);
                 tempEquip.setArmor(armor);
@@ -181,12 +190,14 @@ void getData(List<Hero>* list, List<Equipment>* inventory){
                 weapon.setAttackDamageBoost(tempInt);
                 inFile >> tempDouble;
                 weapon.setattackSpeedBoost(tempDouble);
+                /*
                 inFile >> tempChar;
                 if (tempChar == 'Y') {
                     tempEquip.setEquipped(true);
                 }else{
                     tempEquip.setEquipped(false);
                 }
+                */
                 getline(inFile, tempString);
                 weapon.setWeaponName(tempString);
                 tempEquip.setWeapon(weapon);
@@ -195,7 +206,7 @@ void getData(List<Hero>* list, List<Equipment>* inventory){
         
         }
         
-    
+    inFile.close();
     
     
 }// getData Function END
@@ -211,6 +222,7 @@ char mainMenu(){
     << "\t S to enter search menu\n"
     << "\t C to print chanmpion list\n"
     << "\t I to print inventory list\n"
+    << "\t Q to equip a champion\n"
     << "\t R to remove a champion\n"
     << "\t E to Exit";
     
@@ -913,4 +925,37 @@ void battle(List<Hero>* hero) {
 	}
 	else { cout << "false" << endl; }
 
+}
+void equipChampion(List<Hero>* list, List<Equipment> Inventory){
+    
+    Equipment tempEquipment; int choice; Hero tempHero;
+    
+    list->print();
+    
+    cout << "\nEnter Champion to equip: ";
+    cin >> choice;
+    cout << endl << endl;
+    list->begin();
+    for (int i=0; i < choice-1; i++) {
+        list->scroll();
+    }
+
+    
+    Inventory.print();
+    
+    cout << "\nEnter item to equip: ";
+    cin >> choice;
+    cout << endl << endl;
+    
+    Inventory.begin();
+    
+    for(int i=0; i < choice-1; i++){
+        Inventory.scroll();
+    }
+    
+    tempEquipment = Equipment(Inventory.current());
+    
+    list->equipCurrent(tempEquipment);
+    
+    
 }

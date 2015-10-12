@@ -131,7 +131,9 @@ public:
     //and separated by a blank space
     //Prints nothing if the list is empty
     
-    void print1(); 
+    void print1();
+    
+    void equipCurrent(const Equipment e);
 };
 
 //================================================================= Default Constructor
@@ -427,4 +429,14 @@ void List<listitem>::remove(){
         size--;
     }
 }
+template <class listitem>
+void List<listitem>::equipCurrent(const Equipment e){
+    
+    iterator->data.setEquipment(e);
+    
+    
+    iterator->data.print();
+}
+
+
 #endif /* defined(____linkList__) */

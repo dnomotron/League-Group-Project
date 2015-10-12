@@ -26,7 +26,7 @@ public:
 	//Weapon(string name, int damage, double speed){ weaponName = name, attackDamageBoost = damage, attackSpeedBoost = speed; }
 
 	//Copy Constructor
-    
+    Weapon(const Weapon &data);
 	// ** Setters (manipulators) **
 	void setWeaponName(string);
 	void setAttackDamageBoost(int);
@@ -39,7 +39,13 @@ public:
 
 	// ** Other Member Functions **
     void print();
+    bool operator==(const Weapon &data);
 };
+Weapon::Weapon(const Weapon &data){
+    weaponName = data.weaponName;
+    attackDamageBoost = data.attackDamageBoost;
+    attackSpeedBoost = data.attackSpeedBoost;
+}
 
 void Weapon::setWeaponName(string name){
 	weaponName = name;
@@ -57,6 +63,17 @@ void Weapon::print(){
     cout << "Attack Damage Boost: " << attackDamageBoost << endl;
     cout << "Attack Speed Boost: " << attackSpeedBoost << endl;
 }
+bool Weapon::operator==(const Weapon &data){
+    
+    if (weaponName != data.weaponName) {
+        return false;
+    }else if(attackDamageBoost != data.attackDamageBoost){
+        return false;
+    }else if(attackSpeedBoost != data.attackSpeedBoost){
+        return false;
+    }else
+        return true;
+}
 
 //***************************************************************************************************************************************ARMOR
 class Armor{
@@ -72,12 +89,10 @@ private:
 
 public:
 	//Default Constructor
-	Armor() : armorName("Default Armor"), armorBoost(0), healthBoost(0), manaBoost(0), magicResistanceBoost(0){}
+	Armor() : armorName(""), armorBoost(0), healthBoost(0), manaBoost(0), magicResistanceBoost(0){}
 
 	//Copy Constructor
-
-	//Default Constuctor
-
+    Armor(const Armor &data);
 	// ** Setters (manipulators) **
 	void setArmorName(string);
 	void setArmorBoost(double);
@@ -93,9 +108,31 @@ public:
 	double getMagicResistanceBoost(){ return magicResistanceBoost; }
 
 	// ** Other Member Functions **
-
+    bool operator==(const Armor &data);
 
 };
+Armor::Armor(const Armor &data){
+    armorName = data.armorName;
+    armorBoost = data.armorBoost;
+    healthBoost = data.healthBoost;
+    manaBoost = data.manaBoost;
+    magicResistanceBoost = data.magicResistanceBoost;
+    
+}
+bool Armor::operator==(const Armor &data){
+    if (armorName != data.armorName) {
+        return false;
+    }else if(armorBoost != data.armorBoost){
+        return false;
+    }else if(healthBoost != data.healthBoost){
+        return false;
+    }else if(manaBoost != data.manaBoost){
+        return false;
+    }else if(magicResistanceBoost != data.magicResistanceBoost){
+        return false;
+    }else
+        return true;
+}
 
 void Armor::setArmorName(string name){
 	armorName = name;
@@ -113,7 +150,8 @@ void Armor::setMagicResistanceBoost(double mrb){
 	magicResistanceBoost = mrb;
 }
 
-//***************************************************************************************************************************************EQUIPMENT
+//********************************************************************************** EQUIPMENT
+
 class Equipment{
 private:
 	bool equipped;
@@ -123,8 +161,8 @@ private:
 
 public:
     
-    Equipment(): equipped(false), type("") {}
-    
+    Equipment(): type(""), equipped(false) {}
+    Equipment(const Equipment &data);
     
     // ** Setters **
     void setType(string typespecifier);
@@ -134,19 +172,39 @@ public:
     
 
 	// ** Getters **
-	bool getEquipped();
-    string getType();
-    int getWeapon();
+    bool getEquipped() {return equipped;};
+    string getType() {return type;};
+    Weapon getWeapon() {return weapon;};
+    Armor getArmor() {return armor;};
     
     // ** Other Functions **
     void print();
+    bool operator==(const Equipment &data);
 };
-
+Equipment::Equipment(const Equipment &data){
+    equipped = data.equipped;
+    type = data.type;
+    armor = data.armor;
+        weapon = data.weapon;
+    
+}
 void Equipment::setType(string typespecifier){
     type = typespecifier;
 }
+
 void Equipment::setEquipped(bool status){
     equipped = status;
+    
+}
+
+bool Equipment::operator==(const Equipment &data){
+    
+    if (type != data.type){
+        return false;
+    }else if(weapon == data.weapon && armor == data.armor){
+        return true;
+    }else
+        return false;
     
 }
 void Equipment::setWeapon(Weapon e){

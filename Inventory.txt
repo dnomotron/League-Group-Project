@@ -1,5 +1,5 @@
-Armor 58.3 125 43 34.9 Y Wooden Shield
-Armor 34.8 89 76 74.3 N Gauntlets
-Weapon 45 .054 Y Sword
-Armor 120.4 300 34 23.8 Y Breastplate
-Weapon 67 .097 N Long Sword
+Armor 58.3 125 43 34.9 Wooden Shield
+Armor 34.8 89 76 74.3 Gauntlets
+Weapon 45 .054 Sword
+Armor 120.4 300 34 23.8 Breastplate
+Weapon 67 .097 Long Sword
