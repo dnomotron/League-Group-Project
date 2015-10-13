@@ -17,14 +17,14 @@ void getData(List<Hero>* list, List<Equipment>* inventory);
 
 // Menus
 char mainMenu();
-char searchMenu(char* typesSwitch);
+char searchMenu();
 char attributeMenu();
 char equipmentRoomMenu();
 
 //Switch case Functions
 void addChampion(List<Hero>* list);
 void print_to_file(List<Hero> list);
-void search(List<Hero>* list, bool remove);
+void search(List<Hero>* list, List<Equipment>* inventory, bool remove, char typeSwitch);
 void equipChampion(List<Hero>* list, List<Equipment> inventory);
 void dequipChampion(List<Hero>* list);
 void equipmentRoom(List<Hero>* list, List<Equipment>* inventory);
@@ -37,7 +37,7 @@ int main(int argc, const char * argv[]) {
     
     //creating a new list object L
     
-    List<Hero> Champions; List<Equipment> Inventory; getData(&Champions, &Inventory); char choice; bool remove = false;
+    List<Hero> Champions; List<Equipment> Inventory; getData(&Champions, &Inventory); char choice; bool remove = false; char typeSwitch;
 	
 
    
@@ -53,13 +53,13 @@ int main(int argc, const char * argv[]) {
 				battle(&Champions);
 				break;
             case 'R':
-                remove = true;
-                search(&Champions, remove);
+                remove = true; typeSwitch = 'C';
+                search(&Champions, &Inventory, remove, typeSwitch);
                 break;
 
 			case 'S':
-				remove = false;
-				search(&Champions, remove);
+				remove = false; typeSwitch = 'C';
+				search(&Champions, &Inventory, remove, typeSwitch);
 				break;
                 
             case 'C':
@@ -132,7 +132,7 @@ void getData(List<Hero>* list, List<Equipment>* inventory){
             current.setMagicResistance(tempDouble);
             inFile >> tempInt;
             current.setMovementSpeed(tempInt);
-            current.zeroEquippedCount();
+            //current.zeroEquippedCount();
             list->push_back(current);
             inFile.ignore();
         }//While Loop END
@@ -160,16 +160,9 @@ void getData(List<Hero>* list, List<Equipment>* inventory){
                 armor.setManaBoost(tempInt);
                 inFile >> tempDouble;
                 armor.setMagicResistanceBoost(tempDouble);
-                /*
-                inFile >> tempChar;
-                if (tempChar == 'Y') {
-                    tempEquip.setEquipped(true);
-                }else{
-                    tempEquip.setEquipped(false);
-                }
-                */
+                inFile.ignore();
                 getline(inFile, tempString);
-                armor.setArmorName(tempString);
+                tempEquip.setName(tempString);
                 tempEquip.setArmor(armor);
                 inventory->push_back(tempEquip);
             }
@@ -179,16 +172,9 @@ void getData(List<Hero>* list, List<Equipment>* inventory){
                 weapon.setAttackDamageBoost(tempInt);
                 inFile >> tempDouble;
                 weapon.setattackSpeedBoost(tempDouble);
-                /*
-                inFile >> tempChar;
-                if (tempChar == 'Y') {
-                    tempEquip.setEquipped(true);
-                }else{
-                    tempEquip.setEquipped(false);
-                }
-                */
+                inFile.ignore();
                 getline(inFile, tempString);
-                weapon.setWeaponName(tempString);
+                tempEquip.setName(tempString);
                 tempEquip.setWeapon(weapon);
                 inventory->push_back(tempEquip);
             }
@@ -220,23 +206,16 @@ char mainMenu(){
 }// mainMenu() function END
 
 //======================================================= searchMenu()
-char searchMenu(char* typeSwitch){
+char searchMenu(){
 
     char choice = 'E';
     cout << endl;
     cout << "\t\t\t\t\t *** Search Menu ***\n\nPlease choose from the following:\n\n";
     
-    cout << "\tA to search champions\n"
-    << "\tI to search inventory\n";
-    
-    cout << "\nChoice: ";
-    cin >> typeSwitch;
-    cout << endl << endl;
-    
         cout << "\t N to search by name\n"
         << "\t H to search by hash number\n"
         << "\t A to search by Attribute\n"
-        << "\t E to exit to main menu\n";
+        << "\t E to exit the search menu\n";
     
     cout << "\n\nChoice: ";
     cin >> choice;
@@ -258,7 +237,7 @@ char attributeMenu(){
     << "\t A to search by Armor \n"
     << "\t G to search by Magic Resistance\n"
     << "\t Q to search by Movement Speed\n"
-    << "\t E to exit to search menu";
+    << "\t E to exit the attribute menu";
     
     cout << "\n\nChoice: ";
     cin >> choice;
@@ -273,11 +252,12 @@ char equipmentRoomMenu(){
     cout << "\t\t\t\t *** Equipment Room ***\n\nPlease choose from the following:\n\n";
     
     cout << "\t Q to equip a champion\n"
-    << "\t R to remove champion equipment\n"
+    << "\t D to remove champion equipment\n"
     << "\t S to search for equipment\n"
+    << "\t R to destroy an item\n"
     << "\t P to print Inventory List\n"
-    << "\t N to search for champion by name and print current equipment\n"
-    << "\t E to exit to main menu\n";
+    //<< "\t N to search for champion by name and print current equipment\n"
+    << "\t E to exit the equipment room\n";
     
     cout << "\n\nChoice: ";
     cin >> choice;
@@ -426,43 +406,79 @@ void print_to_file(List<Hero> list){
     
 }// print_to_file Function END
 //======================================================= search()
-void search(List<Hero>* list, bool remove){
-    char choice; string query; Hero temp; int selected =0; int count =0; char response = 'N'; bool found = false; char attribute;
-    int intMin, intMax; double doubleMin, doubleMax; int counted=0; int convert=0; char typeSwitch;
+void search(List<Hero>* list, List<Equipment>* inventory, bool remove, char typeSwitch){
+    char choice; string query; Hero temp; Equipment eTemp; int selected =0; int count =0; char response = 'N'; bool found = false; char attribute;
+    int intMin, intMax; double doubleMin, doubleMax; int counted=0; int convert=0;
     
-    while((choice = searchMenu(&typeSwitch)) && choice != 'E'){
+    while((choice = searchMenu()) && choice != 'E'){
         found = false;
         switch (choice) {
             case 'N':// Name
-                cout << "\nEnter champion name: ";
-                cin >> query; cout << endl;
                 
-                list->begin(); selected = 0;
-                
-                while (list->off_end() == false) {
+                if (typeSwitch == 'C') {
+                    cout << "\nEnter champion name: ";
+                    cin >> query; cout << endl;
                     
-                    temp = list->current();
-                    selected++;// this keeps track of where in the list we are. If query is found, selected is the spot in the list that remove function must delete;
-                    if (temp.getName() == query) {
-                        temp.print(); found = true;
-                                        //====================================== Remove option enabled
-                                            if (remove == true) {
-                                                cout << "\nWould you like to delete? (Y/N): ";
-                                                cin >> response;
-                                                if (toupper(response) == 'N') {
-                                                    selected=0;
-                                                }// if response == 'N' statement END
-                                            }// if (remove==true) statement END
-                        break;
+                    list->begin(); selected = 0;
+                    
+                    while (list->off_end() == false) {
                         
-                    }//if Statement END
+                        temp = list->current();
+                        selected++;// this keeps track of where in the list we are. If query is found, selected is the spot in the list that remove function must delete;
+                        if (temp.getName() == query) {
+                            temp.print(); found = true;
+                            //====================================== Remove option enabled
+                            if (remove == true) {
+                                cout << "\nWould you like to delete? (Y/N): ";
+                                cin >> response;
+                                if (toupper(response) == 'N') {
+                                    selected=0;
+                                }// if response == 'N' statement END
+                            }// if (remove==true) statement END
+                            break;
+                            
+                        }//if Statement END
+                        
+                        list->scroll();
+                        
+                    }// while loop END
+                    if (found == false)
+                        cout << "\nNo match found!" << endl;
                     
-                    list->scroll();
                     
-                }// while loop END
-                if (found == false)
-                    cout << "\nNo match found!" << endl;
-            
+                }else if(typeSwitch == 'I'){
+                    cin.ignore();
+                    cout << "\nEnter Item name: ";
+                    
+                    getline(cin, query); cout << endl;
+                    
+                    inventory->begin(); selected = 0;
+                    
+                    while (inventory->off_end() == false) {
+                        
+                        eTemp = inventory->current();
+                        selected++;// this keeps track of where in the list we are. If query is found, selected is the spot in the list that remove function must delete;
+                        if (eTemp.getName() == query) {
+                            eTemp.print(); found = true;
+                            //====================================== Remove option enabled
+                            if (remove == true) {
+                                cout << "\nWould you like to delete? (Y/N): ";
+                                cin >> response;
+                                if (toupper(response) == 'N') {
+                                    selected=0;
+                                }// if response == 'N' statement END
+                            }// if (remove==true) statement END
+                            break;
+                            
+                        }//if Statement END
+                        
+                        inventory->scroll();
+                        
+                    }// while loop END
+                    if (found == false)
+                        cout << "\nNo match found!" << endl;
+                }
+                
                 break;// End Name
                 
             case 'H':// Hash
@@ -900,13 +916,19 @@ void search(List<Hero>* list, bool remove){
                 break;
         }
         //=========================================== Remove option enabled
-        if (remove == true && selected != 0){
+        if (remove == true && selected != 0 && typeSwitch == 'C') {
             list->begin();
             for (count = 0; count < selected-1; count++){
                 list->scroll();
             }// for statement END
             list->remove();
-        }// if Statement END
+        }else if(remove == true && selected != 0 && typeSwitch == 'I'){
+            inventory->begin();
+            for (count =0; count < selected-1; count++) {
+                inventory->scroll();
+            }
+            inventory->remove();
+        }
         
             }// while statement END
 }
@@ -937,7 +959,7 @@ void battle(List<Hero>* hero) {
 //======================================================= EquipmentRoom()
 void equipmentRoom(List<Hero>* list, List<Equipment>* inventory){
     
-    char choice;
+    char choice; bool remove; char typeSwitch = 'I';
     
     while((choice = equipmentRoomMenu()) && choice != 'E'){
         
@@ -949,13 +971,21 @@ void equipmentRoom(List<Hero>* list, List<Equipment>* inventory){
                 
                 break;
                 
-            case 'R':
+            case 'D':
                 
                 dequipChampion(list);
                 
                 break;
                 
+            case 'R':
+                remove = true;
+                search(list, inventory, remove, typeSwitch);
+                
+                break;
+                
             case 'S'://Search equipment
+                remove = false;
+                search(list, inventory, remove, typeSwitch);
                 
                 break;
                 
