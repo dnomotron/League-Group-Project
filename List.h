@@ -134,6 +134,8 @@ public:
     void print1();
     
     void equipCurrent(const Equipment e);
+    
+    void dequipCurrent(int count);
 };
 
 //================================================================= Default Constructor
@@ -172,13 +174,19 @@ void List<listitem>::print()
     cout << endl;
 }// End List::print()
 
-//================================================================= Print()
+//================================================================= Print1()
 template <class listitem>
 void List<listitem>::print1(){
     
-    if (!off_end())
+    if (!off_end()){
+        
+    
         iterator->data.print();
-    else
+    cout << endl;
+    iterator->data.printEquipment();
+    
+    
+    }else
         cout << "\nIterator off end!\n";
     
     return;
@@ -436,7 +444,24 @@ void List<listitem>::equipCurrent(const Equipment e){
     
     
     iterator->data.print();
+    
+    iterator->data.printEquipment();
 }
+
+template<class listitem>
+void List<listitem>::dequipCurrent(int count){
+    
+    iterator->data.removeEquipment(count);
+    
+    iterator->data.print();
+    
+    iterator->data.printEquipment();
+    
+    
+    
+}
+
+
 
 
 #endif /* defined(____linkList__) */

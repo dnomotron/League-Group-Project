@@ -68,13 +68,13 @@ public:
     double getMagicResistance() { return magicResistance; };
     int getMovementSpeed() { return movementSpeed; };
     //Equipment getEquipment(int count) {return Inventory[count];};
-    void removeEquipment(Equipment removed);
+    void removeEquipment(int count);
     int getEquippedCount() {return equippedCount;};
     //bool operator==(const Equipment &data);
     
 // ** Other Member Functions **
     void print();
-    void printEqiupment();
+    void printEquipment();
     
 };
 
@@ -131,24 +131,14 @@ void Hero::setEquipment(const Equipment e){
     
      if (equippedCount < 6) {
          
-        for (int i=0; i < equippedCount; i++) {
-            temp = Inventory[i];
-            if (temp == e) {
-                    cout << "\nItem Already Equipped!\n";
-                    return;
-            }
-        }
-         
          Inventory[equippedCount] = e;
-         
          
          if (Inventory[equippedCount].getType() == "Weapon") {
              weapon = Inventory[equippedCount].getWeapon();
-             
-             attackDamage += (weapon.getAttackDamage());
-             
-         }
-         if (Inventory[equippedCount].getType() == "Armor"){
+             attackDamage += weapon.getAttackDamage();
+             attackSpeed += weapon.getAttackSpeed();
+         
+         }else if (Inventory[equippedCount].getType() == "Armor"){
              tempArmor = Inventory[equippedCount].getArmor();
              armor += tempArmor.getArmorBoost();
              health += tempArmor.getHealthBoost();
@@ -165,39 +155,36 @@ void Hero::setEquipment(const Equipment e){
     
 }
 
-void Hero::removeEquipment(Equipment removed){
+void Hero::removeEquipment(int count){
     
-    bool found = false; int count = 0; Weapon tempWeapon; Armor tempArmor;
+    Weapon tempWeapon; Armor tempArmor; Equipment removed;
     
-    if (removed.getType() == "Weapon") {
-        while (found == false && count < equippedCount) {
-            if (Inventory[count].getWeapon() == removed.getWeapon()) {
-                found = true;
-                for (int i = count; i < equippedCount; i++) {
-                    Inventory[count] = Inventory[count+1];
-                }
-                equippedCount--;
+    removed = Inventory[count-1];
+    
+        if (removed.getType() == "Weapon"){
                 tempWeapon = removed.getWeapon();
                 attackDamage -= tempWeapon.getAttackDamage();
                 attackSpeed -= tempWeapon.getAttackSpeed();
-            }
+        
         }
-    }else if(removed.getType() == "Armor"){
-        while (found == false && count < equippedCount){
-            if(Inventory[count].getArmor() == removed.getArmor()){
-                found = true;
-                for(int i= count; i < equippedCount; i++){
-                    Inventory[count] = Inventory[count+1];
-                }
-                equippedCount--;
+        else if(removed.getType() == "Armor"){
                 tempArmor = removed.getArmor();
                 armor -= tempArmor.getArmorBoost();
                 health -= tempArmor.getHealthBoost();
                 mana -= tempArmor.getManaBoost();
                 magicResistance -= tempArmor.getMagicResistanceBoost();
-            }
+        
+        }else{
+            cout << "\nWeapon Not Found!" << endl;
+            return;
         }
+    
+    for (int i= count-1; i < equippedCount; i++) {
+        Inventory[i] = Inventory[i+1];
     }
+
+    equippedCount--;
+    
 }
 
 void Hero::print(){
@@ -214,45 +201,15 @@ void Hero::print(){
     cout << left << setw(20) << "Movement Speed: " << right << setw(6) << movementSpeed << endl;
     cout << left << setw(20) << "Equipped Items: " << right << setw(6) << equippedCount << endl;
 }
-void Hero::printEqiupment(){
+void Hero::printEquipment(){
     
     for (int i=0; i < equippedCount; i++) {
+        cout << endl << i+1 << "." << endl;
         Inventory[i].print();
+        cout << endl;
     }
+    
 }
-/*
- if (Inventory[equippedCount].getType() == "Weapon") {
- weapon = Inventory[equippedCount].getWeapon();
- 
- tempInt = weapon.getAttackDamage(); cout << tempInt << endl;
- attackDamage += tempInt;
- cout << attackDamage << endl;
- tempDouble = weapon.getAttackSpeed(); cout << tempDouble << endl;
- attackSpeed += tempDouble;
- cout << attackSpeed << endl;
- equippedCount++;
- 
- 
- }else if (Inventory[equippedCount].getType() == "Armor"){
- tempArmor = Inventory[equippedCount].getArmor();
- cout << "This ran too" << endl;
- tempDouble = tempArmor.getArmorBoost();
- armor += tempDouble;
- tempInt = tempArmor.getHealthBoost();
- health += tempInt;
- tempInt = tempArmor.getManaBoost();
- mana += tempInt;
- tempDouble = tempArmor.getMagicResistanceBoost();
- magicResistance += tempDouble;
- equippedCount++;
- }else{
- cout << "\nCannot Equip Empty Equipment Slot!\n";
- }
-
- 
- 
- 
- */
 
 
 

@@ -19,12 +19,15 @@ void getData(List<Hero>* list, List<Equipment>* inventory);
 char mainMenu();
 char searchMenu(char* typesSwitch);
 char attributeMenu();
+char equipmentRoomMenu();
 
 //Switch case Functions
 void addChampion(List<Hero>* list);
 void print_to_file(List<Hero> list);
 void search(List<Hero>* list, bool remove);
 void equipChampion(List<Hero>* list, List<Equipment> inventory);
+void dequipChampion(List<Hero>* list);
+void equipmentRoom(List<Hero>* list, List<Equipment>* inventory);
 
 //Other functions
 void battle(List<Hero>* hero);
@@ -35,16 +38,6 @@ int main(int argc, const char * argv[]) {
     //creating a new list object L
     
     List<Hero> Champions; List<Equipment> Inventory; getData(&Champions, &Inventory); char choice; bool remove = false;
-	
-	// Testing 
-	
-    Equipment testWeapon;
-    
-    testWeapon.setType("Weapon");
-    //testWeapon.print(Weapon e);
-    
-    
-    // End of Testing
 	
 
    
@@ -72,19 +65,15 @@ int main(int argc, const char * argv[]) {
             case 'C':
                 Champions.print();
                 break;
-            
-            case 'I':
-                Inventory.print();
-                break;
                 
             case 'Q':
                 
-                equipChampion(&Champions, Inventory);
+                equipmentRoom(&Champions, &Inventory);
                 
                 break;
-                
+            
             default:
-                cout << "\nNot a valid choice!\n";
+                cout << endl << choice << "is not a valid choice!\n";
                 break;
         }
         
@@ -221,10 +210,9 @@ char mainMenu(){
 	<< "\t B to go to battle\n"
     << "\t S to enter search menu\n"
     << "\t C to print chanmpion list\n"
-    << "\t I to print inventory list\n"
-    << "\t Q to equip a champion\n"
     << "\t R to remove a champion\n"
-    << "\t E to Exit";
+    << "\t Q to enter equipment room\n"
+    << "\t E to exit program";
     
     
     cout << "\n\nChoice: "; cin >> choice;
@@ -269,13 +257,33 @@ char attributeMenu(){
     << "\t S to search by Attack Speed\n"
     << "\t A to search by Armor \n"
     << "\t G to search by Magic Resistance\n"
-    << "\t Q to search by Movement Speed\n";
+    << "\t Q to search by Movement Speed\n"
+    << "\t E to exit to search menu";
     
     cout << "\n\nChoice: ";
     cin >> choice;
     
     return toupper(choice);
     
+}
+//======================================================= equipmentRoom()
+char equipmentRoomMenu(){
+    char choice = 'E';
+    cout << endl;
+    cout << "\t\t\t\t *** Equipment Room ***\n\nPlease choose from the following:\n\n";
+    
+    cout << "\t Q to equip a champion\n"
+    << "\t R to remove champion equipment\n"
+    << "\t S to search for equipment\n"
+    << "\t P to print Inventory List\n"
+    << "\t N to search for champion by name and print current equipment\n"
+    << "\t E to exit to main menu\n";
+    
+    cout << "\n\nChoice: ";
+    cin >> choice;
+    
+    
+    return toupper(choice);
 }
 
 //======================================================= addChampion()
@@ -833,7 +841,7 @@ void search(List<Hero>* list, bool remove){
                             break;
                             
                         default:
-                            cout << "\nNot a valid choice!\n";
+                            cout << endl << choice << " is not a valid choice!\n";
                             break;
                     }// End Attribute switch
                     
@@ -867,7 +875,7 @@ void search(List<Hero>* list, bool remove){
                             break;
                             
                         default:
-                            cout << "\nNot a valid choice!\n";
+                            cout << endl << attribute << " is not a valid choice!\n";;
                             break;
                             
                             
@@ -926,6 +934,56 @@ void battle(List<Hero>* hero) {
 	else { cout << "false" << endl; }
 
 }
+//======================================================= EquipmentRoom()
+void equipmentRoom(List<Hero>* list, List<Equipment>* inventory){
+    
+    char choice;
+    
+    while((choice = equipmentRoomMenu()) && choice != 'E'){
+        
+        switch (choice) {
+                
+            case 'Q':
+                
+                equipChampion(list, *inventory);
+                
+                break;
+                
+            case 'R':
+                
+                dequipChampion(list);
+                
+                break;
+                
+            case 'S'://Search equipment
+                
+                break;
+                
+            case 'P':
+                
+                inventory->print();
+                
+                break;
+                
+            case 'N':
+                
+                break;
+                
+                
+            default:
+                cout << endl << choice << " is not a valid choice!\n";
+            
+                break;
+                
+        }// End Switch
+        
+    }// End While
+    
+    
+}
+
+
+//======================================================= equipChampion()
 void equipChampion(List<Hero>* list, List<Equipment> Inventory){
     
     Equipment tempEquipment; int choice; Hero tempHero;
@@ -956,6 +1014,30 @@ void equipChampion(List<Hero>* list, List<Equipment> Inventory){
     tempEquipment = Equipment(Inventory.current());
     
     list->equipCurrent(tempEquipment);
+    
+    
+}
+//======================================================= dequipChampion()
+void dequipChampion(List<Hero>* list){
+    
+    list->print(); int choice=0; int count=0;
+    
+    cout << "\nEnter Champion Number: ";
+    cin >> choice;
+    cout << endl << endl;
+    
+    list->begin();
+    for (int i=0; i < choice-1; i++) {
+        list->scroll();
+    }
+    
+    list->print1();
+    
+    cout << "\nEnter item to remove: ";
+    cin >> count;
+    cout << endl;
+    
+    list->dequipCurrent(count);
     
     
 }
