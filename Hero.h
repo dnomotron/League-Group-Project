@@ -70,6 +70,7 @@ public:
     //Equipment getEquipment(int count) {return Inventory[count];};
     void removeEquipment(int count);
     int getEquippedCount() {return equippedCount;};
+    Equipment sendInventory() {return *Inventory;};
     //bool operator==(const Equipment &data);
     
 // ** Other Member Functions **

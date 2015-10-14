@@ -13,21 +13,23 @@
 //======================================================= Local Function to main() Driver
 
 // Must Run at Start
-void getData(List<Hero>* list, List<Equipment>* inventory);
+void getData(List<Hero>* Champions, List<Equipment>* Inventory);
 
 // Menus
 char mainMenu();
+char championHallMenu();
 char searchMenu();
 char attributeMenu();
 char equipmentRoomMenu();
 
 //Switch case Functions
-void addChampion(List<Hero>* list);
-void print_to_file(List<Hero> list);
-void search(List<Hero>* list, List<Equipment>* inventory, bool remove, char typeSwitch);
-void equipChampion(List<Hero>* list, List<Equipment> inventory);
-void dequipChampion(List<Hero>* list);
-void equipmentRoom(List<Hero>* list, List<Equipment>* inventory);
+void addChampion(List<Hero>* Champions);
+void print_to_file(List<Hero> Champions);
+void search(List<Hero>* Champions, List<Equipment>* Inventory, bool remove, char typeSwitch);
+void equipChampion(List<Hero>* Champions, List<Equipment> Inventory);
+void dequipChampion(List<Hero>* Champions);
+void equipmentRoom(List<Hero>* Champions, List<Equipment>* Inventory);
+void championHall(List<Hero>* Champions, List<Equipment>* Inventory);
 
 //Other functions
 void battle(List<Hero>* hero);
@@ -37,48 +39,31 @@ int main(int argc, const char * argv[]) {
     
     //creating a new list object L
     
-    List<Hero> Champions; List<Equipment> Inventory; getData(&Champions, &Inventory); char choice; bool remove = false; char typeSwitch;
+    List<Hero> Champions; List<Equipment> Inventory; getData(&Champions, &Inventory); char choice;
 	
+    
+//Main Menu
+    
+    while ((choice = mainMenu()) && choice != 'Q') {
+        switch (choice) {
+            case 'C':
+                championHall(&Champions, &Inventory);
+                break;
+                
+            case 'E':
+                equipmentRoom(&Champions, &Inventory);
+                break;
+                
+            default:
+                cout << endl << choice << " is not a valid choice!\n";
+                break;
+        }
+    }
 
    
 // Menu should start here:
     
-    while((choice = mainMenu()) && choice != 'E'){
-        
-        switch (choice) {
-            case 'A':
-                addChampion(&Champions);
-				break;
-			case 'B':
-				battle(&Champions);
-				break;
-            case 'R':
-                remove = true; typeSwitch = 'C';
-                search(&Champions, &Inventory, remove, typeSwitch);
-                break;
-
-			case 'S':
-				remove = false; typeSwitch = 'C';
-				search(&Champions, &Inventory, remove, typeSwitch);
-				break;
-                
-            case 'C':
-                Champions.print();
-                break;
-                
-            case 'Q':
-                
-                equipmentRoom(&Champions, &Inventory);
-                
-                break;
-            
-            default:
-                cout << endl << choice << "is not a valid choice!\n";
-                break;
-        }
-        
-        
-    }
+    
     
     
     
@@ -101,7 +86,7 @@ int main(int argc, const char * argv[]) {
     return 0;
 }
 //======================================================= getData()
-void getData(List<Hero>* list, List<Equipment>* inventory){
+void getData(List<Hero>* Champions, List<Equipment>* Inventory){
     
     Hero current; Weapon weapon; Armor armor; Equipment tempEquip;
     string tempString; int tempInt; double tempDouble; //char tempChar;
@@ -133,7 +118,7 @@ void getData(List<Hero>* list, List<Equipment>* inventory){
             inFile >> tempInt;
             current.setMovementSpeed(tempInt);
             //current.zeroEquippedCount();
-            list->push_back(current);
+            Champions->push_back(current);
             inFile.ignore();
         }//While Loop END
     
@@ -164,7 +149,7 @@ void getData(List<Hero>* list, List<Equipment>* inventory){
                 getline(inFile, tempString);
                 tempEquip.setName(tempString);
                 tempEquip.setArmor(armor);
-                inventory->push_back(tempEquip);
+                Inventory->push_back(tempEquip);
             }
             else{
                 
@@ -176,7 +161,7 @@ void getData(List<Hero>* list, List<Equipment>* inventory){
                 getline(inFile, tempString);
                 tempEquip.setName(tempString);
                 tempEquip.setWeapon(weapon);
-                inventory->push_back(tempEquip);
+                Inventory->push_back(tempEquip);
             }
         
         }
@@ -188,17 +173,33 @@ void getData(List<Hero>* list, List<Equipment>* inventory){
 
 //======================================================= mainMenu()
 char mainMenu(){
-    char choice = 'E';
+    char choice;
+    
     cout << endl;
     cout << "\t\t\t\t ** Welcome to the Main Menu **\n\nPlease choose from the following:\n\n";
+    
+    cout << "\t C to enter the Champions Lounge\n"
+    << "\t E to enter the Equipment room\n"
+    << "\t Q to exit program";
+    
+    
+    cout << "\n\nChoice: "; cin >> choice;
+    return toupper(choice);
+    
+    return toupper(choice);
+}
+//======================================================= championHallMenu()
+char championHallMenu(){
+    char choice = 'E';
+    cout << endl;
+    cout << "\t\t\t\t ** Welcome to the Champions Lounge **\n\nPlease choose from the following:\n\n";
     
     cout << "\t A to add new champion\n"
 	<< "\t B to go to battle\n"
     << "\t S to enter search menu\n"
-    << "\t C to print chanmpion list\n"
+    << "\t P to print chanmpion list\n"
     << "\t R to remove a champion\n"
-    << "\t Q to enter equipment room\n"
-    << "\t E to exit program";
+    << "\t E to exit the Lounge";
     
     
     cout << "\n\nChoice: "; cin >> choice;
@@ -253,11 +254,12 @@ char equipmentRoomMenu(){
     
     cout << "\t Q to equip a champion\n"
     << "\t D to remove champion equipment\n"
+    << "\t A to create new item to inventory\n"
     << "\t S to search for equipment\n"
     << "\t R to destroy an item\n"
-    << "\t P to print Inventory List\n"
+    << "\t P to print inventory List\n"
     //<< "\t N to search for champion by name and print current equipment\n"
-    << "\t E to exit the equipment room\n";
+    << "\t E to exit the Equipment Room\n";
     
     cout << "\n\nChoice: ";
     cin >> choice;
@@ -267,7 +269,7 @@ char equipmentRoomMenu(){
 }
 
 //======================================================= addChampion()
-void addChampion(List<Hero>* list){
+void addChampion(List<Hero>* Champions){
     Hero newChampion; string tempString;int tempInt; double tempDouble; int count; char choice;
 
 	//creating random generator
@@ -312,7 +314,7 @@ void addChampion(List<Hero>* list){
             newChampion.setMovementSpeed(r.DrawNumber(315, 375));
             cout << "Movement Speed: " << newChampion.getMovementSpeed() << endl;
             
-            list->push_back(newChampion);
+            Champions->push_back(newChampion);
             
             cout << i+1 << " of " << count << " added." << endl;
             
@@ -365,7 +367,7 @@ void addChampion(List<Hero>* list){
             cin >> tempInt;
             newChampion.setMovementSpeed(tempInt);
             
-            list->push_back(newChampion);
+            Champions->push_back(newChampion);
             
             cout << i+1 << " of " << count << " added." << endl;
         }// for Loop END
@@ -375,20 +377,20 @@ void addChampion(List<Hero>* list){
 }// addChampion Function END
 
 //======================================================= print_to_file()
-void print_to_file(List<Hero> list){
+void print_to_file(List<Hero> Champions){
    
     ofstream outFile; Hero tempChampion; int count = 0;
-    
+    ofstream pventoryOut; Equipment tempArray[6]; Weapon tempWeapon; Armor tempArmor;
     
     outFile.open("Champions.txt");
     if (outFile.fail()) {
         cout << "Error opening file! " << endl;
     }else
     {
-        list.begin();
+        Champions.begin();
         
-        while (!list.off_end()) {
-            tempChampion = list.current();
+        while (!Champions.off_end()) {
+            tempChampion = Champions.current();
             if (count != 0)
                 outFile << endl;
             
@@ -396,7 +398,22 @@ void print_to_file(List<Hero> list){
             << tempChampion.getAttackRange() << " " << tempChampion.getAttackDamage() << " " << tempChampion.getAttackSpeed()
             << " " << tempChampion.getarmor() << " " << tempChampion.getMagicResistance() << " " << tempChampion.getMovementSpeed();
             
-            list.scroll();
+            if (tempChampion.getEquippedCount() > 0) {
+                
+                pventoryOut.open("/Personal Inventory/" + tempChampion.getName() + ".txt");
+                
+                tempArray[6] = tempChampion.sendInventory();
+                
+                for (int i=0; i < tempChampion.getEquippedCount(); i++) {
+                    if (tempArray[i].getType() == "Weapon") {
+                        tempWeapon = tempArray[i].getWeapon();
+                        pventoryOut << tempWeapon.getAttackDamage() << " " << tempWeapon.getAttackSpeed() << " " << tempArray[i].getName() << endl;
+                    }
+                }
+            
+                
+            }
+            Champions.scroll();
             count++;
         }//While Loop END
         
@@ -406,7 +423,7 @@ void print_to_file(List<Hero> list){
     
 }// print_to_file Function END
 //======================================================= search()
-void search(List<Hero>* list, List<Equipment>* inventory, bool remove, char typeSwitch){
+void search(List<Hero>* Champions, List<Equipment>* Inventory, bool remove, char typeSwitch){
     char choice; string query; Hero temp; Equipment eTemp; int selected =0; int count =0; char response = 'N'; bool found = false; char attribute;
     int intMin, intMax; double doubleMin, doubleMax; int counted=0; int convert=0;
     
@@ -419,11 +436,11 @@ void search(List<Hero>* list, List<Equipment>* inventory, bool remove, char type
                     cout << "\nEnter champion name: ";
                     cin >> query; cout << endl;
                     
-                    list->begin(); selected = 0;
+                    Champions->begin(); selected = 0;
                     
-                    while (list->off_end() == false) {
+                    while (Champions->off_end() == false) {
                         
-                        temp = list->current();
+                        temp = Champions->current();
                         selected++;// this keeps track of where in the list we are. If query is found, selected is the spot in the list that remove function must delete;
                         if (temp.getName() == query) {
                             temp.print(); found = true;
@@ -439,7 +456,7 @@ void search(List<Hero>* list, List<Equipment>* inventory, bool remove, char type
                             
                         }//if Statement END
                         
-                        list->scroll();
+                        Champions->scroll();
                         
                     }// while loop END
                     if (found == false)
@@ -452,11 +469,11 @@ void search(List<Hero>* list, List<Equipment>* inventory, bool remove, char type
                     
                     getline(cin, query); cout << endl;
                     
-                    inventory->begin(); selected = 0;
+                    Inventory->begin(); selected = 0;
                     
-                    while (inventory->off_end() == false) {
+                    while (Inventory->off_end() == false) {
                         
-                        eTemp = inventory->current();
+                        eTemp = Inventory->current();
                         selected++;// this keeps track of where in the list we are. If query is found, selected is the spot in the list that remove function must delete;
                         if (eTemp.getName() == query) {
                             eTemp.print(); found = true;
@@ -472,7 +489,7 @@ void search(List<Hero>* list, List<Equipment>* inventory, bool remove, char type
                             
                         }//if Statement END
                         
-                        inventory->scroll();
+                        Inventory->scroll();
                         
                     }// while loop END
                     if (found == false)
@@ -486,7 +503,7 @@ void search(List<Hero>* list, List<Equipment>* inventory, bool remove, char type
                 break;// END Hash
                 
             case 'A':// Attribute
-                list->begin(); selected = 0; counted =0;
+                Champions->begin(); selected = 0; counted =0;
                 cout << "Select an attribute:\n";
                 
                 if (typeSwitch == 'C') {
@@ -497,15 +514,15 @@ void search(List<Hero>* list, List<Equipment>* inventory, bool remove, char type
                             cout << "Enter Min Range: "; cin >> intMin;
                             cout << "\nEnter Max Range: "; cin >> intMax;
                             
-                            while (list->off_end() == false) {
-                                temp = list->current();
+                            while (Champions->off_end() == false) {
+                                temp = Champions->current();
                                 
                                 if (temp.getHealth() >= intMin && temp.getHealth() <= intMax) { counted++;
                                     cout << endl << endl << counted << endl; temp.print(); found = true;
                                     
                                 }//if Statement END
                                 
-                                list->scroll();
+                                Champions->scroll();
                                 
                             }// while loop END
                             
@@ -517,15 +534,15 @@ void search(List<Hero>* list, List<Equipment>* inventory, bool remove, char type
                                     selected=0;
                                 }else
                                 {
-                                    list->begin(); counted =0; selected =0;
-                                    while (list->off_end() == false && counted < convert) {
-                                        temp = list->current();
+                                    Champions->begin(); counted =0; selected =0;
+                                    while (Champions->off_end() == false && counted < convert) {
+                                        temp = Champions->current();
                                         selected++;
                                         if (temp.getHealth() >= intMin && temp.getHealth() <= intMax) {
                                             counted++;
                                         }//if Statement END
                                         
-                                        list->scroll();
+                                        Champions->scroll();
                                         
                                     }// while loop END
                                     
@@ -541,14 +558,14 @@ void search(List<Hero>* list, List<Equipment>* inventory, bool remove, char type
                             cout << "Enter Min Range: "; cin >> intMin;
                             cout << "\nEnter Max Range: "; cin >> intMax;
                             
-                            while (list->off_end() == false) {
-                                temp = list->current();
+                            while (Champions->off_end() == false) {
+                                temp = Champions->current();
                                 if (temp.getMana() >= intMin && temp.getMana() <= intMax) {counted++;
                                     cout << endl << endl << counted << endl; temp.print(); found = true;
                                     
                                 }//if Statement END
                                 
-                                list->scroll();
+                                Champions->scroll();
                                 
                             }// while loop END
                             
@@ -560,15 +577,15 @@ void search(List<Hero>* list, List<Equipment>* inventory, bool remove, char type
                                     selected=0;
                                 }else
                                 {
-                                    list->begin(); counted =0; selected =0;
-                                    while (list->off_end() == false && counted < convert) {
-                                        temp = list->current();
+                                    Champions->begin(); counted =0; selected =0;
+                                    while (Champions->off_end() == false && counted < convert) {
+                                        temp = Champions->current();
                                         selected++;
                                         if (temp.getMana() >= intMin && temp.getMana() <= intMax) {
                                             counted++;
                                         }//if Statement END
                                         
-                                        list->scroll();
+                                        Champions->scroll();
                                         
                                     }// while loop END
                                     
@@ -585,8 +602,8 @@ void search(List<Hero>* list, List<Equipment>* inventory, bool remove, char type
                             cout << "Enter Min Range: "; cin >> intMin;
                             cout << "\nEnter Max Range: "; cin >> intMax;
                             
-                            while (list->off_end() == false) {
-                                temp = list->current();
+                            while (Champions->off_end() == false) {
+                                temp = Champions->current();
                                 
                                 if (temp.getAttackRange() >= intMin && temp.getAttackRange() <= intMax) {
                                     counted++;
@@ -595,7 +612,7 @@ void search(List<Hero>* list, List<Equipment>* inventory, bool remove, char type
                                     
                                 }//if Statement END
                                 
-                                list->scroll();
+                                Champions->scroll();
                                 
                             }// while loop END
                             
@@ -607,15 +624,15 @@ void search(List<Hero>* list, List<Equipment>* inventory, bool remove, char type
                                     selected=0;
                                 }else
                                 {
-                                    list->begin(); counted =0; selected =0;
-                                    while (list->off_end() == false && counted < convert) {
-                                        temp = list->current();
+                                    Champions->begin(); counted =0; selected =0;
+                                    while (Champions->off_end() == false && counted < convert) {
+                                        temp = Champions->current();
                                         selected++;
                                         if (temp.getAttackRange() >= intMin && temp.getAttackRange() <= intMax) {
                                             counted++;
                                         }//if Statement END
                                         
-                                        list->scroll();
+                                        Champions->scroll();
                                         
                                     }// while loop END
                                     
@@ -631,8 +648,8 @@ void search(List<Hero>* list, List<Equipment>* inventory, bool remove, char type
                             cout << "Enter Min Range: "; cin >> intMin;
                             cout << "\nEnter Max Range: "; cin >> intMax;
                             
-                            while (list->off_end() == false) {
-                                temp = list->current();
+                            while (Champions->off_end() == false) {
+                                temp = Champions->current();
                                 
                                 if (temp.getAttackDamage() >= intMin && temp.getAttackDamage() <= intMax) {
                                     counted++;
@@ -641,7 +658,7 @@ void search(List<Hero>* list, List<Equipment>* inventory, bool remove, char type
                                     
                                 }//if Statement END
                                 
-                                list->scroll();
+                                Champions->scroll();
                                 
                             }// while loop END
                             
@@ -653,15 +670,15 @@ void search(List<Hero>* list, List<Equipment>* inventory, bool remove, char type
                                     selected=0;
                                 }else
                                 {
-                                    list->begin(); counted =0; selected =0;
-                                    while (list->off_end() == false && counted < convert) {
-                                        temp = list->current();
+                                    Champions->begin(); counted =0; selected =0;
+                                    while (Champions->off_end() == false && counted < convert) {
+                                        temp = Champions->current();
                                         selected++;
                                         if (temp.getHealth() >= intMin && temp.getHealth() <= intMax) {
                                             counted++;
                                         }//if Statement END
                                         
-                                        list->scroll();
+                                        Champions->scroll();
                                         
                                     }// while loop END
                                     
@@ -677,8 +694,8 @@ void search(List<Hero>* list, List<Equipment>* inventory, bool remove, char type
                             cout << "Enter Min Range: "; cin >> doubleMin;
                             cout << "\nEnter Max Range: "; cin >> doubleMax;
                             
-                            while (list->off_end() == false) {
-                                temp = list->current();
+                            while (Champions->off_end() == false) {
+                                temp = Champions->current();
                                 
                                 if (temp.getAttackSpeed() >= doubleMin && temp.getAttackSpeed() <= doubleMax) {
                                     counted++;
@@ -687,7 +704,7 @@ void search(List<Hero>* list, List<Equipment>* inventory, bool remove, char type
                                     
                                 }//if Statement END
                                 
-                                list->scroll();
+                                Champions->scroll();
                                 
                             }// while loop END
                             
@@ -699,15 +716,15 @@ void search(List<Hero>* list, List<Equipment>* inventory, bool remove, char type
                                     selected=0;
                                 }else
                                 {
-                                    list->begin(); counted =0; selected =0;
-                                    while (list->off_end() == false && counted < convert) {
-                                        temp = list->current();
+                                    Champions->begin(); counted =0; selected =0;
+                                    while (Champions->off_end() == false && counted < convert) {
+                                        temp = Champions->current();
                                         selected++;
                                         if (temp.getAttackSpeed() >= doubleMin && temp.getAttackSpeed() <= doubleMax) {
                                             counted++;
                                         }//if Statement END
                                         
-                                        list->scroll();
+                                        Champions->scroll();
                                         
                                     }// while loop END
                                     
@@ -723,8 +740,8 @@ void search(List<Hero>* list, List<Equipment>* inventory, bool remove, char type
                             cout << "Enter Min Range: "; cin >> doubleMin;
                             cout << "\nEnter Max Range: "; cin >> doubleMax;
                             
-                            while (list->off_end() == false) {
-                                temp = list->current();
+                            while (Champions->off_end() == false) {
+                                temp = Champions->current();
                                 
                                 if (temp.getarmor() >= doubleMin && temp.getarmor() <= doubleMax) {
                                     counted++;
@@ -733,7 +750,7 @@ void search(List<Hero>* list, List<Equipment>* inventory, bool remove, char type
                                     
                                 }//if Statement END
                                 
-                                list->scroll();
+                                Champions->scroll();
                                 
                             }// while loop END
                             
@@ -745,15 +762,15 @@ void search(List<Hero>* list, List<Equipment>* inventory, bool remove, char type
                                     selected=0;
                                 }else
                                 {
-                                    list->begin(); counted =0; selected =0;
-                                    while (list->off_end() == false && counted < convert) {
-                                        temp = list->current();
+                                    Champions->begin(); counted =0; selected =0;
+                                    while (Champions->off_end() == false && counted < convert) {
+                                        temp = Champions->current();
                                         selected++;
                                         if (temp.getarmor() >= doubleMin && temp.getarmor() <= doubleMax) {
                                             counted++;
                                         }//if Statement END
                                         
-                                        list->scroll();
+                                        Champions->scroll();
                                         
                                     }// while loop END
                                     
@@ -769,8 +786,8 @@ void search(List<Hero>* list, List<Equipment>* inventory, bool remove, char type
                             cout << "Enter Min Range: "; cin >> doubleMin;
                             cout << "\nEnter Max Range: "; cin >> doubleMax;
                             
-                            while (list->off_end() == false) {
-                                temp = list->current();
+                            while (Champions->off_end() == false) {
+                                temp = Champions->current();
                                 
                                 if (temp.getMagicResistance() >= doubleMin && temp.getMagicResistance() <= doubleMax) {
                                     counted++;
@@ -778,7 +795,7 @@ void search(List<Hero>* list, List<Equipment>* inventory, bool remove, char type
                                     
                                 }//if Statement END
                                 
-                                list->scroll();
+                                Champions->scroll();
                                 
                             }// while loop END
                             
@@ -790,15 +807,15 @@ void search(List<Hero>* list, List<Equipment>* inventory, bool remove, char type
                                     selected=0;
                                 }else
                                 {
-                                    list->begin(); counted =0; selected =0;
-                                    while (list->off_end() == false && counted < convert) {
-                                        temp = list->current();
+                                    Champions->begin(); counted =0; selected =0;
+                                    while (Champions->off_end() == false && counted < convert) {
+                                        temp = Champions->current();
                                         selected++;
                                         if (temp.getMagicResistance() >= doubleMin && temp.getMagicResistance() <= doubleMax) {
                                             counted++;
                                         }//if Statement END
                                         
-                                        list->scroll();
+                                        Champions->scroll();
                                         
                                     }// while loop END
                                     
@@ -814,8 +831,8 @@ void search(List<Hero>* list, List<Equipment>* inventory, bool remove, char type
                             cout << "Enter Min Range: "; cin >> intMin;
                             cout << "\nEnter Max Range: "; cin >> intMax;
                             
-                            while (list->off_end() == false) {
-                                temp = list->current();
+                            while (Champions->off_end() == false) {
+                                temp = Champions->current();
                                 
                                 if (temp.getMovementSpeed() >= intMin && temp.getMovementSpeed() <= intMax) {
                                     counted++;
@@ -824,7 +841,7 @@ void search(List<Hero>* list, List<Equipment>* inventory, bool remove, char type
                                     
                                 }//if Statement END
                                 
-                                list->scroll();
+                                Champions->scroll();
                                 
                             }// while loop END
                             
@@ -836,15 +853,15 @@ void search(List<Hero>* list, List<Equipment>* inventory, bool remove, char type
                                     selected=0;
                                 }else
                                 {
-                                    list->begin(); counted =0; selected =0;
-                                    while (list->off_end() == false && counted < convert) {
-                                        temp = list->current();
+                                    Champions->begin(); counted =0; selected =0;
+                                    while (Champions->off_end() == false && counted < convert) {
+                                        temp = Champions->current();
                                         selected++;
                                         if (temp.getMovementSpeed() >= intMin && temp.getMovementSpeed() <= intMax) {
                                             counted++;
                                         }//if Statement END
                                         
-                                        list->scroll();
+                                        Champions->scroll();
                                         
                                     }// while loop END
                                     
@@ -917,32 +934,32 @@ void search(List<Hero>* list, List<Equipment>* inventory, bool remove, char type
         }
         //=========================================== Remove option enabled
         if (remove == true && selected != 0 && typeSwitch == 'C') {
-            list->begin();
+            Champions->begin();
             for (count = 0; count < selected-1; count++){
-                list->scroll();
+                Champions->scroll();
             }// for statement END
-            list->remove();
+            Champions->remove();
         }else if(remove == true && selected != 0 && typeSwitch == 'I'){
-            inventory->begin();
+            Inventory->begin();
             for (count =0; count < selected-1; count++) {
-                inventory->scroll();
+                Inventory->scroll();
             }
-            inventory->remove();
+            Inventory->remove();
         }
         
             }// while statement END
 }
 //======================================================= battle()
-void battle(List<Hero>* hero) {
+void battle(List<Hero>* Champions) {
 	string selectedChampion; int selected; Hero temp; bool found = false;
 	cout << "Enter the name of the champion you want to fight with: " << endl;
 	cin >> selectedChampion;
 
-	hero->begin(); selected = 0;
+	Champions->begin(); selected = 0;
 
-	while (hero->off_end() == false) {
+	while (Champions->off_end() == false) {
 
-		temp = hero->current();
+		temp = Champions->current();
 		selected++;// this keeps track of where in the list we are. If query is found, selected is the spot in the list that remove function must delete;
 		if (temp.getName() == selectedChampion) {
 			//temp.print();
@@ -957,7 +974,7 @@ void battle(List<Hero>* hero) {
 
 }
 //======================================================= EquipmentRoom()
-void equipmentRoom(List<Hero>* list, List<Equipment>* inventory){
+void equipmentRoom(List<Hero>* Champions, List<Equipment>* Inventory){
     
     char choice; bool remove; char typeSwitch = 'I';
     
@@ -967,35 +984,39 @@ void equipmentRoom(List<Hero>* list, List<Equipment>* inventory){
                 
             case 'Q':
                 
-                equipChampion(list, *inventory);
+                equipChampion(Champions, *Inventory);
                 
                 break;
                 
             case 'D':
                 
-                dequipChampion(list);
+                dequipChampion(Champions);
                 
                 break;
                 
             case 'R':
                 remove = true;
-                search(list, inventory, remove, typeSwitch);
+                search(Champions, Inventory, remove, typeSwitch);
                 
                 break;
                 
             case 'S'://Search equipment
                 remove = false;
-                search(list, inventory, remove, typeSwitch);
+                search(Champions, Inventory, remove, typeSwitch);
                 
                 break;
                 
             case 'P':
                 
-                inventory->print();
+                Inventory->print();
                 
                 break;
                 
             case 'N':
+                
+                break;
+                
+            case 'A':// add item
                 
                 break;
                 
@@ -1011,21 +1032,56 @@ void equipmentRoom(List<Hero>* list, List<Equipment>* inventory){
     
     
 }
-
+//======================================================= Champion Hall
+void championHall(List<Hero>* Champions, List<Equipment>* Inventory){
+    char typeSwitch = 'C'; bool remove; char choice;
+    
+    while((choice = championHallMenu()) && choice != 'E'){
+        
+        switch (choice) {
+            case 'A':
+                addChampion(Champions);
+                break;
+            case 'B':
+                battle(Champions);
+                break;
+            case 'R':
+                remove = true; typeSwitch = 'C';
+                search(Champions, Inventory, remove, typeSwitch);
+                break;
+                
+            case 'S':
+                remove = false; typeSwitch = 'C';
+                search(Champions, Inventory, remove, typeSwitch);
+                break;
+                
+            case 'C':
+                Champions->print();
+                break;
+                
+            
+            default:
+                cout << endl << choice << "is not a valid choice!\n";
+                break;
+        }
+        
+        
+    }
+}
 
 //======================================================= equipChampion()
-void equipChampion(List<Hero>* list, List<Equipment> Inventory){
+void equipChampion(List<Hero>* Champions, List<Equipment> Inventory){
     
     Equipment tempEquipment; int choice; Hero tempHero;
     
-    list->print();
+    Champions->print();
     
     cout << "\nEnter Champion to equip: ";
     cin >> choice;
     cout << endl << endl;
-    list->begin();
+    Champions->begin();
     for (int i=0; i < choice-1; i++) {
-        list->scroll();
+        Champions->scroll();
     }
 
     
@@ -1043,31 +1099,33 @@ void equipChampion(List<Hero>* list, List<Equipment> Inventory){
     
     tempEquipment = Equipment(Inventory.current());
     
-    list->equipCurrent(tempEquipment);
+   Champions->equipCurrent(tempEquipment);    
+    
+    
     
     
 }
 //======================================================= dequipChampion()
-void dequipChampion(List<Hero>* list){
+void dequipChampion(List<Hero>* Champions){
     
-    list->print(); int choice=0; int count=0;
+    Champions->print(); int choice=0; int count=0;
     
     cout << "\nEnter Champion Number: ";
     cin >> choice;
     cout << endl << endl;
     
-    list->begin();
+    Champions->begin();
     for (int i=0; i < choice-1; i++) {
-        list->scroll();
+        Champions->scroll();
     }
     
-    list->print1();
+    Champions->print1();
     
     cout << "\nEnter item to remove: ";
     cin >> count;
     cout << endl;
     
-    list->dequipCurrent(count);
+     Champions->dequipCurrent(count);
     
     
 }

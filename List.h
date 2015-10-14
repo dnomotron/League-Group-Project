@@ -136,6 +136,8 @@ public:
     void equipCurrent(const Equipment e);
     
     void dequipCurrent(int count);
+    
+    
 };
 
 //================================================================= Default Constructor
@@ -459,6 +461,11 @@ void List<listitem>::dequipCurrent(int count){
     
     
     
+}
+template<class listitem>
+int List<listitem>::getEquipmentCount(){
+    
+    return iterator->data.getEquippedCount();
 }
 
 
