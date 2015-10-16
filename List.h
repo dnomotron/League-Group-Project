@@ -137,6 +137,7 @@ public:
     
     void dequipCurrent(int count);
     
+	int getEquipmentCount();
     
 };
 
