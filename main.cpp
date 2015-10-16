@@ -197,7 +197,7 @@ char championHallMenu(){
     cout << "\t A to add new champion\n"
 	<< "\t B to go to battle\n"
     << "\t S to enter search menu\n"
-    << "\t P to print chanmpion list\n"
+    << "\t P to print champion list\n"
     << "\t R to remove a champion\n"
     << "\t E to exit the Lounge";
     
@@ -887,7 +887,7 @@ void search(List<Hero>* Champions, List<Equipment>* Inventory, bool remove, char
                             
                             break;
                             
-                        case 'S':// Attack Speed
+                        case 'Sp':// Attack Speed
                             
                             break;
                             
@@ -1055,7 +1055,7 @@ void championHall(List<Hero>* Champions, List<Equipment>* Inventory){
                 search(Champions, Inventory, remove, typeSwitch);
                 break;
                 
-            case 'C':
+            case 'P'://case 'C':
                 Champions->print();
                 break;
                 
