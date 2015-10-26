@@ -60,28 +60,7 @@ int main(int argc, const char * argv[]) {
         }
     }
 
-   
-    cout << "Copying List..." << endl;
-    
-    List<Hero> copy = Champions;
-// Menu should start here:
-    
-    
-    
-    
-    
-    
-    
-/* /////////////////////////////////////// Test Case:
-    Champions.print();
-    
-    addChampion(&Champions);
-    
-    Champions.print();
-        
-    print_to_file(Champions);
-    
-*/
+
     
 //======================================================= Save any New Champions or data to file before exit
     print_to_file(Champions);
