@@ -179,7 +179,7 @@ char championHallMenu(){
     cout << "\t A to add new champion\n"
 	<< "\t B to go to battle\n"
     << "\t S to enter search menu\n"
-    << "\t P to print chanmpion list\n"
+    << "\t P to print champion list\n"
     << "\t R to remove a champion\n"
     << "\t E to exit the Lounge";
     
