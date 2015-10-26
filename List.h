@@ -462,11 +462,6 @@ void List<listitem>::dequipCurrent(int count){
     
     
 }
-template<class listitem>
-int List<listitem>::getEquipmentCount(){
-    
-    return iterator->data.getEquippedCount();
-}
 
 
 

@@ -61,6 +61,9 @@ int main(int argc, const char * argv[]) {
     }
 
    
+    cout << "Copying List..." << endl;
+    
+    List<Hero> copy = Champions;
 // Menu should start here:
     
     
@@ -429,6 +432,8 @@ void search(List<Hero>* Champions, List<Equipment>* Inventory, bool remove, char
     
     while((choice = searchMenu()) && choice != 'E'){
         found = false;
+        
+        
         switch (choice) {
             case 'N':// Name
                 
@@ -505,7 +510,7 @@ void search(List<Hero>* Champions, List<Equipment>* Inventory, bool remove, char
             case 'A':// Attribute
                 Champions->begin(); selected = 0; counted =0;
                 cout << "Select an attribute:\n";
-                
+//---------------------------------------------------------- Search Attribute begin ---------------------------------------------------------
                 if (typeSwitch == 'C') {
                     
                     switch ((attribute = attributeMenu())) {
@@ -878,33 +883,321 @@ void search(List<Hero>* Champions, List<Equipment>* Inventory, bool remove, char
                             break;
                     }// End Attribute switch
                     
-                    
+//---------------------------------------------------------- Search Attribute Else ---------------------------------------------------------
                 }else if (typeSwitch == 'I'){
+                    Inventory->begin();
                     
                     switch ((attribute = attributeMenu())) {
                             
                         case 'D'://attack damage Boost
+                            cout << "Enter Min Range: "; cin >> intMin;
+                            cout << "\nEnter Max Range: "; cin >> intMax;
+                            
+                            while (Inventory->off_end() == false) {
+                            
+                                eTemp = Inventory->current();
+                                
+                                if (eTemp.getType() == "Weapon") {
+                                    Weapon wpn2compare(eTemp.getWeapon());
+                                    
+                                    
+                                    if (wpn2compare.getAttackDamage() >= intMin && wpn2compare.getAttackDamage() <= intMax) {
+                                        counted++;
+                                        cout << endl << endl << counted << endl; eTemp.print(); found = true;
+                                        
+                                        
+                                    }//if Statement END
+                                }
+                                
+                                
+                                Inventory->scroll();
+                                
+                            }// while loop END
+                            
+                            //====================================== Remove option enabled
+                            if (remove == true && found == true) {
+                                cout << "\nWhich you like to delete? (Enter 0 to cancel): ";
+                                cin >> convert;
+                                if (convert == 0) {
+                                    selected=0;
+                                }else
+                                {
+                                    Inventory->begin(); counted =0; selected =0;
+                                    
+                                    
+                                    while (Inventory->off_end() == false && counted < convert) {
+                                        eTemp = Inventory->current();
+                                        if (eTemp.getType() == "Weapon") {
+                                         Weapon wpn2compare = eTemp.getWeapon();
+                                        selected++;
+                                        if (wpn2compare.getAttackDamage() >= intMin && wpn2compare.getAttackDamage() <= intMax) {
+                                            counted++;
+                                        }//if Statement END
+                                        }
+                                        Inventory->scroll();
+                                        
+                                    }// while loop END
+                                    
+                                }
+                            }// if (remove==true) statement END
+                            
+                            
+                            if (found == false)
+                                cout << "\nNo match found!" << endl;
                             
                             break;
                             
                         case 'S':// Attack Speed
+                            cout << "Enter Min Range: "; cin >> doubleMin;
+                            cout << "\nEnter Max Range: "; cin >> doubleMax;
                             
+                            while (Inventory->off_end() == false) {
+                                eTemp = Inventory->current();
+                                
+                                if (eTemp.getType() == "Weapon") {
+                                Weapon wpn2compare(eTemp.getWeapon());
+                                
+                                if (wpn2compare.getAttackSpeed() >= doubleMin && wpn2compare.getAttackSpeed() <= doubleMax) {
+                                    counted++;
+                                    cout << endl << endl << counted << endl; eTemp.print(); found = true;
+                                    
+                                    
+                                }//if Statement END
+                                }
+                                Inventory->scroll();
+                                
+                            }// while loop END
+                            
+                            //====================================== Remove option enabled
+                            if (remove == true && found == true) {
+                                cout << "\nWhich you like to delete? (Enter 0 to cancel): ";
+                                cin >> convert;
+                                if (convert == 0) {
+                                    selected=0;
+                                }else
+                                {
+                                    Inventory->begin(); counted =0; selected =0;
+                                    while (Inventory->off_end() == false && counted < convert) {
+                                        eTemp = Inventory->current();
+                                        if (eTemp.getType() == "Weapon") {
+                                        Weapon wpn2compare = eTemp.getWeapon();
+                                        selected++;
+                                        if (wpn2compare.getAttackDamage() >= doubleMin && wpn2compare.getAttackDamage() <= doubleMax) {
+                                            counted++;
+                                        }//if Statement END
+                                        }
+                                        Inventory->scroll();
+                                        
+                                    }// while loop END
+                                    
+                                }
+                            }// if (remove==true) statement END
+                            
+                            
+                            if (found == false)
+                                cout << "\nNo match found!" << endl;
                             break;
                             
                         case 'H':// Health Boost
+                            cout << "Enter Min Range: "; cin >> intMin;
+                            cout << "\nEnter Max Range: "; cin >> intMax;
                             
+                            while (Inventory->off_end() == false) {
+                                eTemp = Inventory->current();
+                                
+                                if (eTemp.getType() == "Armor") {
+                                Armor arm2compare(eTemp.getArmor());
+                                
+                                if (arm2compare.getHealthBoost() >= intMin && arm2compare.getHealthBoost() <= intMax) {
+                                    counted++;
+                                    cout << endl << endl << counted << endl; eTemp.print(); found = true;
+                                    
+                                    
+                                }//if Statement END
+                                }
+                                Inventory->scroll();
+                                
+                            }// while loop END
+                            
+                            //====================================== Remove option enabled
+                            if (remove == true && found == true) {
+                                cout << "\nWhich you like to delete? (Enter 0 to cancel): ";
+                                cin >> convert;
+                                if (convert == 0) {
+                                    selected=0;
+                                }else
+                                {
+                                    Inventory->begin(); counted =0; selected =0;
+                                    while (Inventory->off_end() == false && counted < convert) {
+                                        eTemp = Inventory->current();
+                                        if (eTemp.getType() == "Armor") {
+                                        Armor arm2compare = eTemp.getArmor();
+                                        selected++;
+                                        if (arm2compare.getHealthBoost() >= intMin && arm2compare.getHealthBoost() <= intMax) {
+                                            counted++;
+                                        }//if Statement END
+                                        }
+                                        Inventory->scroll();
+                                        
+                                    }// while loop END
+                                    
+                                }
+                            }// if (remove==true) statement END
+                            
+                            
+                            if (found == false)
+                                cout << "\nNo match found!" << endl;
                             break;
                             
                         case 'A':// Armor Boost
+                            cout << "Enter Min Range: "; cin >> intMin;
+                            cout << "\nEnter Max Range: "; cin >> intMax;
                             
+                            while (Inventory->off_end() == false) {
+                                eTemp = Inventory->current();
+                                if (eTemp.getType() == "Armor") {
+                                Armor arm2compare(eTemp.getArmor());
+                                
+                                if (arm2compare.getArmorBoost() >= intMin && arm2compare.getArmorBoost() <= intMax) {
+                                    counted++;
+                                    cout << endl << endl << counted << endl; eTemp.print(); found = true;
+                                    
+                                    
+                                }//if Statement END
+                                }
+                                Inventory->scroll();
+                                
+                            }// while loop END
+                            
+                            //====================================== Remove option enabled
+                            if (remove == true && found == true) {
+                                cout << "\nWhich you like to delete? (Enter 0 to cancel): ";
+                                cin >> convert;
+                                if (convert == 0) {
+                                    selected=0;
+                                }else
+                                {
+                                    Inventory->begin(); counted =0; selected =0;
+                                    while (Inventory->off_end() == false && counted < convert) {
+                                        eTemp = Inventory->current();
+                                        if (eTemp.getType() == "Armor") {
+                                        Armor arm2compare = eTemp.getArmor();
+                                        selected++;
+                                        if (arm2compare.getArmorBoost() >= intMin && arm2compare.getArmorBoost() <= intMax) {
+                                            counted++;
+                                        }//if Statement END
+                                        }
+                                        Inventory->scroll();
+                                        
+                                    }// while loop END
+                                    
+                                }
+                            }// if (remove==true) statement END
+                            
+                            
+                            if (found == false)
+                                cout << "\nNo match found!" << endl;
                             break;
                             
                         case 'M': // Mana Boost
+                            cout << "Enter Min Range: "; cin >> intMin;
+                            cout << "\nEnter Max Range: "; cin >> intMax;
                             
+                            while (Inventory->off_end() == false) {
+                                eTemp = Inventory->current();
+                                if (eTemp.getType() == "Armor") {
+                                Armor arm2compare(eTemp.getArmor());
+                                
+                                if (arm2compare.getManaBoost() >= intMin && arm2compare.getManaBoost() <= intMax) {
+                                    counted++;
+                                    cout << endl << endl << counted << endl; eTemp.print(); found = true;
+                                    
+                                    
+                                }//if Statement END
+                                }
+                                Inventory->scroll();
+                                
+                            }// while loop END
+                            
+                            //====================================== Remove option enabled
+                            if (remove == true && found == true) {
+                                cout << "\nWhich you like to delete? (Enter 0 to cancel): ";
+                                cin >> convert;
+                                if (convert == 0) {
+                                    selected=0;
+                                }else
+                                {
+                                    Inventory->begin(); counted =0; selected =0;
+                                    while (Inventory->off_end() == false && counted < convert) {
+                                        eTemp = Inventory->current();
+                                        if (eTemp.getType() == "Armor") {
+                                        Armor arm2compare = eTemp.getArmor();
+                                        selected++;
+                                        if (arm2compare.getManaBoost() >= intMin && arm2compare.getManaBoost() <= intMax) {
+                                            counted++;
+                                        }//if Statement END
+                                        }
+                                        Inventory->scroll();
+                                        
+                                    }// while loop END
+                                    
+                                }
+                            }// if (remove==true) statement END
+                            
+                            
+                            if (found == false)
+                                cout << "\nNo match found!" << endl;
                             break;
                             
-                        case 'R': // Magic Resistance Boost
+                        case 'G': // Magic Resistance Boost
+                            cout << "Enter Min Range: "; cin >> intMin;
+                            cout << "\nEnter Max Range: "; cin >> intMax;
                             
+                            while (Inventory->off_end() == false) {
+                                eTemp = Inventory->current();
+                                if (eTemp.getType() == "Armor") {
+                                Armor arm2compare(eTemp.getArmor());
+                                
+                                if (arm2compare.getMagicResistanceBoost() >= intMin && arm2compare.getMagicResistanceBoost() <= intMax) {
+                                    counted++;
+                                    cout << endl << endl << counted << endl; eTemp.print(); found = true;
+                                    
+                                    
+                                }//if Statement END
+                                }
+                                
+                                Inventory->scroll();
+                                
+                            }// while loop END
+                            
+                            //====================================== Remove option enabled
+                            if (remove == true && found == true) {
+                                cout << "\nWhich you like to delete? (Enter 0 to cancel): ";
+                                cin >> convert;
+                                if (convert == 0) {
+                                    selected=0;
+                                }else
+                                {
+                                    Inventory->begin(); counted =0; selected =0;
+                                    while (Inventory->off_end() == false && counted < convert) {
+                                        eTemp = Inventory->current();
+                                        if (eTemp.getType() == "Armor") {
+                                        Armor arm2compare = eTemp.getArmor();
+                                        selected++;
+                                        if (arm2compare.getMagicResistanceBoost() >= intMin && arm2compare.getMagicResistanceBoost() <= intMax) {
+                                            counted++;
+                                        }//if Statement END
+                                        }
+                                        Inventory->scroll();
+                                        
+                                    }// while loop END
+                                    
+                                }
+                            }// if (remove==true) statement END
+                            
+                            
+                            if (found == false)
+                                cout << "\nNo match found!" << endl;
                             break;
                             
                         default:
@@ -932,6 +1225,8 @@ void search(List<Hero>* Champions, List<Equipment>* Inventory, bool remove, char
                 cout << "\nNot a valid choice!\n";
                 break;
         }
+        
+        
         //=========================================== Remove option enabled
         if (remove == true && selected != 0 && typeSwitch == 'C') {
             Champions->begin();
@@ -1055,7 +1350,7 @@ void championHall(List<Hero>* Champions, List<Equipment>* Inventory){
                 search(Champions, Inventory, remove, typeSwitch);
                 break;
                 
-            case 'C':
+            case 'P':
                 Champions->print();
                 break;
                 
