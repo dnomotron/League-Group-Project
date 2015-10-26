@@ -887,7 +887,7 @@ void search(List<Hero>* Champions, List<Equipment>* Inventory, bool remove, char
                             
                             break;
                             
-                        case 'Sp':// Attack Speed
+                        case 'S':// Attack Speed
                             
                             break;
                             
