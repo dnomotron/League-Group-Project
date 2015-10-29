@@ -29,7 +29,7 @@ public:
     //the hash value is the sum of
     //the ASCII values of each character % the table size
     
-    void addItem(string name);
+    void addItem(string name, int index);
     //inserts a new item into the table
     // calls the hash function on the key title to determine the correct bucket
     
@@ -59,9 +59,10 @@ private:
     struct Node
     {
         string name;
+        int listIndex;
         Node* next;
-        Node(): name(""), next(NULL){}
-        Node(string ntitle): name(ntitle), next(NULL) {}
+        Node(): name(""), listIndex(-1), next(NULL){}
+        Node(string ntitle, int nindex): name(ntitle), listIndex(nindex), next(NULL) {}
     };
     
         typedef struct Node* Nodeptr;
@@ -85,24 +86,25 @@ int HashTable::hash(string key){
     index = sum % TABLE_SIZE; //dividing the summed ASCII values by 37 && storing remainder as my index
     return index;
 }
-void HashTable::addItem(string name){
+void HashTable::addItem(string name, int index){
     
     
     int position = hash(name);
     
     if (Table[position]->name == "") {
         Table[position]->name = name;
+        Table[position]->listIndex = index;
         
     }else if(Table[position]->next == NULL){
         
-        Table[position]->next = new Node(name);
+        Table[position]->next = new Node(name, index);
         
     }else{
         Nodeptr walker = Table[position]->next;
         while (walker->next) {
             walker = walker->next;
         }
-        walker->next = new Node(name);
+        walker->next = new Node(name, index);
         
         
     }
@@ -146,7 +148,7 @@ int HashTable::findName(string name){
     
     while (walker) {
         if (walker->name == name) {
-            return index;
+            return walker->listIndex;
         }else{
             walker = walker->next;
         }

@@ -9,12 +9,13 @@
 #include "List.h"
 #include "Random.h"
 #include "HashTable.h"
+#include "Hero.h"
 #include <fstream>
 
 //======================================================= Local Function to main() Driver
 
 // Must Run at Start
-void getData(List<Hero>* Champions, List<Equipment>* Inventory, HashTable* champTable, HashTable* equipTable);
+void getData(List<Hero>* Champions, List<Equipment>* Inventory, HashTable* Table);
 
 // Menus
 char mainMenu();
@@ -24,13 +25,13 @@ char attributeMenu();
 char equipmentRoomMenu();
 
 //Switch case Functions
-void addChampion(List<Hero>* Champions);
+void addChampion(List<Hero>* Champions, HashTable* Table);
 void print_to_file(List<Hero> Champions);
-void search(List<Hero>* Champions, List<Equipment>* Inventory, bool remove, char typeSwitch);
+void search(List<Hero>* Champions, List<Equipment>* Inventory,HashTable* Table, bool remove, char typeSwitch);
 void equipChampion(List<Hero>* Champions, List<Equipment> Inventory);
 void dequipChampion(List<Hero>* Champions);
-void equipmentRoom(List<Hero>* Champions, List<Equipment>* Inventory);
-void championHall(List<Hero>* Champions, List<Equipment>* Inventory);
+void equipmentRoom(List<Hero>* Champions, List<Equipment>* Inventory, HashTable* Table);
+void championHall(List<Hero>* Champions, List<Equipment>* Inventory, HashTable* Table);
 
 //Other functions
 void battle(List<Hero>* hero);
@@ -40,7 +41,7 @@ int main(int argc, const char * argv[]) {
     
     //creating a new list object L
     
-    List<Hero> Champions; List<Equipment> Inventory; HashTable champTable, equipTable; getData(&Champions, &Inventory, &champTable, &equipTable); char choice;
+    List<Hero> Champions; List<Equipment> Inventory; HashTable Table; getData(&Champions, &Inventory, &Table); char choice;
 	
     
 //Main Menu
@@ -48,11 +49,11 @@ int main(int argc, const char * argv[]) {
     while ((choice = mainMenu()) && choice != 'Q') {
         switch (choice) {
             case 'C':
-                championHall(&Champions, &Inventory);
+                championHall(&Champions, &Inventory, &Table);
                 break;
                 
             case 'E':
-                equipmentRoom(&Champions, &Inventory);
+                equipmentRoom(&Champions, &Inventory, &Table);
                 break;
                 
             default:
@@ -69,7 +70,7 @@ int main(int argc, const char * argv[]) {
     return 0;
 }
 //======================================================= getData()
-void getData(List<Hero>* Champions, List<Equipment>* Inventory, HashTable* champTable, HashTable* equipTable){
+void getData(List<Hero>* Champions, List<Equipment>* Inventory, HashTable* Table){
     
     Hero current; Weapon weapon; Armor armor; Equipment tempEquip;
     string tempString; int tempInt; double tempDouble; //char tempChar;
@@ -84,7 +85,7 @@ void getData(List<Hero>* Champions, List<Equipment>* Inventory, HashTable* champ
         while (!inFile.eof()) {
             inFile >> tempString;
             current.setName(tempString);
-            champTable->addItem(tempString);
+            Table->addItem(tempString, Champions->getIndex()); cout << Champions->getIndex() << endl;
             inFile >> tempInt;
             current.setHealth(tempInt);
             inFile >> tempInt;
@@ -102,7 +103,7 @@ void getData(List<Hero>* Champions, List<Equipment>* Inventory, HashTable* champ
             inFile >> tempInt;
             current.setMovementSpeed(tempInt);
             //current.zeroEquippedCount();
-            Champions->push_back(current);
+            Champions->insert(current);
             inFile.ignore();
         }//While Loop END
     
@@ -131,9 +132,10 @@ void getData(List<Hero>* Champions, List<Equipment>* Inventory, HashTable* champ
                 armor.setMagicResistanceBoost(tempDouble);
                 inFile.ignore();
                 getline(inFile, tempString);
+                Table->addItem(tempString, Inventory->getIndex()); cout << Inventory->getIndex() << endl;
                 tempEquip.setName(tempString);
                 tempEquip.setArmor(armor);
-                Inventory->push_back(tempEquip);
+                Inventory->insert(tempEquip);
             }
             else{
                 
@@ -143,9 +145,10 @@ void getData(List<Hero>* Champions, List<Equipment>* Inventory, HashTable* champ
                 weapon.setattackSpeedBoost(tempDouble);
                 inFile.ignore();
                 getline(inFile, tempString);
+                Table->addItem(tempString, Inventory->getIndex()); cout << Inventory->getIndex() << endl;
                 tempEquip.setName(tempString);
                 tempEquip.setWeapon(weapon);
-                Inventory->push_back(tempEquip);
+                Inventory->insert(tempEquip);
             }
         
         }
@@ -198,7 +201,6 @@ char searchMenu(){
     cout << "\t\t\t\t\t *** Search Menu ***\n\nPlease choose from the following:\n\n";
     
         cout << "\t N to search by name\n"
-        << "\t H to search by hash number\n"
         << "\t A to search by Attribute\n"
         << "\t E to exit the search menu\n";
     
@@ -238,7 +240,7 @@ char equipmentRoomMenu(){
     
     cout << "\t Q to equip a champion\n"
     << "\t D to remove champion equipment\n"
-    << "\t A to create new item to inventory\n"
+    << "\t A to add new item\n"
     << "\t S to search for equipment\n"
     << "\t R to destroy an item\n"
     << "\t P to print inventory List\n"
@@ -252,7 +254,7 @@ char equipmentRoomMenu(){
 }
 
 //======================================================= addChampion()
-void addChampion(List<Hero>* Champions){
+void addChampion(List<Hero>* Champions, HashTable* Table){
     Hero newChampion; string tempString;int tempInt; double tempDouble; int count; char choice;
 
 	//creating random generator
@@ -298,7 +300,7 @@ void addChampion(List<Hero>* Champions){
             cout << "Movement Speed: " << newChampion.getMovementSpeed() << endl;
             
             Champions->push_back(newChampion);
-            
+            Table->addItem(tempString, Champions->getIndex());
             cout << i+1 << " of " << count << " added." << endl;
             
         }// for loop END
@@ -406,8 +408,8 @@ void print_to_file(List<Hero> Champions){
     
 }// print_to_file Function END
 //======================================================= search()
-void search(List<Hero>* Champions, List<Equipment>* Inventory, bool remove, char typeSwitch){
-    char choice; string query; Hero temp; Equipment eTemp; int selected =0; int count =0; char response = 'N'; bool found = false; char attribute;
+void search(List<Hero>* Champions, List<Equipment>* Inventory, HashTable* Table, bool remove, char typeSwitch){
+    char choice; string query; Hero temp; Equipment eTemp; int selected =0; char response = 'N'; bool found = false; char attribute;
     int intMin, intMax; double doubleMin, doubleMax; int counted=0; int convert=0;
     
     while((choice = searchMenu()) && choice != 'E'){
@@ -421,14 +423,15 @@ void search(List<Hero>* Champions, List<Equipment>* Inventory, bool remove, char
                     cout << "\nEnter champion name: ";
                     cin >> query; cout << endl;
                     
-                    Champions->begin(); selected = 0;
+                    Champions->scrollToIndex(Table->findName(query));
+                    selected = 0;
                     
-                    while (Champions->off_end() == false) {
+                    if (Champions->off_end() == false) {
                         
                         temp = Champions->current();
-                        selected++;// this keeps track of where in the list we are. If query is found, selected is the spot in the list that remove function must delete;
-                        if (temp.getName() == query) {
-                            temp.print(); found = true;
+                        selected = Table->findName(query);// this keeps track of where in the list we are. If query is found, selected is the spot in the list that remove function must delete;
+                        temp.print(); found = true;
+                        
                             //====================================== Remove option enabled
                             if (remove == true) {
                                 cout << "\nWould you like to delete? (Y/N): ";
@@ -439,11 +442,9 @@ void search(List<Hero>* Champions, List<Equipment>* Inventory, bool remove, char
                             }// if (remove==true) statement END
                             break;
                             
-                        }//if Statement END
+                       
                         
-                        Champions->scroll();
-                        
-                    }// while loop END
+                    }// if statement END
                     if (found == false)
                         cout << "\nNo match found!" << endl;
                     
@@ -454,14 +455,15 @@ void search(List<Hero>* Champions, List<Equipment>* Inventory, bool remove, char
                     
                     getline(cin, query); cout << endl;
                     
-                    Inventory->begin(); selected = 0;
+                    Inventory->scrollToIndex(Table->findName(query)); selected = 0;
                     
-                    while (Inventory->off_end() == false) {
+                    
+                    if (Inventory->off_end() == false) {
                         
                         eTemp = Inventory->current();
-                        selected++;// this keeps track of where in the list we are. If query is found, selected is the spot in the list that remove function must delete;
-                        if (eTemp.getName() == query) {
-                            eTemp.print(); found = true;
+                        selected = Table->findName(query);// this keeps track of where in the list we are. If query is found, selected is the spot in the list that remove function must delete;
+                        eTemp.print(); found = true;
+                        
                             //====================================== Remove option enabled
                             if (remove == true) {
                                 cout << "\nWould you like to delete? (Y/N): ";
@@ -471,21 +473,14 @@ void search(List<Hero>* Champions, List<Equipment>* Inventory, bool remove, char
                                 }// if response == 'N' statement END
                             }// if (remove==true) statement END
                             break;
-                            
-                        }//if Statement END
                         
-                        Inventory->scroll();
                         
-                    }// while loop END
+                    }// if Statement END
                     if (found == false)
                         cout << "\nNo match found!" << endl;
                 }
                 
                 break;// End Name
-                
-            case 'H':// Hash
-                
-                break;// END Hash
                 
             case 'A':// Attribute
                 Champions->begin(); selected = 0; counted =0;
@@ -1208,17 +1203,21 @@ void search(List<Hero>* Champions, List<Equipment>* Inventory, bool remove, char
         
         
         //=========================================== Remove option enabled
-        if (remove == true && selected != 0 && typeSwitch == 'C') {
+        if (remove == true && selected > 0 && typeSwitch == 'C') {
+            
+            Champions->scrollToIndex(selected);
+            Champions->remove();
+            
+            /*
             Champions->begin();
             for (count = 0; count < selected-1; count++){
                 Champions->scroll();
             }// for statement END
             Champions->remove();
-        }else if(remove == true && selected != 0 && typeSwitch == 'I'){
-            Inventory->begin();
-            for (count =0; count < selected-1; count++) {
-                Inventory->scroll();
-            }
+            */
+            
+        }else if(remove == true && selected > 0 && typeSwitch == 'I'){
+            Inventory->scrollToIndex(selected);
             Inventory->remove();
         }
         
@@ -1249,7 +1248,7 @@ void battle(List<Hero>* Champions) {
 
 }
 //======================================================= EquipmentRoom()
-void equipmentRoom(List<Hero>* Champions, List<Equipment>* Inventory){
+void equipmentRoom(List<Hero>* Champions, List<Equipment>* Inventory, HashTable* Table){
     
     char choice; bool remove; char typeSwitch = 'I';
     
@@ -1271,13 +1270,13 @@ void equipmentRoom(List<Hero>* Champions, List<Equipment>* Inventory){
                 
             case 'R':
                 remove = true;
-                search(Champions, Inventory, remove, typeSwitch);
+                search(Champions, Inventory, Table, remove, typeSwitch);
                 
                 break;
                 
             case 'S'://Search equipment
                 remove = false;
-                search(Champions, Inventory, remove, typeSwitch);
+                search(Champions, Inventory, Table, remove, typeSwitch);
                 
                 break;
                 
@@ -1287,11 +1286,8 @@ void equipmentRoom(List<Hero>* Champions, List<Equipment>* Inventory){
                 
                 break;
                 
-            case 'N':
-                
-                break;
-                
             case 'A':// add item
+                
                 
                 break;
                 
@@ -1308,26 +1304,26 @@ void equipmentRoom(List<Hero>* Champions, List<Equipment>* Inventory){
     
 }
 //======================================================= Champion Hall
-void championHall(List<Hero>* Champions, List<Equipment>* Inventory){
+void championHall(List<Hero>* Champions, List<Equipment>* Inventory, HashTable* Table){
     char typeSwitch = 'C'; bool remove; char choice;
     
     while((choice = championHallMenu()) && choice != 'E'){
         
         switch (choice) {
             case 'A':
-                addChampion(Champions);
+                addChampion(Champions, Table);
                 break;
             case 'B':
                 battle(Champions);
                 break;
             case 'R':
                 remove = true; typeSwitch = 'C';
-                search(Champions, Inventory, remove, typeSwitch);
+                search(Champions, Inventory, Table, remove, typeSwitch);
                 break;
                 
             case 'S':
                 remove = false; typeSwitch = 'C';
-                search(Champions, Inventory, remove, typeSwitch);
+                search(Champions, Inventory, Table, remove, typeSwitch);
                 break;
                 
             case 'P':

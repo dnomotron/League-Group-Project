@@ -10,6 +10,7 @@
 #include <iostream>
 #include <cstddef>
 #include "assert.h"
+#include "Hero.h"
 using namespace std; // Less cout statement code
 
 //============================= Linked List Template ============================
@@ -160,7 +161,11 @@ public:
     int binary_search(int low, int high, listitem item);
     // Calls BinarySearch();
     
+    void print1();
     
+    void equipCurrent(const Equipment e);
+    
+    void dequipCurrent(int count);
     
     
     
@@ -192,16 +197,32 @@ List<listitem>::~List()
 template <class listitem>
 void List<listitem>::print()
 {
-    iterator = head;
+    iterator = head; int count = 1;
     while (iterator != NULL) {
-        
-        cout << endl << iterator->data;
-        iterator = iterator->next;
+        cout << endl << count << ".\n";
+        iterator->data.print();
+        iterator = iterator->next; count++;
         
     }// End While loop
-    cout << endl;
+    cout << endl << endl;
 }// End List::print()
-
+//================================================================= Print1()
+template <class listitem>
+void List<listitem>::print1(){
+    
+    if (!off_end()){
+        
+        
+        iterator->data.print();
+        cout << endl;
+        iterator->data.printEquipment();
+        
+        
+    }else
+        cout << "\nIterator off end!\n";
+    
+    return;
+}
 //=========================================================== push_front()
 template <class listitem>
 void List<listitem>::push_front(listitem data){
@@ -209,7 +230,7 @@ void List<listitem>::push_front(listitem data){
     if (size==0)
     {
         head = new Node(data);
-        tail = head;
+        iterator = tail = head;
         
     }
     else
@@ -217,9 +238,9 @@ void List<listitem>::push_front(listitem data){
         NodeRef newNode = new Node(data);
         newNode->next = head;
         head->previous = newNode;
-        head = newNode;
+        iterator = head = newNode;
     }
-    
+
     size++;
     
 }
@@ -230,7 +251,7 @@ void List<listitem>::push_back(listitem data){
     
     if (empty()) {
         head = new Node(data);
-        tail = head;
+        iterator = tail = head;
     }
     else
     {
@@ -238,7 +259,7 @@ void List<listitem>::push_back(listitem data){
         NodeRef newNode = new Node(data);
         tail->next = newNode;
         newNode->previous = tail;
-        tail = newNode;
+        iterator = tail = newNode;
     }
     size++;
 }
@@ -385,10 +406,9 @@ listitem List<listitem>::front(){
  if (off_end())
  {
  cout << "Current: Iterator is off the end of the list! Returing to Beginning of list" << endl;
- assert(iterator == NULL); //xcode will not allow end of non-void function cant compile without " return returntype; "
+ //assert(iterator == NULL); //xcode will not allow end of non-void function cant compile without " return returntype; "
      
-     begin();
-     return iterator->data;
+     exit(-1);
  }
  else
  return iterator -> data;
@@ -406,14 +426,18 @@ void List<listitem>::begin(){
 template <class listitem>
 void List<listitem>::insert(listitem data){
     
-    if (off_end()) {
+    if (get_size() == 0) {
+        push_front(data);
+        iterator = head;
+    }else if (off_end()) {
         cout << "Cannot insert, iterator Off_End" << endl;
     }
     else if(get_size() == 1){
         NodeRef newNode = new Node(data);
         iterator->next = newNode;
         newNode->previous = iterator;
-        tail = newNode;
+        iterator = tail = newNode;
+        
         size++;
     }
     
@@ -430,6 +454,7 @@ void List<listitem>::insert(listitem data){
             NodeRef current = newNode ->next;
             current->previous = newNode;
         }
+        iterator = newNode;
         size++;
     }
 }
@@ -518,8 +543,11 @@ void List<listitem>::printReverse(){
 template <class listitem>
 int List<listitem>::getIndex()
 {
-    NodeRef temp = head; int count = 1;
+    NodeRef temp = head; int count = 2;
     
+    if (get_size() < 2) {
+        return get_size() +1;
+    }
     while (temp != iterator){
         count++;
         temp = temp->next;
@@ -531,6 +559,7 @@ void List<listitem>::scrollToIndex(int index)
 {
     if (size == 0 | (index <=-1)){
         cout << "\nNull index!\n";
+        iterator = NULL;
         return;
     
     }else{
@@ -706,7 +735,29 @@ typename List<listitem>::NodeRef List<listitem>::sorted(NodeRef left, NodeRef ri
     }
     return result;
 }
+template <class listitem>
+void List<listitem>::equipCurrent(const Equipment e){
+    
+    iterator->data.setEquipment(e);
+    
+    
+    iterator->data.print();
+    
+    iterator->data.printEquipment();
+}
 
+template<class listitem>
+void List<listitem>::dequipCurrent(int count){
+    
+    iterator->data.removeEquipment(count);
+    
+    iterator->data.print();
+    
+    iterator->data.printEquipment();
+    
+    
+    
+}
 
 
 #endif /* defined(____linkList__) */
