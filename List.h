@@ -1,8 +1,6 @@
-//  Dalton Rick, Nathan Foster, Kush Patel, Desmond Lee, Kurtis Hoang
+//  Dalton Rick
 //
 //  CIS 22C
-//
-//  Group Project - Leaugue of Legends Character engine
 //
 //  List.h
 
@@ -10,16 +8,14 @@
 #define ____List__
 
 #include <iostream>
-#include "assert.h"
 #include <cstddef>
-#include "Hero.h"
+#include "assert.h"
 using namespace std; // Less cout statement code
 
 //============================= Linked List Template ============================
 template <class listitem>
 class List
 {
-    
 private:
     struct Node
     {
@@ -38,16 +34,25 @@ private:
     NodeRef iterator; //points to one node at a time
     int size;
     
+    void reverse(NodeRef node);
+    //Helper function for the public printReverse() function.
+    //Recursively prints the data in a List in reverse.
+    
+    // Functions to recursively sort list --obtained from outside sources for xtra cred
+    void sort(NodeRef* headRef);
+    void divideForSort(NodeRef source, NodeRef* front, NodeRef* back);
+    NodeRef sorted(NodeRef left, NodeRef right);
+    
 public:
     /**Constructors and Destructors*/
     List();
     //Default constructor; initializes an empty list
     //Postcondition: int data - 0; head = null; tail = null; next - null;
-    
+
     ~List();
     //Destructor. Frees memory allocated to the list
     //Postcondition: head = null;
-    //
+
     List(const List &list);
     //Copy construcor. Initializes list to have the same elements as another list
     //Postcondition: Deep copy of List made;
@@ -57,56 +62,56 @@ public:
     //Returns the last element in the list
     //Precondition: Head != NULL
     //Postcondition: returned item is == to data from tail
-    
+
     // ***** Cannot use current(), see linkList.cpp file for details ******** ERROR!
-    
+
     listitem current();
     //Returns the element pointed to by the iterator
     //Precondition: head != NULL
     //Postcondition: data from iterator is returned
-    
+ 
     bool empty();
     //Determines whether a list is empty.
-    
+
     listitem front();
     //Returns the first element in the list
     //Precondition: head != NULL
-    
+
     bool off_end();
     //Determines if the iterator is off the end of the list
-    
+
     int get_size();
     //Returns the length of the list
     
     
     /**Manipulation Procedures*/
-    
+
     void begin();
     //Moves the iterator to point to the first element in the list
     //If the list is empty, the iterator remains NULL
     //Postcondition: iterator == head
     
-    
+
     void insert(listitem data);
     //Inserts a new element into the list in the position after the iterator
     //Precondition: Head != NULL
     //Postcondition: size++
-    
+
     void pop_back();
     //Removes the value of the last element in the list
     //Precondition: iterator != NULL
     //Postcondition: int size--
-    
+
     void pop_front();
     //Removes the value of the first element in the list
     //Precondition: head != NULL
     //Postcondition: int size--
-    
+
     void push_back(listitem data);
     //Inserts a new element at the end of the list
     //If the list is empty, the new element becomes both head and tail
     //Postcondition: int size++
-    
+
     void push_front(listitem data);
     //Inserts a new element at the front of the list
     //If the list is empty, the new element becomes both head and tail
@@ -117,41 +122,62 @@ public:
     //causing iterator to go off_End
     //Precondition: iterator != NULL
     //Postcondition: iterator == NULL; size--
-    
+
     void scroll();
     //Moves the iterator forward by one element in the list
     //Has no effect if the iterator is offend or the list is empty
     //Postcondition: Iterator == Iterator->next
     
+    bool operator==(const List& list);
+    //Compares one list to another to check for equality
+    //Precondition: lists cannot be empty
+    //Postcondition: bool true/false
     
     /**Additional List Operations*/
-    
+
     void print();
     //Prints to the console the value of each element in the list sequentially
     //and separated by a blank space
     //Prints nothing if the list is empty
     
-    void print1();
+    void printReverse();
+    //Calls the reverse helper function to
+    //Pre: !isEmpty()
     
-    void equipCurrent(const Equipment e);
+    int getIndex();
+    // returns the index number for the iterator
+    //Pre: !isEmpty()
     
-    void dequipCurrent(int count);
+    void scrollToIndex(int index);
+    // Scrolls the iterator to the index point passed in
+    //Pre: !isEmpty()
     
-	int getEquipmentCount();
+    int linear_search(listitem item);
+    
+    // Main sort function, calls: private sort() - obtained from external sources
+    void callSort();
+    
+    int binary_search(int low, int high, listitem item);
+    // Calls BinarySearch();
+    
+    
+    
+    
+    
+    
     
 };
 
-//================================================================= Default Constructor
 template <class listitem>
 List<listitem>::List(): size(0), head(NULL), tail(NULL), iterator(NULL) {}
 
-//================================================================= Destructor()
+//=========================================================== Destructor()
 template <class listitem>
 List<listitem>::~List()
 {
     iterator = head;
     NodeRef temp;
-    while(iterator != NULL)
+    while(iterator!=NULL)
     {
         temp = iterator->next;
         
@@ -162,40 +188,21 @@ List<listitem>::~List()
     }// End while loop
 }// End List::~List()
 
-//================================================================= Print()
+//=========================================================== Print()
 template <class listitem>
 void List<listitem>::print()
 {
-    iterator = head; int count = 1;
+    iterator = head;
     while (iterator != NULL) {
-        cout << endl << endl << count << "." << endl;
-        iterator->data.print();
+        
+        cout << endl << iterator->data;
         iterator = iterator->next;
-        count++;
         
     }// End While loop
     cout << endl;
 }// End List::print()
 
-//================================================================= Print1()
-template <class listitem>
-void List<listitem>::print1(){
-    
-    if (!off_end()){
-        
-    
-        iterator->data.print();
-    cout << endl;
-    iterator->data.printEquipment();
-    
-    
-    }else
-        cout << "\nIterator off end!\n";
-    
-    return;
-}
-
-//================================================================ push_front()
+//=========================================================== push_front()
 template <class listitem>
 void List<listitem>::push_front(listitem data){
     
@@ -212,10 +219,12 @@ void List<listitem>::push_front(listitem data){
         head->previous = newNode;
         head = newNode;
     }
-    size++; 
+    
+    size++;
+    
 }
 
-//============================================================= push_back()
+//=========================================================== push_back()
 template <class listitem>
 void List<listitem>::push_back(listitem data){
     
@@ -234,20 +243,22 @@ void List<listitem>::push_back(listitem data){
     size++;
 }
 
-//============================================================ get_size()
+//=========================================================== get_size()
 template<class listitem>
 int List<listitem>::get_size(){
     
     return size;
 }
 
-//============================================================ back()
+//=========================================================== back()
 template <class listitem>
-listitem List<listitem>::back(){
+listitem List<listitem>::back()
+{
     return tail->data;
+    
 }
 
-//============================================================ Off_End()
+//=========================================================== Off_End()
 template <class listitem>
 bool List<listitem>::off_end()
 {
@@ -256,9 +267,11 @@ bool List<listitem>::off_end()
     else
         return false;
 }
-//============================================================= Copy Constructor
+//=========================================================== Copy Constructor
 template <class listitem>
-List<listitem>::List(const List &list): size(list.size){
+List<listitem>::List(const List &list): size(list.size)
+{
+    
     NodeRef current;
     if(list.head == NULL) //If the original list is empty, make an empty list for this list
     {
@@ -279,8 +292,13 @@ List<listitem>::List(const List &list): size(list.size){
             current = current->next;
             temp = temp->next;
             current->data = temp->data;
+            
+            
+            
         }
-        tail = current;
+        
+        tail = current; //Why do I need this line of code?
+        
     }
 }
 
@@ -288,82 +306,101 @@ List<listitem>::List(const List &list): size(list.size){
 template <class listitem>
 void List<listitem>::pop_front(){
     
-    if (empty())
+    if (empty()) //or make a call to the empty() function
+    {
         cout << "Cannot call pop_front on an empty list" << endl;
-    else if (size==1) {
+    }
+    else if (size==1)
+    {
         delete head;
         head = tail = iterator = NULL;
         
         size = 0;
+        
     }
-    else {
+    else
+    {
         NodeRef temp = head;
         head = head->next;
         head->previous = NULL;
         delete temp;
+        
         size--;
+        
     }
 }
 
-//========================================================= pop_back()
+//=========================================================== pop_back()
 template <class listitem>
 void List<listitem>::pop_back(){
     
     if (empty())
     {cout << "Cannot call pop_back on an empty list" << endl;}
-    else if (size==1) {
+    else if (size==1)
+    {
         delete head;
         head = tail = iterator = NULL;
         size = 0;
     }
-    else {
+    else
+    {
+        
         iterator = tail->previous;
         delete tail;
         iterator->next = NULL;
         tail = iterator;
+        
         size--;
     }
 }
 
-//============================================================ Empty();
+//=========================================================== Empty();
 template <class listitem>
 bool List<listitem>::empty(){
-
+    
     if(size==0)
         return true;
     else
         return false;
 }
 
-//============================================================= front()
+//=========================================================== front()
 template <class listitem>
 listitem List<listitem>::front(){
     if(empty())
     {
         cout << "Cannot call first node on empty list!" << endl;
-        return false;
+        return 0;//xcode will not compile if a function with a return type can end without a proper return value
     }
     else
         return head->data;
 }
 
-//============================================================== current()
-template <class listitem>
- listitem List<listitem>::current(){
+//=========================================================== Current()
+//current() **** current does not work, xcode will not allow me to compile unless i resolve the issue of current() reaching end of non void function.
+
+ template <class listitem>
+ listitem List<listitem>::current()
+ {
  if (off_end())
  {
- cout << "Current: Iterator is off the end of the list!" << endl;
+ cout << "Current: Iterator is off the end of the list! Returing to Beginning of list" << endl;
  assert(iterator == NULL); //xcode will not allow end of non-void function cant compile without " return returntype; "
-     return iterator -> data;
+     
+     begin();
+     return iterator->data;
  }
-     else
-     return iterator -> data;
+ else
+ return iterator -> data;
  }
- 
-//============================================================= begin();
+
+//=========================================================== begin();
 template <class listitem>
 void List<listitem>::begin(){
-    iterator = head; 
+    
+    iterator = head;
+    
+    
 }
 //=========================================================== insert()
 template <class listitem>
@@ -371,7 +408,6 @@ void List<listitem>::insert(listitem data){
     
     if (off_end()) {
         cout << "Cannot insert, iterator Off_End" << endl;
-        return;
     }
     else if(get_size() == 1){
         NodeRef newNode = new Node(data);
@@ -389,14 +425,15 @@ void List<listitem>::insert(listitem data){
         iterator->next = newNode;
         if(newNode->next == NULL)
             tail = newNode;
-        else{
+        else
+        {
             NodeRef current = newNode ->next;
             current->previous = newNode;
         }
         size++;
     }
 }
-//========================================================== scroll();
+//=========================================================== scroll();
 template <class listitem>
 void List<listitem>::scroll(){
     
@@ -415,6 +452,7 @@ void List<listitem>::remove(){
     
     if (off_end()) {
         cout << endl << "Cannot delete NULL value" << endl;
+        
     }
     else{
         
@@ -438,33 +476,239 @@ void List<listitem>::remove(){
         }
         delete iterator;
         size--;
+        
     }
 }
+//=========================================================== Overload == operator()
 template <class listitem>
-void List<listitem>::equipCurrent(const Equipment e){
+bool List<listitem>::operator==(const List& list)
+{
+    if(size != list.size)
+        return false;
+    iterator = head;
+    NodeRef temp = list.head;
+    while(iterator != NULL)
+    {
+        if(iterator->data != temp->data)
+            return false;
+        temp = temp->next;
+        iterator = iterator->next;
+    }
+    return true;
+}
+template <class listitem>
+void List<listitem>::reverse(NodeRef node){
     
-    iterator->data.setEquipment(e);
+    if (node == NULL) {
+        return;
+        }
+    
+    cout << node->data << endl;
+    node = node->previous;
+    reverse(node);
+    
+}
+template <class listitem>
+void List<listitem>::printReverse(){
+    
+    NodeRef temp = tail;
+    reverse(temp);
+    
+}
+template <class listitem>
+int List<listitem>::getIndex()
+{
+    NodeRef temp = head; int count = 1;
+    
+    while (temp != iterator){
+        count++;
+        temp = temp->next;
+    }
+    return count;
+}
+template <class listitem>
+void List<listitem>::scrollToIndex(int index)
+{
+    if (size == 0 | (index <=-1)){
+        cout << "\nNull index!\n";
+        return;
+    
+    }else{
+        iterator = head;
+        
+        for (int i=1; i < index; i++) {
+            iterator = iterator->next;
+        }
+    }
     
     
-    iterator->data.print();
+}
+template <class listitem>
+int List<listitem>::linear_search(listitem item)
+{
     
-    iterator->data.printEquipment();
+    iterator = head; int count = -1;
+    int i = 1;
+    
+    while (iterator != NULL && count == -1) {
+        if (iterator->data == item) {
+            count = i;
+        }else{
+            iterator = iterator->next;
+            i++;
+        }
+        
+    }
+    
+    
+    
+    return count;
+}
+template <class listitem>
+int List<listitem>::binary_search(int low, int high, listitem item)
+{
+    
+    
+    if (size == 0)
+        return -1;
+    
+    //call to sort if list is not empty
+    sort(&head);
+    
+    //Find halfway point
+    int half = ((high - low)/2)+low;
+    
+    //cout << "Low: " << low << " High: " << high << " Half: " << half << endl;
+    
+    scrollToIndex(half);
+    
+    if (low > high){//if iterator gets thrown off end, or search finds nothing
+        return -1;
+    }else if (iterator->data == item)
+    {
+        return half;
+    }else if (item < iterator->data)
+    {
+        return binary_search(low, half-1, item);
+    }else if(item > iterator->data)
+    {
+        return binary_search(half+1, high, item);
+    }else
+        return -1;
+    
+}
+template<class listitem>
+void List<listitem>::callSort()
+{
+    sort(&head);
+    
+// Set new tail
+    head->previous = NULL;
+    NodeRef temp = head;
+    NodeRef last = head;
+    
+    
+    for (int i=1; i < size; i++) {
+        temp = temp->next;
+        temp->previous = last;
+        last = last->next;
+        
+    }
+    tail = temp;
+    
+    
 }
 
 template<class listitem>
-void List<listitem>::dequipCurrent(int count){
+void List<listitem>::sort(NodeRef* headRef)
+{
+    NodeRef headPtr = *headRef;
+    NodeRef left = NULL;
+    NodeRef right = NULL;
     
-    iterator->data.removeEquipment(count);
+    // Base case -- length 0 or 1
+    if ((headPtr == NULL) || (headPtr->next == NULL))
+        return;
     
-    iterator->data.print();
+    // Split head into left and right lists
+    divideForSort(headPtr, &left, &right);
     
-    iterator->data.printEquipment();
     
+    
+    // Recursively sort the sublists
+    sort(&left);
+    sort(&right);
+    
+    /* answer = merge the two sorted lists together */
+    *headRef = sorted(left, right);
     
     
 }
 
+template<class listitem>
+void List<listitem>::divideForSort(NodeRef source, NodeRef* front, NodeRef* back)
+{
+    NodeRef fast = NULL;
+    NodeRef slow = NULL;
+    
+    
+    if (source == NULL || source->next == NULL)
+    {
+        /* length < 2 cases */
+        *front = source;
+        *back = NULL;
+    }
+    else
+    {
+        slow = source;
+        fast = source->next;
+        
+        /* Advance 'fast' two nodes, and advance 'slow' one node */
+        while (fast != NULL)
+        {
+            fast = fast->next;
+            if (fast != NULL)
+            {
+                slow = slow->next;
+                fast = fast->next;
+            }
+        }
+        
+        /* 'slow' is before the midpoint in the list, so split it in two
+         at that point. */
+        *front = source;
+        *back = slow->next;
+        slow->next = NULL;
+    }
+}
+
+template<class listitem>
+typename List<listitem>::NodeRef List<listitem>::sorted(NodeRef left, NodeRef right)
+{
+    NodeRef result = NULL;
+    
+    /* Base cases */
+    if (left == NULL)
+        return(right);
+    else if (right == NULL)
+        return(left);
+    
+    /* Pick either left or right, and recur */
+    if (left->data <= right->data)
+    {
+        result = left;
+        result->next = sorted(left->next, right);
+    }
+    else
+    {
+        result = right;
+        result->next = sorted(left, right->next);
+    }
+    return result;
+}
 
 
 
 #endif /* defined(____linkList__) */
+
+

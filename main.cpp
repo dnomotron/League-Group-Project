@@ -8,12 +8,13 @@
 
 #include "List.h"
 #include "Random.h"
+#include "HashTable.h"
 #include <fstream>
 
 //======================================================= Local Function to main() Driver
 
 // Must Run at Start
-void getData(List<Hero>* Champions, List<Equipment>* Inventory);
+void getData(List<Hero>* Champions, List<Equipment>* Inventory, HashTable* champTable, HashTable* equipTable);
 
 // Menus
 char mainMenu();
@@ -39,7 +40,7 @@ int main(int argc, const char * argv[]) {
     
     //creating a new list object L
     
-    List<Hero> Champions; List<Equipment> Inventory; getData(&Champions, &Inventory); char choice;
+    List<Hero> Champions; List<Equipment> Inventory; HashTable champTable, equipTable; getData(&Champions, &Inventory, &champTable, &equipTable); char choice;
 	
     
 //Main Menu
@@ -68,7 +69,7 @@ int main(int argc, const char * argv[]) {
     return 0;
 }
 //======================================================= getData()
-void getData(List<Hero>* Champions, List<Equipment>* Inventory){
+void getData(List<Hero>* Champions, List<Equipment>* Inventory, HashTable* champTable, HashTable* equipTable){
     
     Hero current; Weapon weapon; Armor armor; Equipment tempEquip;
     string tempString; int tempInt; double tempDouble; //char tempChar;
@@ -83,6 +84,7 @@ void getData(List<Hero>* Champions, List<Equipment>* Inventory){
         while (!inFile.eof()) {
             inFile >> tempString;
             current.setName(tempString);
+            champTable->addItem(tempString);
             inFile >> tempInt;
             current.setHealth(tempInt);
             inFile >> tempInt;
@@ -240,7 +242,6 @@ char equipmentRoomMenu(){
     << "\t S to search for equipment\n"
     << "\t R to destroy an item\n"
     << "\t P to print inventory List\n"
-    //<< "\t N to search for champion by name and print current equipment\n"
     << "\t E to exit the Equipment Room\n";
     
     cout << "\n\nChoice: ";
