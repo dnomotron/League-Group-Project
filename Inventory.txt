@@ -3,4 +3,5 @@ Armor 34.8 89 76 74.3 IceBourne Gauntlets
 Weapon 45 .054 Titanic Hydra
 Armor 120.4 300 34 23.8 Dead Man's Plate
 Weapon 67 .097 Ravenous Hydra
-Weapon 60 .088 40 32 Abyssal Scepter
+Weapon 60 .088 Abyssal Scepter
+Armor armorboost healthbst manabst magres

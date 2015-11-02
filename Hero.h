@@ -67,10 +67,9 @@ public:
     double getarmor() { return armor; };
     double getMagicResistance() { return magicResistance; };
     int getMovementSpeed() { return movementSpeed; };
-    //Equipment getEquipment(int count) {return Inventory[count];};
     void removeEquipment(int count);
     int getEquippedCount() {return equippedCount;};
-    Equipment sendInventory() {return *Inventory;};
+    Equipment sendInventory(int count);
     //bool operator==(const Equipment &data);
     
 // ** Other Member Functions **
@@ -211,7 +210,10 @@ void Hero::printEquipment(){
     }
     
 }
-
+Equipment Hero::sendInventory(int count){
+    
+    return Inventory[count];
+}
 
 
 

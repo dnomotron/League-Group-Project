@@ -167,6 +167,8 @@ public:
     
     void dequipCurrent(int count);
     
+    Equipment sendCurrentEquip(int count);
+    
     
     
     
@@ -741,9 +743,9 @@ void List<listitem>::equipCurrent(const Equipment e){
     iterator->data.setEquipment(e);
     
     
-    iterator->data.print();
+    //iterator->data.print();
     
-    iterator->data.printEquipment();
+    //iterator->data.printEquipment();
 }
 
 template<class listitem>
@@ -751,11 +753,17 @@ void List<listitem>::dequipCurrent(int count){
     
     iterator->data.removeEquipment(count);
     
-    iterator->data.print();
+   // iterator->data.print();
     
-    iterator->data.printEquipment();
+    //iterator->data.printEquipment();
     
     
+    
+}
+template <class listitem>
+Equipment List<listitem>::sendCurrentEquip(int count){
+    
+    return iterator->data.sendInventory(count);
     
 }
 

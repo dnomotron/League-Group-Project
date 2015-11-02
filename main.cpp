@@ -26,7 +26,7 @@ char equipmentRoomMenu();
 
 //Switch case Functions
 void addChampion(List<Hero>* Champions, HashTable* Table);
-void print_to_file(List<Hero> Champions);
+void print_to_file(List<Hero> Champions, List<Equipment> Inventory);
 void search(List<Hero>* Champions, List<Equipment>* Inventory,HashTable* Table, bool remove, char typeSwitch);
 void equipChampion(List<Hero>* Champions, List<Equipment> Inventory);
 void dequipChampion(List<Hero>* Champions);
@@ -42,7 +42,6 @@ int main(int argc, const char * argv[]) {
     //creating a new list object L
     
     List<Hero> Champions; List<Equipment> Inventory; HashTable Table; getData(&Champions, &Inventory, &Table); char choice;
-	
     
 //Main Menu
     
@@ -65,7 +64,7 @@ int main(int argc, const char * argv[]) {
 
     
 //======================================================= Save any New Champions or data to file before exit
-    print_to_file(Champions);
+    print_to_file(Champions, Inventory);
     
     return 0;
 }
@@ -76,16 +75,16 @@ void getData(List<Hero>* Champions, List<Equipment>* Inventory, HashTable* Table
     string tempString; int tempInt; double tempDouble; //char tempChar;
     ifstream inFile;
 
-    inFile.open("Champions.txt");
+    inFile.open("Champions.txt"); // Load Chmapion data
     if (inFile.fail()) {
         cout << "Error! Champions data not found!" << endl;
         return;
-    }
+    }else{
     
         while (!inFile.eof()) {
             inFile >> tempString;
             current.setName(tempString);
-            Table->addItem(tempString, Champions->getIndex()); cout << Champions->getIndex() << endl;
+            Table->addItem(tempString, Champions->getIndex());
             inFile >> tempInt;
             current.setHealth(tempInt);
             inFile >> tempInt;
@@ -106,16 +105,16 @@ void getData(List<Hero>* Champions, List<Equipment>* Inventory, HashTable* Table
             Champions->insert(current);
             inFile.ignore();
         }//While Loop END
-    
+    }
     
     inFile.close();
     
     
-    inFile.open("Inventory.txt");
+    inFile.open("Inventory.txt"); // Load inventory data
     if(inFile.fail()){
         cout << "Error! Inventory Data not Found!" << endl;
         return;
-    }
+    }else{
 
         while (!inFile.eof()) {
             inFile >> tempString;
@@ -132,7 +131,7 @@ void getData(List<Hero>* Champions, List<Equipment>* Inventory, HashTable* Table
                 armor.setMagicResistanceBoost(tempDouble);
                 inFile.ignore();
                 getline(inFile, tempString);
-                Table->addItem(tempString, Inventory->getIndex()); cout << Inventory->getIndex() << endl;
+                Table->addItem(tempString, Inventory->getIndex());
                 tempEquip.setName(tempString);
                 tempEquip.setArmor(armor);
                 Inventory->insert(tempEquip);
@@ -145,19 +144,41 @@ void getData(List<Hero>* Champions, List<Equipment>* Inventory, HashTable* Table
                 weapon.setattackSpeedBoost(tempDouble);
                 inFile.ignore();
                 getline(inFile, tempString);
-                Table->addItem(tempString, Inventory->getIndex()); cout << Inventory->getIndex() << endl;
+                Table->addItem(tempString, Inventory->getIndex());
                 tempEquip.setName(tempString);
                 tempEquip.setWeapon(weapon);
                 Inventory->insert(tempEquip);
             }
         
         }
+    }
+    inFile.close();
+    
+    inFile.open("Personal_Inventory.txt");
+    if (inFile.fail()) {
+        cout << "Personal_Inventory.txt failed to open\n";
+    }else{
+        while (!inFile.eof()) {
+            
+        inFile >> tempString;
+        int index = Table->findName(tempString);
+        Champions->scrollToIndex(index);
+        inFile >> tempInt;
         
+        inFile.ignore();
+            for (int i = 0; i < tempInt; i++) {
+                getline(inFile, tempString);
+                Inventory->scrollToIndex(Table->findName(tempString));
+                tempEquip = Equipment(Inventory->current());
+                Champions->equipCurrent(tempEquip);
+            }
+        
+        }
+    }
     inFile.close();
     
     
 }// getData Function END
-
 //======================================================= mainMenu()
 char mainMenu(){
     char choice;
@@ -362,49 +383,106 @@ void addChampion(List<Hero>* Champions, HashTable* Table){
 }// addChampion Function END
 
 //======================================================= print_to_file()
-void print_to_file(List<Hero> Champions){
+void print_to_file(List<Hero> Champions, List<Equipment> Inventory){
    
     ofstream outFile; Hero tempChampion; int count = 0;
-    ofstream pventoryOut; Equipment tempArray[6]; Weapon tempWeapon; Armor tempArmor;
+    Equipment tempEquip; Weapon tempWeapon; Armor tempArmor;
+    
+    outFile.open("Personal_Inventory.txt");
+    if (outFile.fail()) {
+        cout << "Error opening Personal_Inventory.txt\n";
+    }else{
+        Champions.begin();
+        
+        while (!Champions.off_end()) {
+            tempChampion = Champions.current();
+            
+            if (tempChampion.getEquippedCount() != 0) {
+            
+                if (count != 0) {// newline if not first input
+                    outFile << endl;
+                }
+                
+                outFile << tempChampion.getName() << " ";
+                outFile << tempChampion.getEquippedCount();
+                
+                for (int i=0; i < tempChampion.getEquippedCount(); i++) {
+                    tempEquip = Equipment(Champions.sendCurrentEquip(i));
+                    outFile << endl << tempEquip.getName();
+                }
+                
+                count++;
+                
+            }
+            Champions.scroll();
+
+        }
+        cout << count << " Champion Inventory Saved.\n";
+    }
+    outFile.close();
+    
     
     outFile.open("Champions.txt");
     if (outFile.fail()) {
         cout << "Error opening file! " << endl;
     }else
     {
-        Champions.begin();
+        Champions.begin(); count = 0;
         
         while (!Champions.off_end()) {
-            tempChampion = Champions.current();
-            if (count != 0)
+            
+            tempChampion = Champions.current(); // Make champion data accessible
+            if (count != 0) // Newline if not first input
                 outFile << endl;
             
             outFile << tempChampion.getName() << " " << tempChampion.getHealth() << " " << tempChampion.getMana() << " "
             << tempChampion.getAttackRange() << " " << tempChampion.getAttackDamage() << " " << tempChampion.getAttackSpeed()
             << " " << tempChampion.getarmor() << " " << tempChampion.getMagicResistance() << " " << tempChampion.getMovementSpeed();
             
-            if (tempChampion.getEquippedCount() > 0) {
-                
-                pventoryOut.open("/Personal Inventory/" + tempChampion.getName() + ".txt");
-                
-                tempArray[6] = tempChampion.sendInventory();
-                
-                for (int i=0; i < tempChampion.getEquippedCount(); i++) {
-                    if (tempArray[i].getType() == "Weapon") {
-                        tempWeapon = tempArray[i].getWeapon();
-                        pventoryOut << tempWeapon.getAttackDamage() << " " << tempWeapon.getAttackSpeed() << " " << tempArray[i].getName() << endl;
-                    }
-                }
-            
-                
-            }
             Champions.scroll();
             count++;
         }//While Loop END
         
-        cout << count << " Champions saved to file. " << endl;
+        cout << count << " Champions saved. \n";
     }// else statement END
-
+    outFile.close();
+    
+    outFile.open("Inventory.txt");
+    if (outFile.fail()) {
+        cout << "Inventory.txt unable to open.\n";
+    }else{
+        count = 0;
+        Inventory.begin();
+        
+        while (!Inventory.off_end()) {
+            tempEquip = Inventory.current();
+            
+            if (count != 0) {
+                outFile << endl;
+            }
+            outFile << tempEquip.getType() << " ";
+            if (tempEquip.getType() == "Weapon") {
+                tempWeapon = tempEquip.getWeapon();
+                outFile << tempWeapon.getAttackDamage() << " "
+                << tempWeapon.getAttackSpeed() << " ";
+                
+                
+                
+            }else{
+                tempArmor = tempEquip.getArmor();
+                outFile << tempArmor.getArmorBoost() << " "
+                << tempArmor.getHealthBoost() << " "
+                << tempArmor.getManaBoost() << " "
+                << tempArmor.getMagicResistanceBoost() << " ";
+                
+            }
+            outFile << tempEquip.getName();
+            Inventory.scroll(); count++;
+        }
+        cout << count << " Inventory items saved.\n";
+    }
+    outFile.close();
+    
     
 }// print_to_file Function END
 //======================================================= search()
@@ -439,6 +517,7 @@ void search(List<Hero>* Champions, List<Equipment>* Inventory, HashTable* Table,
                                 if (toupper(response) == 'N') {
                                     selected=0;
                                 }// if response == 'N' statement END
+                                Table->removeItem(query);
                             }// if (remove==true) statement END
                             break;
                             
@@ -471,6 +550,7 @@ void search(List<Hero>* Champions, List<Equipment>* Inventory, HashTable* Table,
                                 if (toupper(response) == 'N') {
                                     selected=0;
                                 }// if response == 'N' statement END
+                                Table->removeItem(query);
                             }// if (remove==true) statement END
                             break;
                         
@@ -1202,19 +1282,12 @@ void search(List<Hero>* Champions, List<Equipment>* Inventory, HashTable* Table,
         }
         
         
-        //=========================================== Remove option enabled
+        //======================================================================== Remove option enabled
         if (remove == true && selected > 0 && typeSwitch == 'C') {
             
             Champions->scrollToIndex(selected);
             Champions->remove();
             
-            /*
-            Champions->begin();
-            for (count = 0; count < selected-1; count++){
-                Champions->scroll();
-            }// for statement END
-            Champions->remove();
-            */
             
         }else if(remove == true && selected > 0 && typeSwitch == 'I'){
             Inventory->scrollToIndex(selected);

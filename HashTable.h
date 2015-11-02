@@ -21,7 +21,7 @@ class HashTable {
 public:
     HashTable();
     
-    //~HashTable();
+    ~HashTable();
     //Will write as part of Lab 6
     
     int hash(string key);
@@ -33,7 +33,7 @@ public:
     //inserts a new item into the table
     // calls the hash function on the key title to determine the correct bucket
     
-    //void removeItem(string key);
+    void removeItem(string key);
     //Will write as part of Lab 6
     //removes the item with the given key
     
@@ -69,7 +69,7 @@ private:
         Nodeptr Table[TABLE_SIZE];
     
 };
-
+//======================================================= HashTable()
 HashTable::HashTable()
 {
     
@@ -77,6 +77,21 @@ HashTable::HashTable()
         Table[i] = new Node();
     }
 }
+//======================================================= ~HashTable()
+HashTable::~HashTable(){
+    
+    for (int i=0; i < TABLE_SIZE; i++) {
+        Nodeptr walker = Table[i];
+        Nodeptr temp;
+        
+        while (walker) {
+            temp = walker->next;
+            delete walker;
+            walker = temp;
+        }
+    }
+}
+//======================================================= hash(key)
 int HashTable::hash(string key){
     
     int index=0, sum = 0;
@@ -86,6 +101,7 @@ int HashTable::hash(string key){
     index = sum % TABLE_SIZE; //dividing the summed ASCII values by 37 && storing remainder as my index
     return index;
 }
+//======================================================= addItem(name, index)
 void HashTable::addItem(string name, int index){
     
     
@@ -109,6 +125,7 @@ void HashTable::addItem(string name, int index){
         
     }
 }
+//======================================================= numItemsAtIndex(index)
 int HashTable::numItemsAtIndex(int index){
     int count =1;
     
@@ -119,6 +136,7 @@ int HashTable::numItemsAtIndex(int index){
     }
     return count;
 }
+//======================================================= printTable()
 void HashTable::printTable(){
     
     for (int i=0; i < TABLE_SIZE; i++) {
@@ -130,6 +148,7 @@ void HashTable::printTable(){
     }
     
 }
+//======================================================= printBucket(index)
 void HashTable::printBucket(int index){
     
     Nodeptr walker = Table[index];
@@ -140,6 +159,7 @@ void HashTable::printBucket(int index){
     }
     
 }
+//======================================================= findName(name)
 int HashTable::findName(string name){
     
     int index = hash(name);
@@ -156,7 +176,35 @@ int HashTable::findName(string name){
     }
     return -1;
 }
-
+//======================================================= removeItem(key)
+void HashTable::removeItem(string key){
+    
+    int index = hash(key);
+    
+    Nodeptr walker = Table[index];
+    Nodeptr temp;
+    
+    if (numItemsAtIndex(index)==1) {
+        delete walker;
+        Table[index] = new Node();
+    }else{
+        temp = walker;
+        walker = walker->next;
+        
+        while (walker) {
+            if (walker->name == key) {
+                Nodeptr next = walker->next;
+                delete walker;
+                temp->next = next;
+                return;
+                
+            }// if walker->name == key
+            walker = walker->next;
+            temp = temp->next;
+        }
+    }
+    
+}
 
 
 
