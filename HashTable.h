@@ -54,6 +54,8 @@ public:
     //returns the index under which the author is stored
     //returns -1 if the author is not foundk
     
+    void updateIndex(string name, int index);
+    
 private:
     
     struct Node
@@ -124,6 +126,25 @@ void HashTable::addItem(string name, int index){
         
         
     }
+}
+void HashTable::updateIndex(string name, int index){
+    int position = hash(name); bool found = false;
+    
+    if (Table[position]->name == name) {
+        Table[position]->listIndex = index;
+    }else{
+        Nodeptr walker = Table[position]->next;
+        while(walker->next && found == false){
+            if (walker->name == name) {
+                found = true;
+                walker->listIndex = index;
+            }else{
+                walker = walker->next;
+            }
+           
+        }
+    }
+    
 }
 //======================================================= numItemsAtIndex(index)
 int HashTable::numItemsAtIndex(int index){

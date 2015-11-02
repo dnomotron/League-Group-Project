@@ -17,6 +17,10 @@
 // Must Run at Start
 void getData(List<Hero>* Champions, List<Equipment>* Inventory, HashTable* Table);
 
+// Run After Sort
+void reHashChampions(List<Hero> Champions, HashTable* Table);
+void reHashInventory(List<Equipment> Inventory, HashTable* Table);
+
 // Menus
 char mainMenu();
 char championHallMenu();
@@ -179,6 +183,29 @@ void getData(List<Hero>* Champions, List<Equipment>* Inventory, HashTable* Table
     
     
 }// getData Function END
+//======================================================= reHashChampions(Champions, Table)
+void reHashChampions(List<Hero> Champions, HashTable* Table){
+    
+    Champions.begin(); Hero champTemp;
+    
+    while (!Champions.off_end()) {
+        champTemp = Champions.current();
+        Table->updateIndex(champTemp.getName(), Champions.getIndex());
+        
+        Champions.scroll();
+    }
+}
+//======================================================= reHashInventory(Inventory, Table)
+void reHashInventory(List<Equipment> Inventory, HashTable* Table){
+    Inventory.begin(); Equipment tempEquip;
+    
+    while (!Inventory.off_end()) {
+        tempEquip = Inventory.current();
+        Table->updateIndex(tempEquip.getName(), Inventory.getIndex());
+        Inventory.scroll();
+    }
+}
+
 //======================================================= mainMenu()
 char mainMenu(){
     char choice;
