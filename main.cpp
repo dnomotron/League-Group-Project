@@ -415,6 +415,7 @@ void print_to_file(List<Hero> Champions, List<Equipment> Inventory){
     ofstream outFile; Hero tempChampion; int count = 0;
     Equipment tempEquip; Weapon tempWeapon; Armor tempArmor;
     
+
     outFile.open("Personal_Inventory.txt");
     if (outFile.fail()) {
         cout << "Error opening Personal_Inventory.txt\n";
@@ -448,6 +449,7 @@ void print_to_file(List<Hero> Champions, List<Equipment> Inventory){
     }
     outFile.close();
     
+    Champions.dequipAll();
     
     outFile.open("Champions.txt");
     if (outFile.fail()) {

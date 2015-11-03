@@ -169,7 +169,7 @@ public:
     
     Equipment sendCurrentEquip(int count);
     
-    
+    void dequipAll();
     
     
     
@@ -766,7 +766,25 @@ Equipment List<listitem>::sendCurrentEquip(int count){
     return iterator->data.sendInventory(count);
     
 }
-
+template <class listitem>
+void List<listitem>::dequipAll(){
+    
+    begin();
+    
+    while (!off_end()) {
+        Hero tempChamp = iterator->data;
+        if (tempChamp.getEquippedCount() !=0) {
+            //cout << "InventoryCount: " << tempChamp.getEquippedCount() << endl;
+            for (int i=1; i <= tempChamp.getEquippedCount(); i++) {
+                iterator->data.removeEquipment(1);
+            }
+        }
+        
+        scroll();
+    }
+    
+    
+}
 
 #endif /* defined(____linkList__) */
 
