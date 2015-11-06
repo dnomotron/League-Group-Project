@@ -1,10 +1,10 @@
+//  Dalton Rick, Nathan Foster, Kush Patel, Desmond Lee, Kurtis Hoang
+//
+//  CIS 22C
+//
+//  Group Project - Leaugue of Legends Character engine
 //
 //  HashTable.h
-//  HashTable
-//
-//  Created by Dalton Rick on 10/28/15.
-//  Copyright (c) 2015 Dalton Rick. All rights reserved.
-//
 
 #ifndef HASHTABLE_H_
 #define HASHTABLE_H_
