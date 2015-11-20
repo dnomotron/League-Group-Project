@@ -10,12 +10,14 @@
 #include "Random.h"
 #include "HashTable.h"
 #include "Hero.h"
+#include "BST.h"
 #include <fstream>
+#include <vector>
 
 //======================================================= Local Function to main() Driver
 
 // Must Run at Start
-void getData(List<Hero>* Champions, List<Equipment>* Inventory, HashTable* Table);
+void getData(List<Hero>* Champions, List<Equipment>* Inventory, HashTable* Table, BST<int>* champHealth, BST<int>* equipHealth);
 
 // Run After Sort
 void reHashChampions(List<Hero> Champions, HashTable* Table);
@@ -29,13 +31,13 @@ char attributeMenu();
 char equipmentRoomMenu();
 
 //Switch case Functions
-void addChampion(List<Hero>* Champions, HashTable* Table);
+void addChampion(List<Hero>* Champions, HashTable* Table, BST<int>* tree);
 void print_to_file(List<Hero> Champions, List<Equipment> Inventory);
-void search(List<Hero>* Champions, List<Equipment>* Inventory,HashTable* Table, bool remove, char typeSwitch);
+void search(List<Hero>* Champions, List<Equipment>* Inventory,HashTable* Table, BST<int>* tree, bool remove, char typeSwitch);
 void equipChampion(List<Hero>* Champions, List<Equipment> Inventory);
 void dequipChampion(List<Hero>* Champions);
-void equipmentRoom(List<Hero>* Champions, List<Equipment>* Inventory, HashTable* Table);
-void championHall(List<Hero>* Champions, List<Equipment>* Inventory, HashTable* Table);
+void equipmentRoom(List<Hero>* Champions, List<Equipment>* Inventory, HashTable* Table, BST<int>* tree);
+void championHall(List<Hero>* Champions, List<Equipment>* Inventory, HashTable* Table, BST<int>* tree);
 
 //Other functions
 void battle(List<Hero>* hero);
@@ -45,18 +47,23 @@ int main(int argc, const char * argv[]) {
     
     //creating a new list object L
     
-    List<Hero> Champions; List<Equipment> Inventory; HashTable Table; getData(&Champions, &Inventory, &Table); char choice;
+    List<Hero> Champions; List<Equipment> Inventory; HashTable Table;  char choice;
+    BST<int> champHealth; BST<int> equipHealth;
+    /* JUST IN CASE ANYONE DECIDES TO BST THE WHOLE DAMN ATTRIBUTE LIST
+    BST<int> manaTree; BST<int> aRangeTree; BST<int> aDamageTree; BST<double> aSpeedTree; BST<double> armorTree; BST<double> magResTree; BST<int> moveSpeedTree;
+    */
+    getData(&Champions, &Inventory, &Table, &champHealth, &equipHealth);
     
 //Main Menu
     
     while ((choice = mainMenu()) && choice != 'Q') {
         switch (choice) {
             case 'C':
-                championHall(&Champions, &Inventory, &Table);
+                championHall(&Champions, &Inventory, &Table, &champHealth);
                 break;
                 
             case 'E':
-                equipmentRoom(&Champions, &Inventory, &Table);
+                equipmentRoom(&Champions, &Inventory, &Table, &equipHealth);
                 break;
                 
             default:
@@ -73,7 +80,7 @@ int main(int argc, const char * argv[]) {
     return 0;
 }
 //======================================================= getData()
-void getData(List<Hero>* Champions, List<Equipment>* Inventory, HashTable* Table){
+void getData(List<Hero>* Champions, List<Equipment>* Inventory, HashTable* Table, BST<int>* champHealth, BST<int>* equipHealth){
     
     Hero current; Weapon weapon; Armor armor; Equipment tempEquip;
     string tempString; int tempInt; double tempDouble; //char tempChar;
@@ -91,6 +98,7 @@ void getData(List<Hero>* Champions, List<Equipment>* Inventory, HashTable* Table
             Table->addItem(tempString, Champions->getIndex());
             inFile >> tempInt;
             current.setHealth(tempInt);
+            champHealth->add(tempInt, Champions->getIndex());
             inFile >> tempInt;
             current.setMana(tempInt);
             inFile >> tempInt;
@@ -129,6 +137,7 @@ void getData(List<Hero>* Champions, List<Equipment>* Inventory, HashTable* Table
                 armor.setArmorBoost(tempDouble);
                 inFile >> tempInt;
                 armor.setHealthBoost(tempInt);
+                equipHealth->add(tempInt, Inventory->getIndex());
                 inFile >> tempInt;
                 armor.setManaBoost(tempInt);
                 inFile >> tempDouble;
@@ -168,7 +177,8 @@ void getData(List<Hero>* Champions, List<Equipment>* Inventory, HashTable* Table
         int index = Table->findName(tempString);
         Champions->scrollToIndex(index);
         inFile >> tempInt;
-        
+            Hero old = Champions->current();
+            
         inFile.ignore();
             for (int i = 0; i < tempInt; i++) {
                 getline(inFile, tempString);
@@ -176,7 +186,8 @@ void getData(List<Hero>* Champions, List<Equipment>* Inventory, HashTable* Table
                 tempEquip = Equipment(Inventory->current());
                 Champions->equipCurrent(tempEquip);
             }
-        
+            Hero current = Champions->current();
+            champHealth->containReplace(old.getHealth(), current.getHealth());
         }
     }
     inFile.close();
@@ -302,7 +313,7 @@ char equipmentRoomMenu(){
 }
 
 //======================================================= addChampion()
-void addChampion(List<Hero>* Champions, HashTable* Table){
+void addChampion(List<Hero>* Champions, HashTable* Table, BST<int>* tree){
     Hero newChampion; string tempString;int tempInt; double tempDouble; int count; char choice;
 
 	//creating random generator
@@ -325,6 +336,7 @@ void addChampion(List<Hero>* Champions, HashTable* Table){
             
             newChampion.setHealth(r.DrawNumber(450, 650));
             cout << "Health: " << newChampion.getHealth() << endl;
+            tree->add(newChampion.getHealth(), Champions->getIndex()+1);
             
             newChampion.setMana(r.DrawNumber(235, 365));
             cout << "Mana: " << newChampion.getMana() << endl;
@@ -515,9 +527,9 @@ void print_to_file(List<Hero> Champions, List<Equipment> Inventory){
     
 }// print_to_file Function END
 //======================================================= search()
-void search(List<Hero>* Champions, List<Equipment>* Inventory, HashTable* Table, bool remove, char typeSwitch){
+void search(List<Hero>* Champions, List<Equipment>* Inventory, HashTable* Table, BST<int>* tree, bool remove, char typeSwitch){
     char choice; string query; Hero temp; Equipment eTemp; int selected =0; char response = 'N'; bool found = false; char attribute;
-    int intMin, intMax; double doubleMin, doubleMax; int counted=0; int convert=0;
+    int intMin, intMax; double doubleMin, doubleMax; int counted=0; int convert=0; vector<int> indexRange;
     
     while((choice = searchMenu()) && choice != 'E'){
         found = false;
@@ -603,17 +615,19 @@ void search(List<Hero>* Champions, List<Equipment>* Inventory, HashTable* Table,
                             cout << "Enter Min Range: "; cin >> intMin;
                             cout << "\nEnter Max Range: "; cin >> intMax;
                             
-                            while (Champions->off_end() == false) {
+                            
+                            indexRange = tree->search(intMin, intMax);
+                
+                            
+                            for (int i=0; i < indexRange.size(); i++) {
+                                found = true;
+                                Champions->scrollToIndex(indexRange.at(i));
                                 temp = Champions->current();
+                                cout << endl << i + 1 << endl;
+                                temp.print();
                                 
-                                if (temp.getHealth() >= intMin && temp.getHealth() <= intMax) { counted++;
-                                    cout << endl << endl << counted << endl; temp.print(); found = true;
-                                    
-                                }//if Statement END
-                                
-                                Champions->scroll();
-                                
-                            }// while loop END
+                            }
+                            
                             
                             //====================================== Remove option enabled
                             if (remove == true && found == true) {
@@ -623,18 +637,8 @@ void search(List<Hero>* Champions, List<Equipment>* Inventory, HashTable* Table,
                                     selected=0;
                                 }else
                                 {
-                                    Champions->begin(); counted =0; selected =0;
-                                    while (Champions->off_end() == false && counted < convert) {
-                                        temp = Champions->current();
-                                        selected++;
-                                        if (temp.getHealth() >= intMin && temp.getHealth() <= intMax) {
-                                            counted++;
-                                        }//if Statement END
-                                        
-                                        Champions->scroll();
-                                        
-                                    }// while loop END
-                                    
+                                    Champions->scrollToIndex(indexRange.at(convert));
+                                    selected = Champions->getIndex();
                                 }
                             }// if (remove==true) statement END
                             
@@ -1350,7 +1354,7 @@ void battle(List<Hero>* Champions) {
 
 }
 //======================================================= EquipmentRoom()
-void equipmentRoom(List<Hero>* Champions, List<Equipment>* Inventory, HashTable* Table){
+void equipmentRoom(List<Hero>* Champions, List<Equipment>* Inventory, HashTable* Table, BST<int>* tree){
     
     char choice; bool remove; char typeSwitch = 'I';
     
@@ -1372,13 +1376,13 @@ void equipmentRoom(List<Hero>* Champions, List<Equipment>* Inventory, HashTable*
                 
             case 'R':
                 remove = true;
-                search(Champions, Inventory, Table, remove, typeSwitch);
+                search(Champions, Inventory, Table, tree, remove, typeSwitch);
                 
                 break;
                 
             case 'S'://Search equipment
                 remove = false;
-                search(Champions, Inventory, Table, remove, typeSwitch);
+                search(Champions, Inventory, Table, tree, remove, typeSwitch);
                 
                 break;
                 
@@ -1406,26 +1410,26 @@ void equipmentRoom(List<Hero>* Champions, List<Equipment>* Inventory, HashTable*
     
 }
 //======================================================= Champion Hall
-void championHall(List<Hero>* Champions, List<Equipment>* Inventory, HashTable* Table){
+void championHall(List<Hero>* Champions, List<Equipment>* Inventory, HashTable* Table, BST<int>* tree){
     char typeSwitch = 'C'; bool remove; char choice;
     
     while((choice = championHallMenu()) && choice != 'E'){
         
         switch (choice) {
             case 'A':
-                addChampion(Champions, Table);
+                addChampion(Champions, Table, tree);
                 break;
             case 'B':
                 battle(Champions);
                 break;
             case 'R':
                 remove = true; typeSwitch = 'C';
-                search(Champions, Inventory, Table, remove, typeSwitch);
+                search(Champions, Inventory, Table, tree, remove, typeSwitch);
                 break;
                 
             case 'S':
                 remove = false; typeSwitch = 'C';
-                search(Champions, Inventory, Table, remove, typeSwitch);
+                search(Champions, Inventory, Table, tree, remove, typeSwitch);
                 break;
                 
             case 'P':

@@ -6,6 +6,7 @@
 //
 //  BST.h
 
+
 #ifndef _BST_h
 #define _BST_h
 
@@ -23,11 +24,12 @@ private:
     struct Node
     {
         bstdata data;
+        int listIndex;
         Node* left;
         Node* right;
         
-        Node(): left(NULL), right(NULL){}
-        Node(bstdata newdata): left(NULL), right(NULL), data(newdata){}
+        Node(): listIndex(-1), left(NULL), right(NULL){}
+        Node(bstdata newdata, int index): left(NULL), right(NULL), data(newdata), listIndex(index){}
     };
     
     typedef struct Node* Nodeptr;
@@ -38,11 +40,13 @@ private:
     /**Private helper functions*/
     
     void destructor(Nodeptr root);
-    void addValue(Nodeptr root, bstdata value);
+    void addValue(Nodeptr root, bstdata value, int index);
     void printInOrder(Nodeptr root);
     void printPreOrder(Nodeptr root);
     void printPostOrder(Nodeptr root);
     bool containsValue(Nodeptr root, bstdata value);
+    void updateValue(Nodeptr root, bstdata value, bstdata replace);
+    vector<int> searchRange(Nodeptr root, bstdata min, bstdata max);
     bstdata findMin(Nodeptr root);
     bstdata findMax(Nodeptr root);
     Nodeptr removeValue(Nodeptr root, bstdata value);
@@ -63,12 +67,15 @@ public:
     bool isEmpty();
     int getSize();
     int getHeight();
-    void add(bstdata value);
+    void add(bstdata value, int index);
     bstdata getRoot();
+    int getRootIndex(Nodeptr root);
     void inOrderPrint();
     void preOrderPrint();
     void postOrderPrint();
     bool contains(bstdata value);
+    void containReplace(bstdata value, bstdata replace);
+    vector<int> search(bstdata min, bstdata max);
     bstdata minimum();
     bstdata maximum();
     void remove(bstdata value);
@@ -86,33 +93,33 @@ template <class bstdata>
 BST<bstdata>::BST(): root(NULL), size(0){}
 //====================================================== add()
 template <class bstdata>
-void BST<bstdata>::add(bstdata value)
+void BST<bstdata>::add(bstdata value, int index)
 {
     if (root == NULL){
-        root = new Node(value); //if the tree is empty insert the value at the root
+        root = new Node(value, index); //if the tree is empty insert the value at the root
         size++;
     }else
-        addValue(root, value); //otherwise call the helper function, passing it the root
+        addValue(root, value, index); //otherwise call the helper function, passing it the root
 }
 //====================================================== addValue(root, value) - private
 template <class bstdata>
-void BST<bstdata>::addValue(Nodeptr root, bstdata value){
+void BST<bstdata>::addValue(Nodeptr root, bstdata value, int index){
     
     if (value == root->data) { // no duplicate values in tree
         return;
     }else if(value < root->data){
         if (!root->left) {
-            root->left = new Node(value);
+            root->left = new Node(value, index);
             size++;
         }else{
-            addValue(root->left, value);
+            addValue(root->left, value, index);
         }
     }else if(value > root->data){
         if (!root->right) {
-            root->right = new Node(value);
+            root->right = new Node(value, index);
             size++;
         }else{
-            addValue(root->right, value);
+            addValue(root->right, value, index);
         }
         
         
@@ -129,6 +136,16 @@ bstdata BST<bstdata>::getRoot()
         exit(-1);
     }else{
     return root->data;
+    }
+}
+//====================================================== getRootIndex()
+template <class bstdata>
+int BST<bstdata>::getRootIndex(Nodeptr root){
+    if(isEmpty()){
+        cout << "\nRoot is empty!\n";
+        exit(-1);
+    }else{
+        return root->listIndex;
     }
 }
 //====================================================== isEmpty()
@@ -245,6 +262,30 @@ bool BST<bstdata>::contains(bstdata value){
         return false;
     }
 }
+//====================================================== containReplace(value, replace)
+template <class bstdata>
+void BST<bstdata>::containReplace(bstdata value, bstdata replace){
+    
+    if(!isEmpty()){
+        updateValue(root, value, replace);
+    }
+    
+}
+//====================================================== updateValue(root, value, replace)
+template <class bstdata>
+void BST<bstdata>::updateValue(Nodeptr root, bstdata value, bstdata replace){
+    
+    if(root){
+        if(root->data == value)
+            root->data = replace;
+    }else if(value < root->data){
+        return updateValue(root->left, value, replace);
+    }else{
+        return updateValue(root->right, value, replace);
+    }
+    
+}
+
 //====================================================== containsValue(root, value) - private
 template <class bstdata>
 bool BST<bstdata>::containsValue(Nodeptr root, bstdata value){
@@ -262,6 +303,48 @@ bool BST<bstdata>::containsValue(Nodeptr root, bstdata value){
         return false;
     }
 }
+//====================================================== search(min, max, indexArray)
+template <class bstdata>
+vector<int> BST<bstdata>::search(bstdata min, bstdata max){
+    
+    vector<int> index;
+    
+    if(!isEmpty()){
+        return searchRange(root, min, max);
+    }else{
+        return index;
+    }
+}
+//====================================================== searchRange(root, min, max, indexArray)
+template <class bstdata>
+vector<int> BST<bstdata>::searchRange(Nodeptr root, bstdata min, bstdata max){
+    vector<int> index;
+    
+    if (root){
+        if(root->data > max)
+            return searchRange(root->left, min, max);
+        else if(root->data < min){
+            return searchRange(root->right, min, max);
+        }
+        else if(root->data >= min && root->data <= max){
+            index.push_back(root->listIndex);
+            vector<int> left = searchRange(root->left, min, max);
+            vector<int> right = searchRange(root->right, min, max);
+            
+            index.reserve(left.size());
+            index.insert(index.end(), left.begin(), left.end());
+            index.reserve(right.size());
+            index.insert(index.end(), right.begin(), right.end());
+        }else{
+            return index;
+        }
+    }
+        return index;
+    
+    
+    
+}
+
 //====================================================== findMin(root) - private
 template <class bstdata>
 bstdata BST<bstdata>::findMin(Nodeptr root){
