@@ -27,7 +27,6 @@ public:
 	//Copy Constructor
     Weapon(const Weapon &data);
 	// ** Setters (manipulators) **
-	void setWeaponName(string);
 	void setAttackDamageBoost(int);
 	void setattackSpeedBoost(double);
 

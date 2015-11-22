@@ -32,6 +32,7 @@ char equipmentRoomMenu();
 
 //Switch case Functions
 void addChampion(List<Hero>* Champions, HashTable* Table, BST<int>* tree);
+void addEquipment(List<Equipment>* Inventory, HashTable* Table, BST<int>* tree);
 void print_to_file(List<Hero> Champions, List<Equipment> Inventory);
 void search(List<Hero>* Champions, List<Equipment>* Inventory,HashTable* Table, BST<int>* tree, bool remove, char typeSwitch);
 void equipChampion(List<Hero>* Champions, List<Equipment> Inventory);
@@ -420,6 +421,139 @@ void addChampion(List<Hero>* Champions, HashTable* Table, BST<int>* tree){
     }// else statement END
     return;
 }// addChampion Function END
+//======================================================= addEquipment()
+void addEquipment(List<Equipment>* Inventory, HashTable* Table, BST<int>* tree){
+    Equipment newEquipment; string tempString;int tempInt; double tempDouble; int count; char choice;
+    
+    //creating random generator
+    
+    Random r;  // Example of how to generator a number between 1-200 -> r.DrawNumber(1, 200);
+    
+    cout << "\nWould you like to use the Random Stat Generator? (Y/N): ";
+    cin >> choice;
+    
+    if (toupper(choice) == 'Y') {
+        cout << "\nHow many items would you like to add?: ";
+        cin >> count;
+        
+        for (int i=0; i < count; i++) {
+            cin.ignore();
+            cout << "\nEnter Equipment Name: ";
+            getline(cin, tempString);
+            newEquipment.setName(tempString);
+            
+            cout << "\nEnter 1 for Weapon or 2 for Armor";
+            cin >> tempInt; cout << endl;
+            
+            if (tempInt == 1) {
+                newEquipment.setType("Weapon");
+            }else if(tempInt == 2){
+                newEquipment.setType("Armor");
+            }else{
+                cout << tempInt << " Not a valid option!";
+                exit(-1);
+            }
+            
+            if (newEquipment.getType() == "Weapon") {
+                Weapon tempWeapon;
+                tempWeapon.setAttackDamageBoost(r.DrawNumber(10, 100));
+                tempWeapon.setattackSpeedBoost(r.DrawNumber(450, 990)*0.0001);
+                
+                newEquipment.setWeapon(tempWeapon);
+                Inventory->insert(newEquipment);
+                Table->addItem(tempString, Inventory->getIndex()-1);
+                
+                
+            }else{
+                Armor tempArmor;
+                tempArmor.setArmorBoost(r.DrawNumber(400, 1200)*0.127);
+                tempArmor.setMagicResistanceBoost(r.DrawNumber(200, 1000)*0.124);
+                tempArmor.setManaBoost(r.DrawNumber(20, 275));
+                tempArmor.setHealthBoost(r.DrawNumber(100, 450));
+                
+                newEquipment.setArmor(tempArmor);
+                Inventory->insert(newEquipment);
+                Table->addItem(tempString, Inventory->getIndex()-1);
+                
+            }
+            
+            cout << i+1 << " of " << count << " added." << endl;
+            
+        }// for loop END
+        
+    }else{
+        cout << "\nHow many items would you like to add?: ";
+        cin >> count;
+        
+        for (int i=0; i < count; i++) {
+            cin.ignore();
+            cout << "\nEnter Equipment Name: ";
+            getline(cin, tempString);
+            newEquipment.setName(tempString);
+            
+            cout << "\nEnter 1 for Weapon or 2 for Armor";
+            cin >> tempInt; cout << endl;
+            
+            if (tempInt == 1) {
+                newEquipment.setType("Weapon");
+            }else if(tempInt == 2){
+                newEquipment.setType("Armor");
+            }else{
+                cout << tempInt << " Not a valid option!";
+                exit(-1);
+            }
+            if (newEquipment.getType() == "Weapon") {
+                Weapon tempWeapon;
+                cout << "\nEnter Attack Damage Boost: ";
+                cin >> tempInt;
+                tempWeapon.setAttackDamageBoost(tempInt);
+                
+                cout << "\nEnter Attack Speed Boost: ";
+                cin >> tempDouble;
+                tempWeapon.setattackSpeedBoost(tempDouble);
+                
+                newEquipment.setWeapon(tempWeapon);
+                Inventory->insert(newEquipment);
+                Table->addItem(tempString, Inventory->getIndex()-1);
+                
+                
+            }else{
+                Armor tempArmor;
+                cout << "\nEnter Armor Boost: ";
+                cin >> tempDouble;
+                tempArmor.setArmorBoost(tempDouble);
+                
+                cout << "\nEnter Magic Resistance Boost: ";
+                cin >> tempDouble;
+                
+                tempArmor.setMagicResistanceBoost(tempDouble);
+                
+                cout << "\nEnter Mana Boost: ";
+                cin >> tempInt;
+                
+                tempArmor.setManaBoost(tempInt);
+                
+                cout << "\nEnter Health Boost: ";
+                cin >> tempInt;
+                
+                tempArmor.setHealthBoost(tempInt);
+                
+                newEquipment.setArmor(tempArmor);
+                Inventory->insert(newEquipment);
+                Table->addItem(tempString, Inventory->getIndex()-1);
+                tree->add(tempInt, Inventory->getIndex());
+                
+            }
+            
+            cout << i+1 << " of " << count << " added." << endl;
+            
+            
+        }//END for loop
+    }
+    
+    
+    
+}
 
 //======================================================= print_to_file()
 void print_to_file(List<Hero> Champions, List<Equipment> Inventory){
@@ -1393,7 +1527,7 @@ void equipmentRoom(List<Hero>* Champions, List<Equipment>* Inventory, HashTable*
                 break;
                 
             case 'A':// add item
-                
+                addEquipment(Inventory, Table, tree);
                 
                 break;
                 
