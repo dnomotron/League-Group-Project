@@ -407,7 +407,7 @@ listitem List<listitem>::front(){
  {
  if (off_end())
  {
- cout << "Current: Iterator is off the end of the list! Returing to Beginning of list" << endl;
+ cout << "Current: Iterator is off the end of the list! Exiting..." << endl;
  //assert(iterator == NULL); //xcode will not allow end of non-void function cant compile without " return returntype; "
      
      exit(-1);

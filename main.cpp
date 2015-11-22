@@ -771,8 +771,9 @@ void search(List<Hero>* Champions, List<Equipment>* Inventory, HashTable* Table,
                                     selected=0;
                                 }else
                                 {
-                                    Champions->scrollToIndex(indexRange.at(convert));
-                                    selected = Champions->getIndex();
+                                    Champions->scrollToIndex(indexRange.at(convert-1));
+                                    selected = Champions->getIndex()-1;
+                                    cout << "Selected: " << selected;
                                 }
                             }// if (remove==true) statement END
                             
