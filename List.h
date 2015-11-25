@@ -171,6 +171,7 @@ public:
     
     void dequipAll();
     
+    string currentEquipString(int count);
     
     
 };
@@ -784,6 +785,13 @@ void List<listitem>::dequipAll(){
     }
     
     
+}
+template <class listitem>
+string List<listitem>::currentEquipString(int count){
+    
+    Equipment temp = iterator->data.sendInventory(count);
+    
+    return temp.getDataString();
 }
 
 #endif /* defined(____linkList__) */

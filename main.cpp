@@ -57,10 +57,21 @@ int main(int argc, const char * argv[]) {
     
 //Main Menu
     
+    Champions.begin();
+    
+    
+    cout << Champions.current().getName() << endl;
+    for (int i=0; i < Champions.current().getEquippedCount(); i++) {
+        cout << Champions.currentEquipString(i) << endl;
+    }
+    
+    
     while ((choice = mainMenu()) && choice != 'Q') {
         switch (choice) {
             case 'C':
+                
                 championHall(&Champions, &Inventory, &Table, &champHealth);
+                
                 break;
                 
             case 'E':
@@ -574,7 +585,7 @@ void print_to_file(List<Hero> Champions, List<Equipment> Inventory){
             if (tempChampion.getEquippedCount() != 0) {
             
                 if (count != 0) {// newline if not first input
-                    outFile << endl;
+                    outFile << "\n";
                 }
                 
                 outFile << tempChampion.getName() << " ";
@@ -608,7 +619,7 @@ void print_to_file(List<Hero> Champions, List<Equipment> Inventory){
             
             tempChampion = Champions.current(); // Make champion data accessible
             if (count != 0) // Newline if not first input
-                outFile << endl;
+                outFile << "\n";
             
             outFile << tempChampion.getName() << " " << tempChampion.getHealth() << " " << tempChampion.getMana() << " "
             << tempChampion.getAttackRange() << " " << tempChampion.getAttackDamage() << " " << tempChampion.getAttackSpeed()
@@ -633,7 +644,7 @@ void print_to_file(List<Hero> Champions, List<Equipment> Inventory){
             tempEquip = Inventory.current();
             
             if (count != 0) {
-                outFile << endl;
+                outFile << "\n";
             }
             outFile << tempEquip.getType() << " ";
             if (tempEquip.getType() == "Weapon") {
@@ -1547,6 +1558,9 @@ void equipmentRoom(List<Hero>* Champions, List<Equipment>* Inventory, HashTable*
 //======================================================= Champion Hall
 void championHall(List<Hero>* Champions, List<Equipment>* Inventory, HashTable* Table, BST<int>* tree){
     char typeSwitch = 'C'; bool remove; char choice;
+    
+    
+    
     
     while((choice = championHallMenu()) && choice != 'E'){
         

@@ -70,6 +70,7 @@ public:
     void removeEquipment(int count);
     int getEquippedCount() {return equippedCount;};
     Equipment sendInventory(int count);
+    string getEquipment(int index);
     //bool operator==(const Equipment &data);
     
 // ** Other Member Functions **
@@ -132,11 +133,12 @@ void Hero::setEquipment(const Equipment e){
      if (equippedCount < 6) {
          
          Inventory[equippedCount] = e;
-         
+        
          if (Inventory[equippedCount].getType() == "Weapon") {
              weapon = Inventory[equippedCount].getWeapon();
              attackDamage += weapon.getAttackDamage();
              attackSpeed += weapon.getAttackSpeed();
+
          
          }else if (Inventory[equippedCount].getType() == "Armor"){
              tempArmor = Inventory[equippedCount].getArmor();
@@ -144,6 +146,7 @@ void Hero::setEquipment(const Equipment e){
              health += tempArmor.getHealthBoost();
              mana += tempArmor.getManaBoost();
              magicResistance += tempArmor.getMagicResistanceBoost();
+
          }
          equippedCount++;
          
@@ -178,12 +181,13 @@ void Hero::removeEquipment(int count){
             cout << "\nWeapon Not Found!" << endl;
             return;
         }
+    equippedCount--;
     
     for (int i= count-1; i < equippedCount; i++) {
         Inventory[i] = Inventory[i+1];
     }
 
-    equippedCount--;
+    
     
 }
 
@@ -214,7 +218,11 @@ Equipment Hero::sendInventory(int count){
     
     return Inventory[count];
 }
+string Hero::getEquipment(int index){
 
+    
+    return Inventory[index].getDataString();
+}
 
 
 

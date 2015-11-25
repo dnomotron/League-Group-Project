@@ -8,7 +8,7 @@
 
 #ifndef ____Equipment__
 #define ____Equipment__
-
+#include <sstream>
 using namespace std;
 
 //***************************************************************************************************************************************WEAPON
@@ -136,30 +136,28 @@ void Armor::setMagicResistanceBoost(double mrb){
 class Equipment{
 private:
     string name;
-	bool equipped;
     string type;
     Weapon weapon;
     Armor armor;
 
 public:
     
-    Equipment(): name(""), type(""), equipped(false) {}
+    Equipment(): name(""), type("") {}
     Equipment(const Equipment &data);
     
     // ** Setters **
     void setName(string n);
     void setType(string typespecifier);
-    void setEquipped(bool status);
     void setWeapon(Weapon e);
     void setArmor(Armor a);
     
 
 	// ** Getters **
     string getName() {return name;};
-    bool getEquipped() {return equipped;};
     string getType() {return type;};
     Weapon getWeapon() {return weapon;};
     Armor getArmor() {return armor;};
+    string getDataString();
     
     // ** Other Functions **
     void print();
@@ -167,7 +165,6 @@ public:
 };
 Equipment::Equipment(const Equipment &data){
     name = data.name;
-    equipped = data.equipped;
     type = data.type;
     armor = data.armor;
         weapon = data.weapon;
@@ -180,10 +177,6 @@ void Equipment::setType(string typespecifier){
     type = typespecifier;
 }
 
-void Equipment::setEquipped(bool status){
-    equipped = status;
-    
-}
 
 bool Equipment::operator==(const Equipment &data){
     
@@ -230,5 +223,33 @@ void Equipment::print(){
     else{
         cout << "\nEmpty Weapon Slot!" << endl;
     }
+}
+string Equipment::getDataString(){
+    string data;
+    
+    if(type == "Weapon"){
+        data = name + "\n";
+        
+        data += to_string(weapon.getAttackSpeed());
+        data += "\n";
+        data += to_string(weapon.getAttackDamage());
+        data += "\n";
+
+    }else if(type == "Armor"){
+        data = name + "\n";
+        data += to_string(armor.getArmorBoost());
+        data += "\n";
+        data += to_string(armor.getHealthBoost());
+        data += "\n";
+        data += to_string(armor.getMagicResistanceBoost());
+        data += "\n";
+        data += to_string(armor.getManaBoost());
+        data += "\n";
+    }
+    else{
+        data = "\nEmpty Weapon Slot\n";
+    }
+    
+    return data;
 }
 #endif /* defined(____Equipment__) */
