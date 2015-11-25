@@ -225,23 +225,28 @@ void Equipment::print(){
     }
 }
 string Equipment::getDataString(){
-    string data;
+    string data; string number;
     
     if(type == "Weapon"){
         data = name + "\n";
-        
-        data += to_string(weapon.getAttackSpeed());
+        number = to_string(weapon.getAttackSpeed());
+        number.erase(number.find_last_not_of('0') + 1, string::npos);
+        data += number;
         data += "\n";
         data += to_string(weapon.getAttackDamage());
         data += "\n";
 
     }else if(type == "Armor"){
         data = name + "\n";
-        data += to_string(armor.getArmorBoost());
+        number = to_string(armor.getArmorBoost());
+        number.erase(number.find_last_not_of('0') + 1, string::npos);
+        data += number;
         data += "\n";
         data += to_string(armor.getHealthBoost());
         data += "\n";
-        data += to_string(armor.getMagicResistanceBoost());
+        number = to_string(armor.getMagicResistanceBoost());
+        number.erase(number.find_last_not_of('0') + 1, string::npos);
+        data += number;
         data += "\n";
         data += to_string(armor.getManaBoost());
         data += "\n";
