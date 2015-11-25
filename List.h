@@ -173,6 +173,8 @@ public:
     
     string currentEquipString(int count);
     
+    string equipmentString();
+    
     
 };
 
@@ -792,6 +794,14 @@ string List<listitem>::currentEquipString(int count){
     Equipment temp = iterator->data.sendInventory(count);
     
     return temp.getDataString();
+}
+template <class listitem>
+string List<listitem>::equipmentString(){
+    
+    if(!off_end()){
+        return iterator->data.getDataString();
+    }else
+        return "\nequipmentString: iterator off end!";
 }
 
 #endif /* defined(____linkList__) */
