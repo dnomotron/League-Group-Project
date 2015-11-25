@@ -231,8 +231,8 @@ string Equipment::getDataString(){
         data = name + "\n";
         number = to_string(weapon.getAttackSpeed());
         number.erase(number.find_last_not_of('0') + 1, string::npos);
-        data += number;
-        data += "\n";
+        data += "Attack Speed Boost +" + number;
+        data += "\nAttack Damage Boost +";
         data += to_string(weapon.getAttackDamage());
         data += "\n";
 
@@ -240,14 +240,14 @@ string Equipment::getDataString(){
         data = name + "\n";
         number = to_string(armor.getArmorBoost());
         number.erase(number.find_last_not_of('0') + 1, string::npos);
-        data += number;
-        data += "\n";
+        data += "Armor Boost +" +number;
+        data += "\nHelth Boost +";
         data += to_string(armor.getHealthBoost());
-        data += "\n";
+        data += "\nMagic Resistance Boost +";
         number = to_string(armor.getMagicResistanceBoost());
         number.erase(number.find_last_not_of('0') + 1, string::npos);
         data += number;
-        data += "\n";
+        data += "\nMana Boost +";
         data += to_string(armor.getManaBoost());
         data += "\n";
     }
