@@ -59,10 +59,12 @@ int main(int argc, const char * argv[]) {
     
     Champions.begin();
     
+    Hero temp;
+    temp = Champions.current();
     
     cout << Champions.current().getName() << endl;
     for (int i=0; i < Champions.current().getEquippedCount(); i++) {
-        cout << Champions.currentEquipString(i) << endl;
+        cout << temp.getEquipment(i) << endl;
     }
     
     

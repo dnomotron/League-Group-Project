@@ -92,6 +92,9 @@ Hero::Hero(const Hero &data){
     movementSpeed = data.movementSpeed;
     equippedCount = data.equippedCount;
     
+    for(int i=0; i < data.equippedCount; i++){
+        Inventory[i] = data.Inventory[i];
+    }
     
 }
 Hero::~Hero() {}
