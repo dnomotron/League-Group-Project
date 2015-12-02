@@ -62,17 +62,6 @@ int main(int argc, const char * argv[]) {
     Hero temp;
     temp = Champions.current();
     
-    
-    Inventory.begin();
-    cout << Inventory.equipmentString() << endl;
-    
-    /*
-    cout << Champions.current().getName() << endl;
-    for (int i=0; i < Champions.current().getEquippedCount(); i++) {
-        cout << temp.getEquipment(i) << endl;
-    }
-    */
-    
     while ((choice = mainMenu()) && choice != 'Q') {
         switch (choice) {
             case 'C':
